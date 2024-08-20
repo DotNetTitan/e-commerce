@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Application.Features.OrderManagement.CreateOrder
+namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 {
-    internal class CreateOrderCommand
+    internal class PlaceOrderCommand
     {
     }
 }

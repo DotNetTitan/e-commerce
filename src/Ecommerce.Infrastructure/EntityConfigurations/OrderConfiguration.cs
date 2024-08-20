@@ -22,29 +22,14 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.OwnsOne(c => c.ShippingAddress, a =>
+            builder.OwnsOne(c => c.ShippingAddress, address =>
             {
-                a.Property(aa => aa.Street).HasColumnName("ShippingAddress_Street");
-                a.Property(aa => aa.PostalCode).HasColumnName("ShippingAddress_PostalCode");
-                a.Property(aa => aa.Building).HasColumnName("ShippingAddress_Building");
-
-                // Configure the relationship with City
-                a.HasOne(aa => aa.City)
-                    .WithMany()
-                    .HasForeignKey(aa => aa.CityId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Configure the relationship with State
-                a.HasOne(aa => aa.State)
-                    .WithMany()
-                    .HasForeignKey(aa => aa.StateId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                // Configure the relationship with Country
-                a.HasOne(aa => aa.Country)
-                    .WithMany()
-                    .HasForeignKey(aa => aa.CountryId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                address.Property(a => a.Building).HasColumnName("ShippingAddressBuilding");
+                address.Property(a => a.Street).HasColumnName("ShippingAddressStreet");
+                address.Property(a => a.PostalCode).HasColumnName("ShippingAddressPostalCode");
+                address.Property(a => a.City).HasColumnName("ShippingAddressCity");
+                address.Property(a => a.State).HasColumnName("ShippingAddressState");
+                address.Property(a => a.Country).HasColumnName("ShippingAddressCountry");
             });
         }
     }

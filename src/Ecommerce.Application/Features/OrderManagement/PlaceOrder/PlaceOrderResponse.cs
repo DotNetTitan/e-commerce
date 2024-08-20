@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Application.DTOs.OrderManagement
+namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 {
-    internal class CreateOrderDto
+    internal class PlaceOrderResponse
     {
     }
 }

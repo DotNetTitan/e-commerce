@@ -35,26 +35,14 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .HasForeignKey(r => r.CustomerId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
-            builder.OwnsOne(c => c.CustomerAddress, a =>
+            builder.OwnsOne(c => c.CustomerAddress, address =>
             {
-                a.Property(aa => aa.Street).HasColumnName("CustomerAddress_Street");
-                a.Property(aa => aa.PostalCode).HasColumnName("CustomerAddress_PostalCode");
-                a.Property(aa => aa.Building).HasColumnName("CustomerAddress_Building");
-
-                a.HasOne(aa => aa.City)
-                    .WithMany()
-                    .HasForeignKey(aa => aa.CityId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                a.HasOne(aa => aa.State)
-                    .WithMany()
-                    .HasForeignKey(aa => aa.StateId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                a.HasOne(aa => aa.Country)
-                    .WithMany()
-                    .HasForeignKey(aa => aa.CountryId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                address.Property(a => a.Building).HasColumnName("CustomerAddressBuilding");
+                address.Property(a => a.Street).HasColumnName("CustomerAddressStreet");
+                address.Property(a => a.PostalCode).HasColumnName("CustomerAddressPostalCode");
+                address.Property(a => a.City).HasColumnName("CustomerAddressCity");
+                address.Property(a => a.State).HasColumnName("CustomerAddressState");
+                address.Property(a => a.Country).HasColumnName("CustomerAddressCountry");
             });
         }
     }
