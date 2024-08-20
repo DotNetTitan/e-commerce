@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Application.Features.OrderManagement.ListUserOrders
+namespace Ecommerce.Application.Features.OrderManagement.ListCustomerOrders
 {
-    internal class ListUserOrdersResponse
+    internal class ListCustomerOrdersResponse
     {
     }
 }

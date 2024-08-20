@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Domain.Entities
+﻿namespace Ecommerce.Domain.Entities
 {
-    internal class ShoppingCart
+    public class ShoppingCart : BaseEntity
     {
+        public ShoppingCart()
+        {
+            ShoppingCartId = Guid.NewGuid();
+            ShoppingCartItems = new List<ShoppingCartItem>();
+        }
+
+        public Guid ShoppingCartId { get; set; }
+        public required Guid CustomerId { get; set; }
+        public required Customer Customer { get; set; }
+        public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

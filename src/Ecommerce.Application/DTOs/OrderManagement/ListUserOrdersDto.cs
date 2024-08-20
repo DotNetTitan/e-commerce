@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Application.DTOs.OrderManagement
 {
-    internal class ListUserOrdersDto
+    internal class ListCustomerOrdersDto
     {
     }
 }

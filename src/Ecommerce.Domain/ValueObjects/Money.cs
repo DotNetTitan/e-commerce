@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Domain.ValueObjects
+﻿namespace Ecommerce.Domain.ValueObjects
 {
-    internal class Money
-    {
-    }
+    public record Money(decimal Amount, string Currency);
 }
