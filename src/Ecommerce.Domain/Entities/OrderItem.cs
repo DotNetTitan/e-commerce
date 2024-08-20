@@ -1,12 +1,10 @@
-﻿using Ecommerce.Domain.ValueObjects;
-
-namespace Ecommerce.Domain.Entities
+﻿namespace Ecommerce.Domain.Entities
 {
     public class OrderItem
     {
         public OrderItem()
         {
-            OrderItemId = Guid.NewGuid();   
+            OrderItemId = Guid.NewGuid();
         }
 
         public Guid OrderItemId { get; set; }
@@ -14,7 +12,7 @@ namespace Ecommerce.Domain.Entities
         public required Order Order { get; set; }
         public required Guid ProductId { get; set; }
         public required Product Product { get; set; }
-        public required Guid Quantity { get; set; }
-        public required Money Price { get; set; }
+        public required int Quantity { get; set; }
+        public required decimal Price { get; set; }
     }
 }

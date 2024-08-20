@@ -1,6 +1,4 @@
-﻿using Ecommerce.Domain.ValueObjects;
-
-namespace Ecommerce.Domain.Entities
+﻿namespace Ecommerce.Domain.Entities
 {
     public class Payment
     {
@@ -14,6 +12,6 @@ namespace Ecommerce.Domain.Entities
         public required Order Order { get; set; }
         public required decimal Amount { get; set; }
         public required DateTime PaymentDate { get; set; }
-        public required PaymentMethod PaymentMethod { get; set; }
+        public required string PaymentMethod { get; set; }
     }
 }

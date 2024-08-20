@@ -1,6 +1,4 @@
-﻿using Ecommerce.Domain.ValueObjects;
-
-namespace Ecommerce.Domain.Entities
+﻿namespace Ecommerce.Domain.Entities
 {
     public class Product : BaseEntity
     {
@@ -13,7 +11,7 @@ namespace Ecommerce.Domain.Entities
         public Guid ProductId { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
-        public required Money Price { get; set; }
+        public required decimal Price { get; set; }
         public required Guid CategoryId { get; set; }
         public required Category Category { get; set; }
         public ICollection<Review> Reviews { get; set; }

@@ -1,6 +1,4 @@
-﻿using Ecommerce.Domain.ValueObjects;
-
-namespace Ecommerce.Domain.Entities
+﻿namespace Ecommerce.Domain.Entities
 {
     public class Customer : BaseEntity
     {
@@ -15,7 +13,7 @@ namespace Ecommerce.Domain.Entities
         public required string IdentityId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public Address? Address { get; set; }
+        public string? Address { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ShoppingCart? ShoppingCart { get; set; }
