@@ -10,15 +10,11 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
             builder.HasKey(c => c.CustomerId);
-            builder.Property(c => c.IdentityId).IsRequired();
-            builder.HasIndex(c => c.IdentityId).IsUnique();
 
-            // Configure the IdentityId property
             builder.Property(c => c.IdentityId)
                 .IsRequired()
                 .HasColumnName("IdentityId");
 
-            // Configure the one-to-one relationship with IdentityUser
             builder.HasOne<IdentityUser>()
                 .WithOne()
                 .HasForeignKey<Customer>(c => c.IdentityId)
@@ -38,6 +34,28 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .WithOne(r => r.Customer)
                 .HasForeignKey(r => r.CustomerId)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            builder.OwnsOne(c => c.CustomerAddress, a =>
+            {
+                a.Property(aa => aa.Street).HasColumnName("CustomerAddress_Street");
+                a.Property(aa => aa.PostalCode).HasColumnName("CustomerAddress_PostalCode");
+                a.Property(aa => aa.Building).HasColumnName("CustomerAddress_Building");
+
+                a.HasOne(aa => aa.City)
+                    .WithMany()
+                    .HasForeignKey(aa => aa.CityId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                a.HasOne(aa => aa.State)
+                    .WithMany()
+                    .HasForeignKey(aa => aa.StateId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                a.HasOne(aa => aa.Country)
+                    .WithMany()
+                    .HasForeignKey(aa => aa.CountryId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

@@ -10,7 +10,7 @@
 
         public Guid ShoppingCartId { get; set; }
         public required Guid CustomerId { get; set; }
-        public required Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
         public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
