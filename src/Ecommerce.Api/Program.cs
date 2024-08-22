@@ -13,6 +13,7 @@ using Asp.Versioning;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Services;
 using Ecommerce.Application.Common;
+using Ecommerce.Application.Common.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
