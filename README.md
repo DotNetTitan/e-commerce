@@ -5,10 +5,9 @@ This project is an E-commerce API built using ASP.NET Core. It provides various 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
 - [Configuration](#configuration)
 - [API Versioning](#api-versioning)
-- [Swagger Documentation](#swagger-documentation)
-- [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -18,7 +17,8 @@ To get started with this project, follow these steps:
 
 1. **Clone the repository:**
     ```sh
-    git clone https://github.com/your-repo/e-commerce.git
+    git clone https://github.com/DotNetTitan/e-commerce.git
+    
     cd e-commerce
     ```
 
@@ -28,15 +28,28 @@ To get started with this project, follow these steps:
     ```
 
 3. **Set up the database:**
-    Update the connection string in `appsettings.json` and run the migrations:
+
+    Add the initial migration:
     ```sh
-    dotnet ef database update
+    dotnet ef migrations add InitDatabase --project Ecommerce.Infrastructure -s Ecommerce.Api -c ApplicationDbContext
+    ```
+
+    Update the database:
+    ```sh
+    dotnet ef database update --project Ecommerce.Infrastructure -s Ecommerce.Api -c ApplicationDbContext
     ```
 
 4. **Run the application:**
     ```sh
     dotnet run --project src/Ecommerce.Api
     ```
+
+## Prerequisites
+
+Ensure you have the following installed on your machine:
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
 ## Configuration
 
@@ -52,15 +65,11 @@ Make sure to update these files with your specific settings.
 
 The API supports versioning. The default API version is `1.0`. You can specify the version in the URL or use the default version.
 
-```csharp
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-})
-.AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
+
+## Contributing
+
+Contributions are welcome! Please read the contributing guidelines first.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
