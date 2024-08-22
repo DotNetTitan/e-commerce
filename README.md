@@ -31,11 +31,15 @@ To get started with this project, follow these steps:
 
     Add the initial migration:
     ```sh
+    cd src
+    
     dotnet ef migrations add InitDatabase --project Ecommerce.Infrastructure -s Ecommerce.Api -c ApplicationDbContext
     ```
 
     Update the database:
     ```sh
+    cd src
+    
     dotnet ef database update --project Ecommerce.Infrastructure -s Ecommerce.Api -c ApplicationDbContext
     ```
 
