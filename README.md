@@ -29,17 +29,18 @@ To get started with this project, follow these steps:
 
 3. **Set up the database:**
 
-    Add the initial migration:
+   - **Navigate to the `src` directory:**
     ```sh
     cd src
-    
+    ```
+
+   - **Add the initial migration:**
+    ```sh
     dotnet ef migrations add InitDatabase --project Ecommerce.Infrastructure -s Ecommerce.Api -c ApplicationDbContext
     ```
 
-    Update the database:
+   - **Update the database:**
     ```sh
-    cd src
-    
     dotnet ef database update --project Ecommerce.Infrastructure -s Ecommerce.Api -c ApplicationDbContext
     ```
 
