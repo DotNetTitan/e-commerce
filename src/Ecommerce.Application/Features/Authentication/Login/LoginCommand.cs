@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.Authentication.Login
 {
-    internal class LoginCommand
+    public class LoginCommand : IRequest<Result<LoginCommandResponse>>
     {
+        public required string Username { get; set; }
+        public required string Password { get; set; }
     }
 }

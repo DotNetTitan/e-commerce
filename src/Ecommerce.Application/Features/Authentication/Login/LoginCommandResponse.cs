@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.Features.Authentication.Login
+﻿namespace Ecommerce.Application.Features.Authentication.Login
 {
-    internal class LoginCommandResponse
+    public class LoginCommandResponse
     {
+        public string? AccessToken { get; set; }
+        public string? RefreshToken { get; set; }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.Authentication.Register
 {
-    internal class RegisterCommand
+    public class RegisterCommand : IRequest<Result<RegisterCommandResponse>>
     {
+        public required string Username { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
 }

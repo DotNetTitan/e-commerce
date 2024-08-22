@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Domain.Exceptions
+﻿namespace Ecommerce.Domain.Exceptions
 {
-    internal class OrderNotFoundException
+    public class OrderNotFoundException  : Exception
     {
+        public OrderNotFoundException() : base("Order not found.")
+        {
+        }
+
+        public OrderNotFoundException(string message) : base(message)
+        {
+        }
+
+        public OrderNotFoundException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

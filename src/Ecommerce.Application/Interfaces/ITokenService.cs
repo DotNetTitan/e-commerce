@@ -1,6 +1,9 @@
-﻿namespace Ecommerce.Application.Interfaces;
+﻿using Ecommerce.Application.Common.Models;
 
-public interface ITokenService
+namespace Ecommerce.Application.Interfaces
 {
-    
+    public interface ITokenService
+    {
+        Task<TokenResponse> GenerateTokensAsync(string userName, string userId);
+    }
 }

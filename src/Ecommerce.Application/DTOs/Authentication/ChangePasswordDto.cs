@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.DTOs.Authentication
+﻿namespace Ecommerce.Application.DTOs.Authentication
 {
-    internal class ChangePasswordDto
+    public class ChangePasswordDto
     {
+        public required string Username { get; set; }
+        public required string CurrentPassword { get; set; }
+        public required string NewPassword { get; set; }
+        public required string ConfirmNewPassword { get; set; }
     }
 }

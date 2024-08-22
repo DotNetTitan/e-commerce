@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Ecommerce.Application.Features.Authentication.Login
 {
-    internal class LoginCommandValidator
+    internal class LoginCommandValidator : AbstractValidator<LoginCommand>
     {
+        public LoginCommandValidator()
+        {
+            RuleFor(x => x.Username)
+                .NotEmpty().WithMessage("Username is required.");
+
+            RuleFor(x => x.Password)
+                .NotEmpty().WithMessage("Password is required.");
+        }
     }
 }

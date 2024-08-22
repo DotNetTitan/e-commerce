@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.DTOs.Authentication
+﻿namespace Ecommerce.Application.DTOs.Authentication
 {
-    internal class ResetPasswordDto
+    public class ResetPasswordDto
     {
+        public required string Email { get; set; }
+        public required string Token { get; set; }
+        public required string NewPassword { get; set; }
     }
 }

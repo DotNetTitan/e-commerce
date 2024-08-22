@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Domain.Exceptions
+﻿namespace Ecommerce.Domain.Exceptions
 {
-    internal class CustomerNotFoundException
+    public class CustomerNotFoundException : Exception
     {
+        public CustomerNotFoundException() : base("Customer not found.")
+        {
+        }
+
+        public CustomerNotFoundException(string message) : base(message)
+        {
+        }
+
+        public CustomerNotFoundException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

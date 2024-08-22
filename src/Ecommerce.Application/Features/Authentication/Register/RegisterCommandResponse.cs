@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.Features.Authentication.Register
+﻿namespace Ecommerce.Application.Features.Authentication.Register
 {
-    internal class RegisterCommandResponse
+    public class RegisterCommandResponse
     {
+        public bool Succeeded { get; set; }
+        public IEnumerable<string>? Errors { get; set; }
     }
 }
