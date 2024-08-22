@@ -4,7 +4,7 @@ using FluentResults;
 
 namespace Ecommerce.Application.Features.Authentication.Register
 {
-    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterCommandResponse>>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterCommandResponse>>
     {
         private readonly IAuthenticationService _authenticationService;
 

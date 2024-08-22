@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +12,7 @@ using System.Text;
 using Asp.Versioning;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Services;
+using Ecommerce.Application.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,7 +69,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
-    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IRegisterAssembly).Assembly));
 
     ConfigureAuthentication(services, configuration);
     ConfigureIdentityOptions(services);
