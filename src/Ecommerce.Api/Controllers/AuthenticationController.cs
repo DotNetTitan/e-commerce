@@ -4,6 +4,7 @@ using MediatR;
 using Ecommerce.Application.Features.Authentication.Register;
 using Ecommerce.Application.DTOs.Authentication;
 using Asp.Versioning;
+using Ecommerce.Application.Features.Authentication.ConfirmEmail;
 
 namespace Ecommerce.API.Controllers
 {
@@ -56,6 +57,25 @@ namespace Ecommerce.API.Controllers
             }
 
             return Unauthorized(result.Errors);
+        }
+
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string email, [FromQuery] string token)
+        {
+            var command = new ConfirmEmailCommand
+            {
+                Email = email,
+                Token = token
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok();
+            }
+
+            return BadRequest(result.Errors);
         }
     }
 }

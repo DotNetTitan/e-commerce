@@ -24,7 +24,12 @@ namespace Ecommerce.Application.Features.Authentication.Register
             {
                 await _mediator.Publish(new UserRegisteredNotification(request.Username, request.Email, result.Value), cancellationToken);
 
-                return Result.Ok();
+                var response = new RegisterCommandResponse
+                {
+                    Message = "Registration successful! Please check your email to confirm your account and complete the registration process."
+                };
+
+                return Result.Ok(response);
             }
 
             return Result.Fail(result.Errors);

@@ -1,12 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
+using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Authentication.ConfirmEmail
 {
-    internal class ConfirmEmailCommandHandler
+    public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, Result<ConfirmEmailCommandResponse>>
     {
+        private readonly IAuthenticationService _authenticationService;
+
+        public ConfirmEmailCommandHandler(IAuthenticationService authenticationService)
+        {
+            _authenticationService = authenticationService;
+        }
+
+        public async Task<Result<ConfirmEmailCommandResponse>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _authenticationService.ConfirmEmailAsync(request.Email, request.Token);
+
+            if (result.IsSuccess)
+            {
+                var response = new ConfirmEmailCommandResponse
+                {
+                    Message = "Email confirmation successful."
+                };
+
+                return Result.Ok(response);
+            }
+
+            return Result.Fail<ConfirmEmailCommandResponse>(result.Errors);
+        }
     }
 }

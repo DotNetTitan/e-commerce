@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.Authentication.ConfirmEmail
 {
-    internal class ConfirmEmailCommand
+    public class ConfirmEmailCommand : IRequest<Result<ConfirmEmailCommandResponse>>
     {
+        public required string Email { get; init; }
+        public required string Token { get; init; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Application.DTOs.Authentication;
 using Ecommerce.Application.Interfaces;
+using Ecommerce.Domain.Exceptions;
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
 
@@ -62,6 +63,20 @@ namespace Ecommerce.Infrastructure.Services
                 UserName = user.UserName!,
                 Email = user.Email!
             };
+        }
+
+        public async Task<Result> ConfirmEmailAsync(string email, string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email) ?? throw new UserNotFoundException();
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
+            {
+                return Result.Ok();
+            }
+
+            return Result.Fail(result.Errors.Select(e => e.Description));
         }
     }
 }
