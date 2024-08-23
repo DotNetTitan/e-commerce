@@ -1,5 +1,5 @@
 using Ecommerce.Api.Middlewares.ExceptionHandler;
-using Ecommerce.Infrastructure.Settings;
+using Ecommerce.Domain.Settings;
 using Ecommerce.Infrastructure.Tokens;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +14,8 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Services;
 using Ecommerce.Application.Common;
 using Ecommerce.Application.Common.Models;
+using Azure.Communication.Email;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +77,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     ConfigureAuthentication(services, configuration);
     ConfigureIdentityOptions(services);
 
+    services.AddSingleton(new EmailClient(configuration["AppSettings:AzureCommunicationService"]));
+    services.AddTransient<IEmailService, EmailService>();
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<RefreshTokenService>();

@@ -16,7 +16,7 @@ namespace Ecommerce.Infrastructure.Services
             _signInManager = signInManager;
         }
 
-        public async Task<Result> RegisterUserAsync(string username, string email, string password)
+        public async Task<Result<string>> RegisterUserAsync(string username, string email, string password)
         {
             var user = new IdentityUser
             {
@@ -28,7 +28,8 @@ namespace Ecommerce.Infrastructure.Services
 
             if (result.Succeeded)
             {
-                return Result.Ok();
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                return Result.Ok(token);
             }
 
             return Result.Fail(result.Errors.Select(e => e.Description));

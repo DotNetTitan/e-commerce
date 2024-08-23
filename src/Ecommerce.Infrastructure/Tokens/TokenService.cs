@@ -1,6 +1,6 @@
 ﻿using Ecommerce.Application.Common.Models;
 using Ecommerce.Application.Interfaces;
-using Ecommerce.Infrastructure.Settings;
+using Ecommerce.Domain.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
