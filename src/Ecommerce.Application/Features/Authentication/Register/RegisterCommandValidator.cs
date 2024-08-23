@@ -6,7 +6,7 @@ namespace Ecommerce.Application.Features.Authentication.Register
     {
         public RegisterCommandValidator()
         {
-            RuleFor(x => x.Username)
+            RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username is required.")
                 .Length(3, 50).WithMessage("Username must be between 3 and 50 characters.");
 

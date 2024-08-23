@@ -18,11 +18,11 @@ namespace Ecommerce.Application.Features.Authentication.Login
 
         public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var result = await _authenticationService.LoginUserAsync(request.Username, request.Password);
+            var result = await _authenticationService.LoginUserAsync(request.UserName, request.Password);
 
             if (result.IsSuccess)
             {
-                var user = await _authenticationService.GetUserByUsernameAsync(request.Username) ?? throw new UserNotFoundException();
+                var user = await _authenticationService.GetUserByUsernameAsync(request.UserName) ?? throw new UserNotFoundException();
 
                 var tokens = await _tokenService.GenerateTokensAsync(user.UserName, user.Id);
 

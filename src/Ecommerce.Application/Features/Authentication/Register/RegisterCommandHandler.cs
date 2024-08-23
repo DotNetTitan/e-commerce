@@ -18,11 +18,11 @@ namespace Ecommerce.Application.Features.Authentication.Register
 
         public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            var result = await _authenticationService.RegisterUserAsync(request.Username, request.Email, request.Password);
+            var result = await _authenticationService.RegisterUserAsync(request.UserName, request.Email, request.Password);
 
             if(result.IsSuccess)
             {
-                await _mediator.Publish(new UserRegisteredNotification(request.Username, request.Email, result.Value), cancellationToken);
+                await _mediator.Publish(new UserRegisteredNotification(request.UserName, request.Email, result.Value), cancellationToken);
 
                 var response = new RegisterCommandResponse
                 {

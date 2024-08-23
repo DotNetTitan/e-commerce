@@ -5,6 +5,7 @@ using Ecommerce.Application.Features.Authentication.Register;
 using Ecommerce.Application.DTOs.Authentication;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Authentication.ConfirmEmail;
+using Ecommerce.Application.Common.Models;
 
 namespace Ecommerce.API.Controllers
 {
@@ -25,7 +26,7 @@ namespace Ecommerce.API.Controllers
         {
             var command = new RegisterCommand
             {
-                Username = register.Username,
+                UserName = register.UserName,
                 Email = register.Email,
                 Password = register.Password
             };
@@ -34,7 +35,7 @@ namespace Ecommerce.API.Controllers
 
             if (result.IsSuccess)
             {
-                return Ok();
+                return Ok(result.Value.Message);
             }
 
             return BadRequest(result.Errors);
@@ -45,22 +46,28 @@ namespace Ecommerce.API.Controllers
         {
             var command = new LoginCommand
             {
-                Username = login.Username,
+                UserName = login.UserName,
                 Password = login.Password
             };
 
             var result = await _mediator.Send(command);
 
+            var tokenResponse = new TokenResponse
+            {
+                AccessToken = result.Value.AccessToken,
+                RefreshToken = result.Value.RefreshToken
+            };
+
             if (result.IsSuccess)
             {
-                return Ok(result.Value);
+                return Ok(tokenResponse);
             }
 
             return Unauthorized(result.Errors);
         }
 
-        [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] string email, [FromQuery] string token)
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string token, [FromQuery] string email)
         {
             var command = new ConfirmEmailCommand
             {
@@ -72,7 +79,7 @@ namespace Ecommerce.API.Controllers
 
             if (result.IsSuccess)
             {
-                return Ok();
+                return Ok(result.Value.Message);
             }
 
             return BadRequest(result.Errors);

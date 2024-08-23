@@ -6,7 +6,7 @@ namespace Ecommerce.Application.Features.Authentication.Login
     {
         public LoginCommandValidator()
         {
-            RuleFor(x => x.Username)
+            RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username is required.");
 
             RuleFor(x => x.Password)

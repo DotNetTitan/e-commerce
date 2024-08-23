@@ -3,6 +3,8 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Exceptions;
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace Ecommerce.Infrastructure.Services
 {
@@ -17,11 +19,11 @@ namespace Ecommerce.Infrastructure.Services
             _signInManager = signInManager;
         }
 
-        public async Task<Result<string>> RegisterUserAsync(string username, string email, string password)
+        public async Task<Result<string>> RegisterUserAsync(string userName, string email, string password)
         {
             var user = new IdentityUser
             {
-                UserName = username,
+                UserName = userName,
                 Email = email
             };
 
@@ -30,15 +32,30 @@ namespace Ecommerce.Infrastructure.Services
             if (result.Succeeded)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                return Result.Ok(token);
+
+                var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+                return Result.Ok(encodedToken);
             }
 
             return Result.Fail(result.Errors.Select(e => e.Description));
         }
 
-        public async Task<Result> LoginUserAsync(string username, string password)
+        public async Task<Result> LoginUserAsync(string userName, string password)
         {
-            var result = await _signInManager.PasswordSignInAsync(username, password, false, false);
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                return Result.Fail(["Username not found."]);
+            }
+
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                return Result.Fail(["Email is not confirmed."]);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(userName, password, false, false);
 
             if (result.Succeeded)
             {
@@ -52,7 +69,7 @@ namespace Ecommerce.Infrastructure.Services
         {
             var user = await _userManager.FindByNameAsync(userName);
 
-            if(user == null)
+            if (user == null)
             {
                 return null;
             }
@@ -69,7 +86,9 @@ namespace Ecommerce.Infrastructure.Services
         {
             var user = await _userManager.FindByEmailAsync(email) ?? throw new UserNotFoundException();
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
 
             if (result.Succeeded)
             {
