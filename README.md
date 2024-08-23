@@ -4,12 +4,19 @@ This project is an E-commerce API built using ASP.NET Core. It provides various 
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
 - [Configuration](#configuration)
 - [API Versioning](#api-versioning)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Prerequisites
+
+Ensure you have the following installed on your machine:
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
 ## Getting Started
 
@@ -48,13 +55,6 @@ To get started with this project, follow these steps:
     ```sh
     dotnet run --project src/Ecommerce.Api
     ```
-
-## Prerequisites
-
-Ensure you have the following installed on your machine:
-
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
 ## Configuration
 
