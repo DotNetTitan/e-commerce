@@ -13,16 +13,6 @@
         public string EmailSenderAddress { get; init; } = default!;
 
         /// <summary>
-        /// Gets or sets the Azure Communication Service connection string.
-        /// </summary>
-        public string AzureCommunicationServiceConnection { get; init; } = default!;
-
-        /// <summary>
-        /// Gets or sets the default connection string.
-        /// </summary>
-        public string DefaultConnection { get; init; } = default!;
-
-        /// <summary>
         /// Gets or sets the JWT settings.
         /// </summary>
         public JwtSettings Jwt { get; init; } = default!;
