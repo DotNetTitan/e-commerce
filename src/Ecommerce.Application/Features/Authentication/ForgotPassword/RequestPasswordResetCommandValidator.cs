@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Ecommerce.Application.Features.Authentication.ForgotPassword
 {
-    internal class RequestPasswordResetCommandValidator
+    public class RequestPasswordResetCommandValidator : AbstractValidator<RequestPasswordResetCommand>
     {
+        public RequestPasswordResetCommandValidator()
+        {
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("Email is required.")
+                .EmailAddress().WithMessage("A valid email is required.");
+        }
     }
 }

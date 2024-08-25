@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Ecommerce.Application.Interfaces;
 using FluentResults;
-using Ecommerce.Application.Features.Authentication.Notifications.UserRegistered;
 
 namespace Ecommerce.Application.Features.Authentication.Register
 {
@@ -22,7 +21,7 @@ namespace Ecommerce.Application.Features.Authentication.Register
 
             if(result.IsSuccess)
             {
-                await _mediator.Publish(new UserRegisteredNotification(request.UserName, request.Email, result.Value), cancellationToken);
+                await _mediator.Publish(new RegisterCommandNotification(request.UserName, request.Email, result.Value), cancellationToken);
 
                 var response = new RegisterCommandResponse
                 {

@@ -6,6 +6,9 @@ using Ecommerce.Application.DTOs.Authentication;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Authentication.ConfirmEmail;
 using Ecommerce.Application.Common.Models;
+using Ecommerce.Application.Features.Authentication.ForgotPassword;
+using Ecommerce.Application.Features.Authentication.ResetPassword;
+using Ecommerce.Application.Features.Authentication.ResendEmailConfirmation;
 
 namespace Ecommerce.API.Controllers
 {
@@ -73,6 +76,62 @@ namespace Ecommerce.API.Controllers
             {
                 Email = email,
                 Token = token
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value.Message);
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
+        {
+            var command = new RequestPasswordResetCommand
+            {
+                Email = forgotPassword.Email
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value.Message);
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
+        {
+            var command = new ResetPasswordCommand
+            {
+                Email = resetPassword.Email,
+                Token = resetPassword.Token,
+                NewPassword = resetPassword.NewPassword
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value.Message);
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        [HttpPost("resend-email-confirmation")]
+        public async Task<IActionResult> ResendEmailConfirmation([FromBody] ResendEmailConfirmationDto resendEmailConfirmation)
+        {
+            var command = new ResendEmailConfirmationCommand
+            {
+                Email = resendEmailConfirmation.Email
             };
 
             var result = await _mediator.Send(command);

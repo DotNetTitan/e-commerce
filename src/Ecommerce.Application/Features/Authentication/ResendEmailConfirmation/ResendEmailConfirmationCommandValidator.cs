@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Ecommerce.Application.Features.Authentication.ResendEmailConfirmation
 {
-    internal class ResendEmailConfirmationCommandValidator
+    public class ResendEmailConfirmationCommandValidator : AbstractValidator<ResendEmailConfirmationCommand>
     {
+        public ResendEmailConfirmationCommandValidator()
+        {
+            RuleFor(p => p.Email)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .EmailAddress().WithMessage("{PropertyName} is not a valid email address.");
+        }
     }
 }

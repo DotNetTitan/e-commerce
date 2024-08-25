@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.Authentication.ResetPassword
 {
-    internal class ResetPasswordCommand
+    public class ResetPasswordCommand : IRequest<Result<ResetPasswordCommandResponse>>
     {
+        public required string Email { get; set; }
+        public required string Token { get; set; }
+        public required string NewPassword { get; set; }
     }
 }

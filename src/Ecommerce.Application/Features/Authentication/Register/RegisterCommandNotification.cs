@@ -1,14 +1,14 @@
 ﻿using MediatR;
 
-namespace Ecommerce.Application.Features.Authentication.Notifications.UserRegistered
+namespace Ecommerce.Application.Features.Authentication.Register
 {
-    public class UserRegisteredNotification : INotification
+    public class RegisterCommandNotification : INotification
     {
         public string Username { get; }
         public string Email { get; }
         public string EmailConfirmationToken { get; }
 
-        public UserRegisteredNotification(string username, string email, string emailConfirmationToken)
+        public RegisterCommandNotification(string username, string email, string emailConfirmationToken)
         {
             Username = username;
             Email = email;

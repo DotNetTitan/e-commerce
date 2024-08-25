@@ -39,7 +39,7 @@ namespace Ecommerce.Infrastructure.Services
                 recipients: new EmailRecipients(new List<EmailAddress> { new EmailAddress(to) }),
                 content: new EmailContent(subject)
                 {
-                    PlainText = body
+                    Html = body
                 }
             );
 

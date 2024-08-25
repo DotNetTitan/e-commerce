@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.Features.Authentication.ResetPassword
+﻿namespace Ecommerce.Application.Features.Authentication.ResetPassword
 {
-    internal class ResetPasswordCommandResponse
+    public class ResetPasswordCommandResponse
     {
+        public required string Message { get; set; }
     }
 }

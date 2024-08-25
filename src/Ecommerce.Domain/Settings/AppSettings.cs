@@ -3,6 +3,16 @@
     public class AppSettings
     {
         /// <summary>
+        /// Gets or sets the URL for resending confirmation email.
+        /// </summary>
+        public string ResendConfirmationEmailUrl { get; init; } = default!;
+
+        /// <summary>
+        /// Gets or sets the URL for password reset.
+        /// </summary>
+        public string PasswordResetUrl { get; init; } = default!;
+
+        /// <summary>
         /// Gets or sets the URL for confirmation email.
         /// </summary>
         public string ConfirmationEmailUrl { get; init; } = default!;
