@@ -25,6 +25,11 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(RegisterCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status429TooManyRequests)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] RegisterDto register)
         {
             var command = new RegisterCommand
@@ -36,15 +41,16 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess)
-            {
-                return Ok(result.Value.Message);
-            }
-
-            return BadRequest(result.Errors);
+            return result.IsSuccess ? Ok(result.Value.Message) : BadRequest(result.Errors);
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status429TooManyRequests)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
             var command = new LoginCommand
@@ -55,21 +61,15 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess)
-            {
-                var tokenResponse = new TokenResponse
-                {
-                    AccessToken = result.Value.AccessToken,
-                    RefreshToken = result.Value.RefreshToken
-                };
-
-                return Ok(tokenResponse);
-            }
-
-            return Unauthorized(result.Errors);
+            return result.IsSuccess ? Ok(result.Value) : Unauthorized(result.Errors);
         }
 
         [HttpPost("confirm-email")]
+        [ProducesResponseType(typeof(ConfirmEmailCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status429TooManyRequests)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string token, [FromQuery] string email)
         {
             var command = new ConfirmEmailCommand
@@ -80,15 +80,15 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess)
-            {
-                return Ok(result.Value.Message);
-            }
-
-            return BadRequest(result.Errors);
+            return result.IsSuccess ? Ok(result.Value.Message) : BadRequest(result.Errors);
         }
 
         [HttpPost("forgot-password")]
+        [ProducesResponseType(typeof(RequestPasswordResetCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status429TooManyRequests)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
         {
             var command = new RequestPasswordResetCommand
@@ -98,15 +98,15 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess)
-            {
-                return Ok(result.Value.Message);
-            }
-
-            return BadRequest(result.Errors);
+            return result.IsSuccess ? Ok(result.Value.Message) : BadRequest(result.Errors);
         }
 
         [HttpPost("reset-password")]
+        [ProducesResponseType(typeof(ResetPasswordCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status429TooManyRequests)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
         {
             var command = new ResetPasswordCommand
@@ -118,15 +118,15 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess)
-            {
-                return Ok(result.Value.Message);
-            }
-
-            return BadRequest(result.Errors);
+            return result.IsSuccess ? Ok(result.Value.Message) : BadRequest(result.Errors);
         }
 
         [HttpPost("resend-email-confirmation")]
+        [ProducesResponseType(typeof(ResendEmailConfirmationCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status429TooManyRequests)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ResendEmailConfirmation([FromBody] ResendEmailConfirmationDto resendEmailConfirmation)
         {
             var command = new ResendEmailConfirmationCommand
@@ -136,12 +136,7 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.IsSuccess)
-            {
-                return Ok(result.Value.Message);
-            }
-
-            return BadRequest(result.Errors);
+            return result.IsSuccess ? Ok(result.Value.Message) : BadRequest(result.Errors);
         }
     }
 }

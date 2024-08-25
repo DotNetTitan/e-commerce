@@ -16,6 +16,10 @@ using Ecommerce.Application.Common;
 using Ecommerce.Application.Common.Models;
 using Azure.Communication.Email;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Text.Json;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +37,9 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 
 // Add services to the container
 ConfigureServices(builder.Services, builder.Configuration);
+
+// Configure rate limiter
+ConfigureRateLimiter(builder.Services, builder.Configuration);
 
 builder.Services.AddApiVersioning(options =>
 {
@@ -82,7 +89,50 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<RefreshTokenService>();
-    services.AddHttpContextAccessor();
+}
+
+static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)
+{
+    var rateLimitWindowSeconds = configuration.GetValue<int>("AppSettings:RateLimiter:RateLimitWindowSeconds");
+    var rateLimitWindow = TimeSpan.FromSeconds(rateLimitWindowSeconds);
+    var retryAfter = $"{rateLimitWindow.TotalSeconds.ToString(NumberFormatInfo.InvariantInfo)} seconds";
+
+    var permitLimit = configuration.GetValue<int>("AppSettings:RateLimiter:PermitLimit");
+
+    services.AddRateLimiter(options =>
+    {
+        // (default policy)
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        {
+            return RateLimitPartition.GetFixedWindowLimiter(httpContext.Request.Headers.UserAgent.ToString(), _ =>
+                new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = permitLimit,
+                    Window = rateLimitWindow
+                }
+            );
+        });
+
+        options.OnRejected = async (context, cancellationToken) =>
+        {
+            context.HttpContext.Response.Headers.RetryAfter = retryAfter;
+            context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+            context.HttpContext.Response.ContentType = "application/problem+json";
+
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status429TooManyRequests,
+                Title = "Too Many Requests",
+                Detail = $"You have exceeded the allowed number of requests. Your current limit is {permitLimit} requests per {rateLimitWindowSeconds} seconds. Please try again later in {rateLimitWindowSeconds} seconds.",
+                Instance = context.HttpContext.Request.Path,
+                Type = RfcTypeUrls.TooManyRequests
+            };
+
+            var json = JsonSerializer.Serialize(problemDetails);
+
+            await context.HttpContext.Response.WriteAsync(json, cancellationToken);
+        };
+    });
 }
 
 void ConfigureSwagger(SwaggerGenOptions options)
