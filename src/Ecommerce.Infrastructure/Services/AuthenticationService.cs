@@ -47,7 +47,7 @@ namespace Ecommerce.Infrastructure.Services
 
             if (user == null)
             {
-                return Result.Fail(["Username not found."]);
+                return Result.Fail(["User not found."]);
             }
 
             if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -62,7 +62,7 @@ namespace Ecommerce.Infrastructure.Services
                 return Result.Ok();
             }
 
-            return Result.Fail(["Invalid login attempt."]);
+            return Result.Fail(["Invalid login attempt. Please check your credentials and try again."]);
         }
 
         public async Task<UserDto?> GetUserByUsernameAsync(string userName)

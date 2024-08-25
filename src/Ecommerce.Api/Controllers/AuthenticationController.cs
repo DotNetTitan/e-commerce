@@ -55,14 +55,14 @@ namespace Ecommerce.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            var tokenResponse = new TokenResponse
-            {
-                AccessToken = result.Value.AccessToken,
-                RefreshToken = result.Value.RefreshToken
-            };
-
             if (result.IsSuccess)
             {
+                var tokenResponse = new TokenResponse
+                {
+                    AccessToken = result.Value.AccessToken,
+                    RefreshToken = result.Value.RefreshToken
+                };
+
                 return Ok(tokenResponse);
             }
 
