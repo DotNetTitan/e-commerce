@@ -44,7 +44,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return affectedRows > 0;
         }
 
-        public async Task<(IEnumerable<Category> Categories, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, string? searchTerm = null)
+        public async Task<(List<Category> Categories, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, string? searchTerm = null)
         {
             var query = _context.Categories.AsQueryable();
 

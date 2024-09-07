@@ -2,7 +2,7 @@
 {
     public class ListProductsResponse
     {
-        public required IEnumerable<ProductDetails> Products { get; set; }
+        public required List<ProductDetails> Products { get; set; }
         public required int TotalCount { get; set; }
         public required int PageNumber { get; set; }
         public required int PageSize { get; set; }

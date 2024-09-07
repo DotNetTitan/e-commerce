@@ -21,7 +21,7 @@ namespace Ecommerce.Application.Features.CategoryManagement.ListCategories
                 request.SearchTerm
             );
 
-            var categoryDetails = categories.Select(c => new CategoryDetails
+            var categoryDetails = categories.ConvertAll(c => new CategoryDetails
             {
                 Id = c.CategoryId,
                 Name = c.Name,

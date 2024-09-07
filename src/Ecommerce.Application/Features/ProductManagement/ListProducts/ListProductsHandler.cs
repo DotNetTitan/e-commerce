@@ -22,7 +22,7 @@ namespace Ecommerce.Application.Features.ProductManagement.ListProducts
                 request.CategoryId
             );
 
-            var productDetails = products.Select(p => new ProductDetails
+            var productDetails = products.ConvertAll(p => new ProductDetails
             {
                 Id = p.ProductId,
                 Name = p.Name,

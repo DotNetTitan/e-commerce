@@ -46,7 +46,7 @@ namespace Ecommerce.Infrastructure.Repositories
             return affectedRows > 0;
         }
 
-        public async Task<(IEnumerable<Product> Products, int TotalCount)> GetProductsAsync(int pageNumber, int pageSize, string? searchTerm = null, Guid? categoryId = null)
+        public async Task<(List<Product> Products, int TotalCount)> GetProductsAsync(int pageNumber, int pageSize, string? searchTerm = null, Guid? categoryId = null)
         {
             var query = _context.Products
                 .Include(p => p.Category)

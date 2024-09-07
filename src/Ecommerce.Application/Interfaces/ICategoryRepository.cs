@@ -8,6 +8,6 @@ namespace Ecommerce.Application.Interfaces
         Task<Category?> CreateAsync(Category category);
         Task<Category?> UpdateAsync(Category category);
         Task<bool> DeleteAsync(Guid id);
-        Task<(IEnumerable<Category> Categories, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, string? searchTerm = null);
+        Task<(List<Category> Categories, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, string? searchTerm = null);
     }
 }
