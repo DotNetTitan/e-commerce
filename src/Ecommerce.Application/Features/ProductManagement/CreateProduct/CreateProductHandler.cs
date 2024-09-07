@@ -2,7 +2,6 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Application.Features.ProductManagement.CreateProduct
 {

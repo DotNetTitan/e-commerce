@@ -2,7 +2,6 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Ecommerce.Infrastructure.Extensions;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -47,7 +46,7 @@ namespace Ecommerce.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(c => c.Name.Contains(searchTerm) || c.Description.Contains(searchTerm));
+                query = query.Where(c => c.Name.Contains(searchTerm));
             }
 
             var totalCount = await query.CountAsync();
@@ -64,7 +63,7 @@ namespace Ecommerce.Infrastructure.Repositories
         public async Task<Category?> GetByNameAsync(string name)
         {
             return await _context.Categories
-                .FirstOrDefaultIgnoreCaseAsync(c => c.Name, name);
+                .FirstOrDefaultAsync(c => c.Name == name);
         }
     }
 }

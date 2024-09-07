@@ -2,7 +2,6 @@
 using Ecommerce.Domain.Entities;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Ecommerce.Infrastructure.Extensions;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -87,7 +86,7 @@ namespace Ecommerce.Infrastructure.Repositories
         public async Task<Product?> GetByNameAsync(string name)
         {
             return await _context.Products
-                .FirstOrDefaultIgnoreCaseAsync(p => p.Name, name);
+                .FirstOrDefaultAsync(p => p.Name == name);
         }
     }
 }
