@@ -2,13 +2,13 @@
 {
     public class ListProductsResponse
     {
-        public required IEnumerable<ProductDto> Products { get; set; }
+        public required IEnumerable<ProductDetails> Products { get; set; }
         public required int TotalCount { get; set; }
         public required int PageNumber { get; set; }
         public required int PageSize { get; set; }
     }
 
-    public class ProductDto
+    public class ProductDetails
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }

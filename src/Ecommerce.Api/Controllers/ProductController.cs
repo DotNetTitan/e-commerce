@@ -1,11 +1,13 @@
-﻿using Asp.Versioning;
+﻿using MediatR;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Ecommerce.Application.Features.ProductManagement.CreateProduct;
 using Ecommerce.Application.Features.ProductManagement.GetProductDetails;
 using Ecommerce.Application.Features.ProductManagement.UpdateProduct;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Ecommerce.Application.Features.ProductManagement.ListProducts;
 using Ecommerce.Application.Features.ProductManagement.DeleteProduct;
+using Ecommerce.Application.DTOs.ProductManagement;
+using System.Net;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -25,8 +27,17 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto)
         {
+            var command = new CreateProductCommand
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price,
+                StockQuantity = dto.StockQuantity,
+                CategoryId = dto.CategoryId
+            };
+
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
@@ -60,12 +71,22 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDto dto)
         {
-            if (id != command.Id)
+            if (id != dto.Id)
             {
                 return BadRequest("The ID in the URL does not match the ID in the request body.");
             }
+
+            var command = new UpdateProductCommand
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price,
+                StockQuantity = dto.StockQuantity,
+                CategoryId = dto.CategoryId
+            };
 
             var result = await _mediator.Send(command);
 
@@ -74,7 +95,7 @@ namespace Ecommerce.Api.Controllers
                 return Ok(result.Value);
             }
 
-            if (result.Errors.Any(e => e.Message.Contains("not found")))
+            if (result.Errors.Exists(e => e.Message.Contains("not found")))
             {
                 return NotFound(result.Errors.FirstOrDefault()?.Message);
             }
@@ -84,9 +105,18 @@ namespace Ecommerce.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ListProductsResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ListProducts([FromQuery] ListProductsQuery query)
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ListProducts([FromQuery] ListProductsDto dto)
         {
+            var query = new ListProductsQuery
+            {
+                PageNumber = dto.PageNumber,
+                PageSize = dto.PageSize,
+                SearchTerm = dto.SearchTerm,
+                CategoryId = dto.CategoryId
+            };
+
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
@@ -94,13 +124,13 @@ namespace Ecommerce.Api.Controllers
                 return Ok(result.Value);
             }
 
-            return StatusCode(500, "An error occurred while retrieving the products");
+            return NotFound(result.Errors.FirstOrDefault()?.Message);
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(DeleteProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var command = new DeleteProductCommand { ProductId = id };
@@ -111,12 +141,7 @@ namespace Ecommerce.Api.Controllers
                 return Ok(result.Value);
             }
 
-            if (result.Errors.Any(e => e.Message.Contains("not found")))
-            {
-                return NotFound(result.Errors.FirstOrDefault()?.Message);
-            }
-
-            return StatusCode(500, "An error occurred while deleting the product");
+            return NotFound(result.Errors.FirstOrDefault()?.Message);
         }
     }
 }

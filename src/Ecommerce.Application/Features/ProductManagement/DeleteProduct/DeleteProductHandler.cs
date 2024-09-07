@@ -33,7 +33,7 @@ namespace Ecommerce.Application.Features.ProductManagement.DeleteProduct
                 });
             }
 
-            return Result.Fail<DeleteProductResponse>("Failed to delete product");
+            return Result.Fail<DeleteProductResponse>($"Failed to delete product  with ID {request.ProductId}");
         }
     }
 }

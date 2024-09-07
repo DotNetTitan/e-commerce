@@ -85,14 +85,16 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     ConfigureAuthentication(services, configuration);
     ConfigureIdentityOptions(services);
 
+    services.AddHttpContextAccessor();
+
     services.AddSingleton(new EmailClient(configuration["AppSettings:AzureCommunicationService"]));
     services.AddTransient<IEmailService, EmailService>();
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<RefreshTokenService>();
     services.AddScoped<ICurrentUserService, CurrentUserService>();
-    services.AddHttpContextAccessor();
     services.AddScoped<IProductRepository, ProductRepository>();
+    services.AddScoped<ICategoryRepository, CategoryRepository>();
 }
 
 static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)

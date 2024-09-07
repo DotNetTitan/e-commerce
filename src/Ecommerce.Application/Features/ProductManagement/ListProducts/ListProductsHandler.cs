@@ -1,7 +1,6 @@
 ﻿using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
-using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Features.ProductManagement.ListProducts
 {
@@ -23,7 +22,7 @@ namespace Ecommerce.Application.Features.ProductManagement.ListProducts
                 request.CategoryId
             );
 
-            var productDtos = products.Select(p => new ProductDto
+            var productDetails = products.Select(p => new ProductDetails
             {
                 Id = p.ProductId,
                 Name = p.Name,
@@ -36,7 +35,7 @@ namespace Ecommerce.Application.Features.ProductManagement.ListProducts
 
             var response = new ListProductsResponse
             {
-                Products = productDtos,
+                Products = productDetails,
                 TotalCount = totalCount,
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize
