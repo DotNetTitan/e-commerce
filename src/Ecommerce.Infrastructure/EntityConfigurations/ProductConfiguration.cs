@@ -18,6 +18,9 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .WithOne(r => r.Product)
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(p => p.Name);
+            builder.HasIndex(p => p.CategoryId);
         }
     }
 }

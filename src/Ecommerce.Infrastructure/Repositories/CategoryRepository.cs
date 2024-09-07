@@ -2,6 +2,7 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Ecommerce.Infrastructure.Extensions;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -58,6 +59,12 @@ namespace Ecommerce.Infrastructure.Repositories
                 .ToListAsync();
 
             return (categories, totalCount);
+        }
+
+        public async Task<Category?> GetByNameAsync(string name)
+        {
+            return await _context.Categories
+                .FirstOrDefaultIgnoreCaseAsync(c => c.Name, name);
         }
     }
 }

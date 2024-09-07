@@ -16,6 +16,13 @@ namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
 
         public async Task<Result<CreateCategoryResponse>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
+            // Check if a category with the same name already exists
+            var existingCategory = await _categoryRepository.GetByNameAsync(request.Name);
+            if (existingCategory != null)
+            {
+                return Result.Fail<CreateCategoryResponse>($"A category with the name '{request.Name}' already exists.");
+            }
+
             var category = new Category
             {
                 Name = request.Name,

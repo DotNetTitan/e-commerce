@@ -9,5 +9,6 @@ namespace Ecommerce.Application.Interfaces
         Task<Category?> UpdateAsync(Category category);
         Task<bool> DeleteAsync(Category category);
         Task<(List<Category> Categories, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, string? searchTerm = null);
+        Task<Category?> GetByNameAsync(string name);
     }
 }

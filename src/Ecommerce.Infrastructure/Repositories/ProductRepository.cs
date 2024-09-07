@@ -2,6 +2,7 @@
 using Ecommerce.Domain.Entities;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Ecommerce.Infrastructure.Extensions;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -16,9 +17,16 @@ namespace Ecommerce.Infrastructure.Repositories
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
-            return await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.ProductId == id);
+            var product = await _context.Products.FindAsync(id);
+
+            if (product != null)
+            {
+                await _context.Entry(product)
+                    .Reference(p => p.Category)
+                    .LoadAsync();
+            }
+
+            return product;
         }
 
         public async Task<Product?> CreateAsync(Product product)
@@ -74,6 +82,12 @@ namespace Ecommerce.Infrastructure.Repositories
             }
 
             return query;
+        }
+
+        public async Task<Product?> GetByNameAsync(string name)
+        {
+            return await _context.Products
+                .FirstOrDefaultIgnoreCaseAsync(p => p.Name, name);
         }
     }
 }

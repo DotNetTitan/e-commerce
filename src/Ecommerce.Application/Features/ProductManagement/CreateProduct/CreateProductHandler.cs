@@ -2,6 +2,7 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Application.Features.ProductManagement.CreateProduct
 {
@@ -16,6 +17,13 @@ namespace Ecommerce.Application.Features.ProductManagement.CreateProduct
 
         public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
+            // Check if a product with the same name already exists
+            var existingProduct = await _productRepository.GetByNameAsync(request.Name);
+            if (existingProduct != null)
+            {
+                return Result.Fail<CreateProductResponse>($"A product with the name '{request.Name}' already exists.");
+            }
+
             var product = new Product
             {
                 Name = request.Name,
