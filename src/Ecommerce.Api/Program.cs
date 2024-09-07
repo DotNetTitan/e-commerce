@@ -12,10 +12,8 @@ using System.Text;
 using Asp.Versioning;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Services;
-using Ecommerce.Application.Common;
 using Ecommerce.Application.Common.Models;
 using Azure.Communication.Email;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text.Json;
@@ -95,6 +93,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<ICurrentUserService, CurrentUserService>();
     services.AddScoped<IProductRepository, ProductRepository>();
     services.AddScoped<ICategoryRepository, CategoryRepository>();
+    services.AddScoped<ICustomerRepository, CustomerRepository>();
 }
 
 static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)

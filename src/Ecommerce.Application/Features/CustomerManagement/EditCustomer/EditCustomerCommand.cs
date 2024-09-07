@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using FluentResults;
+using Ecommerce.Domain.ValueObjects;
 
 namespace Ecommerce.Application.Features.CustomerManagement.EditCustomer
 {
-    internal class EditCustomerCommand
+    public class EditCustomerCommand : IRequest<Result<EditCustomerResponse>>
     {
+        public Guid CustomerId { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public Address? Address { get; set; }
     }
 }

@@ -16,14 +16,14 @@ namespace Ecommerce.Application.Features.CategoryManagement.DeleteCategory
 
         public async Task<Result<DeleteCategoryResponse>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var product = await _categoryRepository.GetByIdAsync(request.Id);
+            var category = await _categoryRepository.GetByIdAsync(request.Id);
 
-            if (product == null)
+            if (category == null)
             {
                 return Result.Fail<DeleteCategoryResponse>($"Category with ID {request.Id} not found.");
             }
 
-            var isDeleted = await _categoryRepository.DeleteAsync(request.Id);
+            var isDeleted = await _categoryRepository.DeleteAsync(category);
 
             if (isDeleted)
             {

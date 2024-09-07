@@ -12,6 +12,9 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
 
             builder.Property(o => o.OrderDate).IsRequired();
 
+            builder.Property(p => p.TotalAmount)
+                .HasColumnType("decimal(18, 2)");
+
             builder.HasOne(o => o.Customer)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.CustomerId)

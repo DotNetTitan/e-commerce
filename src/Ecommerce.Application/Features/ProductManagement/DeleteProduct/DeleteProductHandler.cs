@@ -22,7 +22,7 @@ namespace Ecommerce.Application.Features.ProductManagement.DeleteProduct
                 return Result.Fail<DeleteProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
-            var isDeleted = await _productRepository.DeleteAsync(request.ProductId);
+            var isDeleted = await _productRepository.DeleteAsync(product);
 
             if (isDeleted)
             {

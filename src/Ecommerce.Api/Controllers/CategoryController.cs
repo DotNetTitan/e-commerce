@@ -95,6 +95,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(DeleteCategoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
             var command = new DeleteCategoryCommand { Id = id };

@@ -16,8 +16,8 @@ namespace Ecommerce.Domain.Entities
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public Address? CustomerAddress { get; set; }
+        public ShoppingCart? ShoppingCart { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }
-        public ShoppingCart? ShoppingCart { get; set; }
     }
 }

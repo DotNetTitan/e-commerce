@@ -1,6 +1,4 @@
-﻿using Ecommerce.Domain.Entities;
-
-namespace Ecommerce.Domain.ValueObjects
+﻿namespace Ecommerce.Domain.ValueObjects
 {
     public record Address(string Building, string Street, string PostalCode, string City, string State, string Country);
 }

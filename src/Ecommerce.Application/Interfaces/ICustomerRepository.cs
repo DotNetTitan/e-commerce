@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Interfaces
 {
-    internal interface ICustomerRepository
+    public interface ICustomerRepository
     {
+        Task<Customer?> GetByIdAsync(Guid customerId);
+        Task<Customer> UpdateAsync(Customer customer);
+        Task<Customer> AddAsync(Customer customer);
     }
 }

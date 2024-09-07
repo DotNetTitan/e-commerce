@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using FluentResults;
 
 namespace Ecommerce.Application.Features.CustomerManagement.ViewCustomerDetails
 {
-    internal class ViewCustomerDetailsQuery
+    public class ViewCustomerDetailsQuery : IRequest<Result<ViewCustomerDetailsResponse>>
     {
+        public Guid CustomerId { get; set; }
     }
 }

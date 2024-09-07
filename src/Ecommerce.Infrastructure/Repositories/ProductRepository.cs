@@ -35,12 +35,8 @@ namespace Ecommerce.Infrastructure.Repositories
             return product;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Product product)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                return false;
-            
             _context.Products.Remove(product);
             var affectedRows = await _context.SaveChangesAsync();
             return affectedRows > 0;

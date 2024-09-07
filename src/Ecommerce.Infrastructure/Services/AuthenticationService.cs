@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Application.DTOs.Authentication;
 using Ecommerce.Application.Interfaces;
+using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Exceptions;
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
@@ -12,11 +13,13 @@ namespace Ecommerce.Infrastructure.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ICustomerRepository _customerRepository;
 
-        public AuthenticationService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AuthenticationService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ICustomerRepository customerRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _customerRepository = customerRepository;
         }
 
         public async Task<Result<string>> RegisterUserAsync(string userName, string email, string password)
@@ -31,6 +34,13 @@ namespace Ecommerce.Infrastructure.Services
 
             if (result.Succeeded)
             {
+                var customer = new Customer
+                {
+                    IdentityId = user.Id,
+                };
+
+                await _customerRepository.AddAsync(customer);
+
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
                 var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));

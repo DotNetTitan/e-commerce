@@ -33,12 +33,8 @@ namespace Ecommerce.Infrastructure.Repositories
             return category;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Category category)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-                return false;
-            
             _context.Categories.Remove(category);
             var affectedRows = await _context.SaveChangesAsync();
             return affectedRows > 0;

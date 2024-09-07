@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecommerce.Domain.ValueObjects;
 
 namespace Ecommerce.Application.Features.CustomerManagement.ViewCustomerDetails
 {
-    internal class ViewCustomerDetailsResponse
+    public class ViewCustomerDetailsResponse
     {
+        public Guid CustomerId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public Address? Address { get; set; }
     }
 }
