@@ -8,6 +8,7 @@ using Ecommerce.Application.Features.CategoryManagement.DeleteCategory;
 using Ecommerce.Application.Features.CategoryManagement.ListCategories;
 using Ecommerce.Application.DTOs.CategoryManagement;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -27,6 +28,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(CreateCategoryResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Authorize]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto dto)
         {
             var command = new CreateCategoryCommand
@@ -50,6 +52,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Authorize]
         public async Task<IActionResult> GetCategory(Guid id)
         {
             var query = new GetCategoryDetailsQuery { Id = id };
@@ -67,6 +70,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(UpdateCategoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [Authorize]
         public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryDto dto)
         {
             if (id != dto.CategoryId)
@@ -96,6 +100,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Authorize]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
             var command = new DeleteCategoryCommand { Id = id };
@@ -118,6 +123,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ListCategoriesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [Authorize]
         public async Task<IActionResult> ListCategories([FromQuery] ListCategoriesDto dto)
         {
             var query = new ListCategoriesQuery

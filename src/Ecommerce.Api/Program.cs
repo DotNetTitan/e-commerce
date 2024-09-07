@@ -218,4 +218,6 @@ void ConfigurePipeline(WebApplication webApplication)
     webApplication.UseAuthentication();
     webApplication.UseAuthorization();
     webApplication.MapControllers();
+
+    webApplication.UseRateLimiter();
 }
