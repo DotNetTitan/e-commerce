@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.ProductManagement.DeleteProduct
 {
-    internal class DeleteProductCommand
+    public class DeleteProductCommand : IRequest<Result<DeleteProductResponse>>
     {
+        public required Guid ProductId { get; init; }
     }
 }

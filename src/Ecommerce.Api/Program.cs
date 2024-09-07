@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text.Json;
 using System.Threading.RateLimiting;
+using Ecommerce.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +90,9 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<RefreshTokenService>();
+    services.AddScoped<ICurrentUserService, CurrentUserService>();
+    services.AddHttpContextAccessor();
+    services.AddScoped<IProductRepository, ProductRepository>();
 }
 
 static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)

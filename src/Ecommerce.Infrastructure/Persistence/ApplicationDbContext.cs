@@ -9,9 +9,18 @@ namespace Ecommerce.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole<string>, string>
     {
+        private readonly ICurrentUserService _currentUserService;
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
             base(options)
         { }
+
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options,
+            ICurrentUserService currentUserService) : base(options)
+        {
+            _currentUserService = currentUserService;
+        }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -23,7 +32,6 @@ namespace Ecommerce.Infrastructure.Persistence
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,6 +51,44 @@ namespace Ecommerce.Infrastructure.Persistence
             builder.ApplyConfiguration(new ReviewConfiguration());
             builder.ApplyConfiguration(new ShoppingCartConfiguration());
             builder.ApplyConfiguration(new ShoppingCartItemConfiguration());
+        }
+
+        public override int SaveChanges()
+        {
+            UpdateAuditFields();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateAuditFields();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void UpdateAuditFields()
+        {
+            var currentTime = DateTimeOffset.UtcNow;
+            var currentUser = GetCurrentUser();
+
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.Created = currentTime;
+                        entry.Entity.CreatedBy = currentUser;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModified = currentTime;
+                        entry.Entity.LastModifiedBy = currentUser;
+                        break;
+                }
+            }
+        }
+
+        private string GetCurrentUser()
+        {
+            return _currentUserService.UserName ?? "system";
         }
     }
 }

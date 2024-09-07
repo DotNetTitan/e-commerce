@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.Features.ProductManagement.DeleteProduct
+﻿namespace Ecommerce.Application.Features.ProductManagement.DeleteProduct
 {
-    internal class DeleteProductResponse
+    public class DeleteProductResponse
     {
+        public required Guid ProductId { get; set; }
+        public required bool IsDeleted { get; set; }
     }
 }

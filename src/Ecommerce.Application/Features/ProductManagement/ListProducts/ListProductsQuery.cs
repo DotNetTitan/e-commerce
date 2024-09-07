@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.ProductManagement.ListProducts
 {
-    internal class ListProductsQuery
+    public class ListProductsQuery : IRequest<Result<ListProductsResponse>>
     {
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public string? SearchTerm { get; set; }
+        public Guid? CategoryId { get; set; }
     }
 }

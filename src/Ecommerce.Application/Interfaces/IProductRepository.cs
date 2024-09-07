@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Interfaces
 {
-    internal interface IProductRepository
+    public interface IProductRepository
     {
+        Task<Product?> GetByIdAsync(Guid id);
+        Task<Product?> CreateAsync(Product product);
+        Task<Product?> UpdateAsync(Product product);
+        Task<bool> DeleteAsync(Guid id);
+        Task<(IEnumerable<Product> Products, int TotalCount)> GetProductsAsync(int pageNumber, int pageSize, string? searchTerm = null, Guid? categoryId = null);
     }
 }
