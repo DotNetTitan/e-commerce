@@ -15,11 +15,11 @@ namespace Ecommerce.Application.Features.CategoryManagement.UpdateCategory
 
         public async Task<Result<UpdateCategoryResponse>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = await _categoryRepository.GetByIdAsync(request.Id);
+            var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
             if (category == null)
             {
-                return Result.Fail<UpdateCategoryResponse>($"Category with ID {request.Id} not found.");
+                return Result.Fail<UpdateCategoryResponse>($"Category with ID {request.CategoryId} not found.");
             }
 
             category.Name = request.Name;

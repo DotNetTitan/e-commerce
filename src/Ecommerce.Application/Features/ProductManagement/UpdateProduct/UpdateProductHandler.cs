@@ -15,11 +15,11 @@ namespace Ecommerce.Application.Features.ProductManagement.UpdateProduct
 
         public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var existingProduct = await _productRepository.GetByIdAsync(request.Id);
+            var existingProduct = await _productRepository.GetByIdAsync(request.ProductId);
 
             if (existingProduct == null)
             {
-                return Result.Fail<UpdateProductResponse>($"Product with ID {request.Id} not found.");
+                return Result.Fail<UpdateProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
             // Update basic properties

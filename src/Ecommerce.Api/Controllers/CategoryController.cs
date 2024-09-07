@@ -69,14 +69,14 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryDto dto)
         {
-            if (id != dto.Id)
+            if (id != dto.CategoryId)
             {
                 return BadRequest("The ID in the URL does not match the ID in the request body.");
             }
 
             var command = new UpdateCategoryCommand
             {
-                Id = dto.Id,
+                CategoryId = dto.CategoryId,
                 Name = dto.Name,
                 Description = dto.Description
             };

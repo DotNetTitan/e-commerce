@@ -6,7 +6,7 @@ namespace Ecommerce.Application.Features.ProductManagement.UpdateProduct
     {
         public UpdateProductCommandValidator()
         {
-            RuleFor(x => x.Id)
+            RuleFor(x => x.ProductId)
                 .NotEmpty().WithMessage("Product ID is required.");
 
             RuleFor(x => x.Name)
@@ -24,7 +24,7 @@ namespace Ecommerce.Application.Features.ProductManagement.UpdateProduct
                 .GreaterThanOrEqualTo(0).WithMessage("Stock quantity must be zero or greater.");
 
             RuleFor(x => x.CategoryId)
-                .NotEmpty().WithMessage("Category is required.");
+                .NotEmpty().WithMessage("Category ID is required.");
         }
     }
 }

@@ -73,14 +73,14 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDto dto)
         {
-            if (id != dto.Id)
+            if (id != dto.ProductId)
             {
                 return BadRequest("The ID in the URL does not match the ID in the request body.");
             }
 
             var command = new UpdateProductCommand
             {
-                Id = dto.Id,
+                ProductId = dto.ProductId,
                 Name = dto.Name,
                 Description = dto.Description,
                 Price = dto.Price,
