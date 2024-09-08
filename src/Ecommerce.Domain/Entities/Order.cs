@@ -16,7 +16,6 @@ namespace Ecommerce.Domain.Entities
         public decimal TotalAmount { get; set; }
         public Customer? Customer { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
-        public required Payment Payment { get; set; }
         public required Address ShippingAddress { get; set; }
     }
 }
