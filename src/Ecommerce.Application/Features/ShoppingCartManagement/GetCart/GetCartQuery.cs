@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.ShoppingCartManagement.GetCart
 {
-    internal class GetCartQuery
+    public class GetCartQuery : IRequest<Result<GetCartResponse>>
     {
+        public required Guid CustomerId { get; init; }
     }
 }

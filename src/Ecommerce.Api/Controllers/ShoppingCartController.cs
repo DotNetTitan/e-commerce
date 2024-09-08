@@ -4,6 +4,7 @@ using Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart;
 using Ecommerce.Application.DTOs.ShoppingCartManagement;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
+using Ecommerce.Application.Features.ShoppingCartManagement.GetCart;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -34,6 +35,27 @@ namespace Ecommerce.Api.Controllers
             };
 
             var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        [HttpGet("get-cart")]
+        [ProducesResponseType(typeof(GetCartResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetCart([FromQuery] Guid customerId)
+        {
+            var query = new GetCartQuery
+            {
+                CustomerId = customerId
+            };
+
+            var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
             {
