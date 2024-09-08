@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Interfaces
 {
-    internal interface IShoppingCartRepository
+    public interface IShoppingCartRepository
     {
+        Task<ShoppingCart?> GetByCustomerIdAsync(Guid customerId);
+        Task<ShoppingCart?> UpdateAsync(ShoppingCart shoppingCart);
     }
 }

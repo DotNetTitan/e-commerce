@@ -32,19 +32,24 @@ namespace Ecommerce.Application.Features.ProductManagement.UpdateProduct
             int stockDifference = request.StockQuantity - existingProduct.StockQuantity;
             if (stockDifference != 0)
             {
-                if (stockDifference > 0)
+                try
                 {
-                    // Increasing stock
-                    existingProduct.StockQuantity += stockDifference;
-                }
-                else
-                {
-                    // Decreasing stock
-                    if (existingProduct.StockQuantity + stockDifference < 0)
+                    if (stockDifference > 0)
                     {
-                        return Result.Fail<UpdateProductResponse>("Cannot reduce stock below zero.");
+                        existingProduct.IncreaseStock(stockDifference);
                     }
-                    existingProduct.StockQuantity += stockDifference;
+                    else
+                    {
+                        existingProduct.DecreaseStock(-stockDifference);
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    return Result.Fail<UpdateProductResponse>(ex.Message);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return Result.Fail<UpdateProductResponse>(ex.Message);
                 }
             }
 

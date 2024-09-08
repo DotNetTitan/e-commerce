@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.DTOs.ShoppingCartManagement
+﻿namespace Ecommerce.Application.DTOs.ShoppingCartManagement
 {
-    internal class AddItemToCartDto
+    public class AddItemToCartDto
     {
+        public required Guid CustomerId { get; set; }
+        public required Guid ProductId { get; set; }
+        public required int Quantity { get; set; }
     }
 }

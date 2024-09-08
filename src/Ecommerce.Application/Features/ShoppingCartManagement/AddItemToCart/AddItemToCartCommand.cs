@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart
 {
-    internal class AddItemToCartCommand
+    public class AddItemToCartCommand : IRequest<Result<AddItemToCartResponse>>
     {
+        public required Guid CustomerId { get; init; }
+        public required Guid ProductId { get; init; }
+        public required int Quantity { get; init; }
     }
 }
