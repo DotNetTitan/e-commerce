@@ -27,7 +27,6 @@ namespace Ecommerce.Infrastructure.Persistence
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Payment> Payments { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
@@ -46,7 +45,6 @@ namespace Ecommerce.Infrastructure.Persistence
             builder.ApplyConfiguration(new CustomerConfiguration());
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new OrderItemConfiguration());
-            builder.ApplyConfiguration(new PaymentConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ReviewConfiguration());
             builder.ApplyConfiguration(new ShoppingCartConfiguration());
