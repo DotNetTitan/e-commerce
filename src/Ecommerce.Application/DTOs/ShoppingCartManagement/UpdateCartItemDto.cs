@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.DTOs.ShoppingCartManagement
+﻿namespace Ecommerce.Application.DTOs.ShoppingCartManagement
 {
-    internal class UpdateCartItemDto
+    public class UpdateCartItemDto
     {
+        public required Guid CustomerId { get; init; }
+        public required Guid ProductId { get; init; }
+        public required int NewQuantity { get; init; }
     }
 }

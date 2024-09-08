@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.ShoppingCartManagement.RemoveItemFromCart
 {
-    internal class FileName
+    public class RemoveItemFromCartCommand : IRequest<Result<RemoveItemFromCartResponse>>
     {
+        public required Guid CustomerId { get; init; }
+        public required Guid ProductId { get; init; }
     }
 }
