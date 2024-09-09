@@ -10,5 +10,6 @@ namespace Ecommerce.Application.Interfaces
         Task<bool> DeleteAsync(Product product);
         Task<(List<Product> Products, int TotalCount)> GetProductsAsync(int pageNumber, int pageSize, string? searchTerm = null, Guid? categoryId = null);
         Task<Product?> GetByNameAsync(string name);
+        Task<List<Product>> GetAllAsync();
     }
 }

@@ -16,6 +16,7 @@
         public Category? Category { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public int StockQuantity { get; set; }
+        public int LowStockThreshold { get; set; }
 
         // Check if the product is in stock for the requested quantity
         public bool IsInStock(int quantity) => StockQuantity >= quantity;
@@ -46,5 +47,11 @@
 
         // Get the number of reviews
         public int ReviewCount => Reviews.Count;
+
+        // Check if the product is low on stock
+        public bool IsLowStock()
+        {
+            return StockQuantity <= LowStockThreshold;
+        }
     }
 }

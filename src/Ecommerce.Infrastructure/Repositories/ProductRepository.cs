@@ -88,5 +88,12 @@ namespace Ecommerce.Infrastructure.Repositories
             return await _context.Products
                 .FirstOrDefaultAsync(p => p.Name == name);
         }
+
+        public async Task<List<Product>> GetAllAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .ToListAsync();
+        }
     }
 }

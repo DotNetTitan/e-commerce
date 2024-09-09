@@ -35,7 +35,8 @@ namespace Ecommerce.Api.Controllers
                 Description = dto.Description,
                 Price = dto.Price,
                 StockQuantity = dto.StockQuantity,
-                CategoryId = dto.CategoryId
+                CategoryId = dto.CategoryId,
+                LowStockThreshold = dto.LowStockThreshold
             };
 
             var result = await _mediator.Send(command);
@@ -85,7 +86,8 @@ namespace Ecommerce.Api.Controllers
                 Description = dto.Description,
                 Price = dto.Price,
                 StockQuantity = dto.StockQuantity,
-                CategoryId = dto.CategoryId
+                CategoryId = dto.CategoryId,
+                LowStockThreshold = dto.LowStockThreshold
             };
 
             var result = await _mediator.Send(command);

@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Features\CategoryManagement\UpdateCategory\" />
-    <Folder Include="Features\InventoryManagement\" />
   </ItemGroup>
 
 </Project>

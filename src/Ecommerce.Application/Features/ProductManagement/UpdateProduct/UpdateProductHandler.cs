@@ -22,11 +22,11 @@ namespace Ecommerce.Application.Features.ProductManagement.UpdateProduct
                 return Result.Fail<UpdateProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
-            // Update basic properties
             existingProduct.Name = request.Name;
             existingProduct.Description = request.Description;
             existingProduct.Price = request.Price;
             existingProduct.CategoryId = request.CategoryId;
+            existingProduct.LowStockThreshold = request.LowStockThreshold;
 
             // Handle stock quantity update
             int stockDifference = request.StockQuantity - existingProduct.StockQuantity;

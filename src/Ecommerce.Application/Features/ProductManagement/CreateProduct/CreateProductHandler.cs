@@ -29,7 +29,8 @@ namespace Ecommerce.Application.Features.ProductManagement.CreateProduct
                 Description = request.Description,
                 Price = request.Price,
                 StockQuantity = request.StockQuantity,
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+                LowStockThreshold = request.LowStockThreshold
             };
 
             var createdProduct = await _productRepository.CreateAsync(product);

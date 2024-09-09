@@ -2,11 +2,12 @@
 {
     public class UpdateProductDto
     {
-        public required Guid ProductId { get; set; }
-        public required string Name { get; set; }
-        public required string Description { get; set; }
-        public required decimal Price { get; set; }
-        public required int StockQuantity { get; set; }
-        public required Guid CategoryId { get; set; }
+        public required Guid ProductId { get; init; }
+        public required string Name { get; init; }
+        public required string Description { get; init; }
+        public required decimal Price { get; init; }
+        public required int StockQuantity { get; init; }
+        public required Guid CategoryId { get; init; }
+        public required int LowStockThreshold { get; init; }
     }
 }
