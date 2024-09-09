@@ -32,5 +32,31 @@ namespace Ecommerce.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return shoppingCart;
         }
+
+        public async Task<bool> ClearAsync(Guid customerId)
+        {
+            var itemsDeleted = await _context.ShoppingCartItems
+                .Where(sci => sci.ShoppingCart.CustomerId == customerId)
+                .ExecuteDeleteAsync();
+
+            if (itemsDeleted > 0)
+            {
+                // If items were deleted, we know the cart existed
+                return true;
+            }
+
+            // If no items were deleted, check if the cart exists
+            var cartExists = await _context.ShoppingCarts
+                .AnyAsync(sc => sc.CustomerId == customerId);
+
+            return cartExists;
+        }
+
+        public async Task<ShoppingCart> CreateAsync(ShoppingCart shoppingCart)
+        {
+            await _context.ShoppingCarts.AddAsync(shoppingCart);
+            await _context.SaveChangesAsync();
+            return shoppingCart;
+        }
     }
 }

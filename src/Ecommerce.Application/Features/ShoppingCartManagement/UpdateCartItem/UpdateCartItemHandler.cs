@@ -41,6 +41,7 @@ namespace Ecommerce.Application.Features.ShoppingCartManagement.UpdateCartItem
             }
 
             cartItem.UpdateQuantity(request.NewQuantity);
+            cartItem.Price = product.Price;
             await _shoppingCartRepository.UpdateAsync(cart);
 
             return Result.Ok(new UpdateCartItemResponse

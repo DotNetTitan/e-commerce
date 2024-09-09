@@ -33,6 +33,7 @@ namespace Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart
             if (cart == null)
             {
                 cart = new ShoppingCart { CustomerId = request.CustomerId };
+                cart = await _shoppingCartRepository.CreateAsync(cart);
             }
 
             cart.AddItem(product, request.Quantity);

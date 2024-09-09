@@ -6,5 +6,7 @@ namespace Ecommerce.Application.Interfaces
     {
         Task<ShoppingCart?> GetByCustomerIdAsync(Guid customerId);
         Task<ShoppingCart?> UpdateAsync(ShoppingCart shoppingCart);
+        Task<bool> ClearAsync(Guid customerId);
+        Task<ShoppingCart> CreateAsync(ShoppingCart shoppingCart);
     }
 }

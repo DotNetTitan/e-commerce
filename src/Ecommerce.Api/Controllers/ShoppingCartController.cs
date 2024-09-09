@@ -7,6 +7,7 @@ using Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart;
 using Ecommerce.Application.Features.ShoppingCartManagement.GetCart;
 using Ecommerce.Application.Features.ShoppingCartManagement.RemoveItemFromCart;
 using Ecommerce.Application.Features.ShoppingCartManagement.UpdateCartItem;
+using Ecommerce.Application.Features.ShoppingCartManagement.ClearCart;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -23,7 +24,7 @@ namespace Ecommerce.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("{customerId}/items")]
+        [HttpPost("customers/{customerId}/cart/items")]
         [ProducesResponseType(typeof(AddItemToCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -51,7 +52,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpGet("{customerId}")]
+        [HttpGet("customers/{customerId}/cart")]
         [ProducesResponseType(typeof(GetCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -72,7 +73,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpDelete("{customerId}/items/{productId}")]
+        [HttpDelete("customers/{customerId}/cart/items/{productId}")]
         [ProducesResponseType(typeof(RemoveItemFromCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -94,7 +95,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpPut("{customerId}/items/{productId}")]
+        [HttpPut("customers/{customerId}/cart/items/{productId}")]
         [ProducesResponseType(typeof(UpdateCartItemResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -110,6 +111,27 @@ namespace Ecommerce.Api.Controllers
                 CustomerId = customerId,
                 ProductId = productId,
                 NewQuantity = dto.NewQuantity
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        [HttpDelete("customers/{customerId}/cart")]
+        [ProducesResponseType(typeof(ClearCartResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ClearCart(Guid customerId)
+        {
+            var command = new ClearCartCommand
+            {
+                CustomerId = customerId
             };
 
             var result = await _mediator.Send(command);
