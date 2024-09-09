@@ -24,15 +24,15 @@ namespace Ecommerce.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("customers/{customerId}/cart/items")]
+        [HttpPost("customers/{customerId}/cart/items/{productId}")]
         [ProducesResponseType(typeof(AddItemToCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AddItemToCart(Guid customerId, [FromBody] AddItemToCartDto dto)
+        public async Task<IActionResult> AddItemToCart(Guid customerId, Guid productId, [FromBody] AddItemToCartDto dto)
         {
-            if (customerId != dto.CustomerId)
+            if (customerId != dto.CustomerId || productId != dto.ProductId)
             {
-                return BadRequest("Customer ID in the route does not match the DTO.");
+                return BadRequest("Customer ID or Product ID in the route does not match the DTO.");
             }
 
             var command = new AddItemToCartCommand
@@ -52,7 +52,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpGet("customers/{customerId}/cart")]
+        [HttpGet("customers/{customerId}/cart/items")]
         [ProducesResponseType(typeof(GetCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -123,7 +123,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpDelete("customers/{customerId}/cart")]
+        [HttpDelete("customers/{customerId}/cart/items")]
         [ProducesResponseType(typeof(ClearCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
