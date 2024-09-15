@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 {
-    internal class PlaceOrderResponse
+    public class PlaceOrderResponse
     {
+        public Guid OrderId { get; internal set; }
+        public decimal TotalAmount { get; internal set; }
     }
 }

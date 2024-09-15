@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ecommerce.Application.DTOs.OrderManagement
+﻿namespace Ecommerce.Application.DTOs.OrderManagement
 {
-    internal class PlaceOrderDto
+    public class PlaceOrderDto
     {
+        public Guid CustomerId { get; set; }
+        public required List<OrderItemDto> OrderItems { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 }

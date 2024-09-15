@@ -12,7 +12,7 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
             builder.HasKey(p => p.OrderItemId);
 
             // Configure properties
-            builder.Property(p => p.Price)
+            builder.Property(p => p.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
 
             builder.Property(p => p.Quantity)

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using Ecommerce.Application.DTOs.OrderManagement;
 
 namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 {
-    internal class PlaceOrderCommand
+    public class PlaceOrderCommand : IRequest<PlaceOrderResponse>
     {
+        public PlaceOrderDto OrderDetails { get; set; }
     }
 }
