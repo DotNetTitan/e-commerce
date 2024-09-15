@@ -14,11 +14,18 @@ namespace Ecommerce.Infrastructure.Repositories
             _context = context;
         }
 
+        /// <summary>
+        /// Begins a new database transaction.
+        /// </summary>
         public async Task BeginTransactionAsync()
         {
             _transaction = await _context.Database.BeginTransactionAsync();
         }
 
+        /// <summary>
+        /// Saves all changes made in this context to the database and commits the transaction.
+        /// This method should be called after BeginTransactionAsync() for operations requiring transaction management.
+        /// </summary>
         public async Task CommitAsync()
         {
             try
@@ -38,6 +45,9 @@ namespace Ecommerce.Infrastructure.Repositories
             }
         }
 
+        /// <summary>
+        /// Discards all changes made in this context and rolls back the transaction.
+        /// </summary>
         public async Task RollbackAsync()
         {
             if (_transaction != null)
@@ -48,7 +58,11 @@ namespace Ecommerce.Infrastructure.Repositories
             }
         }
 
-        public async Task<int> SaveChangesAsync()
+        /// <summary>
+        /// Saves all changes made in this context to the database without transaction management.
+        /// Use this method for simple operations that don't require explicit transaction control.
+        /// </summary>
+        public async Task<int> SaveChangesWithoutTransactionAsync()
         {
             return await _context.SaveChangesAsync();
         }

@@ -63,7 +63,6 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
                 order.UpdateStatus(OrderStatus.InProgress);
 
                 await _orderRepository.CreateAsync(order);
-                await _unitOfWork.SaveChangesAsync();
 
                 await _unitOfWork.CommitAsync(); // Commit the transaction if everything is successful
 
