@@ -28,6 +28,8 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .WithMany()
                 .HasForeignKey(p => p.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(oi => new { oi.OrderId, oi.ProductId });
         }
     }
 }

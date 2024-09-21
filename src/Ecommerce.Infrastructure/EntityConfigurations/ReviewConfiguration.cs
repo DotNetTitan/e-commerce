@@ -19,6 +19,10 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .WithMany(c => c.Reviews)
                 .HasForeignKey(r => r.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(r => r.Rating).IsRequired();
+            builder.Property(r => r.Comment).IsRequired();
+            builder.HasIndex(r => new { r.ProductId, r.CustomerId });
         }
     }
 }

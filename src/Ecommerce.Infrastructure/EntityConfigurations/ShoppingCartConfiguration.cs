@@ -14,6 +14,13 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .WithOne(sci => sci.ShoppingCart)
                 .HasForeignKey(sci => sci.ShoppingCartId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(sc => sc.Customer)
+                .WithOne(c => c.ShoppingCart)
+                .HasForeignKey<ShoppingCart>(sc => sc.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(sc => sc.CustomerId);
         }
     }
 }

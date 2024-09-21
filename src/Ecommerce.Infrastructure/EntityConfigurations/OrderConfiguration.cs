@@ -15,6 +15,8 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
             builder.Property(p => p.TotalAmount)
                 .HasColumnType("decimal(18, 2)");
 
+            builder.HasIndex(o => o.CustomerId);
+
             builder.HasOne(o => o.Customer)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.CustomerId)
@@ -34,6 +36,8 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 address.Property(a => a.State).HasColumnName("ShippingAddressState");
                 address.Property(a => a.Country).HasColumnName("ShippingAddressCountry");
             });
+
+            builder.HasIndex(o => o.OrderDate);
         }
     }
 }

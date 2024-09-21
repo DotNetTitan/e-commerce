@@ -44,6 +44,8 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 address.Property(a => a.State).HasColumnName("CustomerAddressState");
                 address.Property(a => a.Country).HasColumnName("CustomerAddressCountry");
             });
+
+            builder.HasIndex(c => c.IdentityId);
         }
     }
 }

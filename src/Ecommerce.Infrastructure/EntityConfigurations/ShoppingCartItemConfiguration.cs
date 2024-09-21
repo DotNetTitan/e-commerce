@@ -21,6 +21,8 @@ namespace Ecommerce.Infrastructure.EntityConfigurations
                 .WithMany()
                 .HasForeignKey(sci => sci.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(sci => new { sci.ShoppingCartId, sci.ProductId });
         }
     }
 }
