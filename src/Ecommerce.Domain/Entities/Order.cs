@@ -9,7 +9,7 @@ namespace Ecommerce.Domain.Entities
         {
             OrderId = Guid.NewGuid();
             OrderItems = new List<OrderItem>();
-            Status = OrderStatus.Pending;
+            Status = OrderStatus.InProgress;
         }
 
         public Guid OrderId { get; set; }
