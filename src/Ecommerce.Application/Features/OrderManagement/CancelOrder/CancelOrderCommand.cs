@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using FluentResults;
+using MediatR;
 
 namespace Ecommerce.Application.Features.OrderManagement.CancelOrder
 {
-    public class CancelOrderCommand : IRequest<bool>
+    public class CancelOrderCommand : IRequest<Result<CancelOrderCommandResponse>>
     {
-        public Guid OrderId { get; set; }
-        public Guid CustomerId { get; set; }
+        public required Guid OrderId { get; init; }
+        public required Guid CustomerId { get; init; }
     }
 }

@@ -9,7 +9,7 @@ namespace Ecommerce.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/inventory")]
+    [Route("api/v{version:apiVersion}/products/{productId}/inventory")]
     [Authorize]
     public class InventoryController : ControllerBase
     {
@@ -35,7 +35,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpPut("{productId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(UpdateInventoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -53,7 +53,7 @@ namespace Ecommerce.Api.Controllers
                 return Ok(result.Value);
             }
 
-            return BadRequest(result.Errors);
+            return NotFound(result.Errors);
         }
     }
 }

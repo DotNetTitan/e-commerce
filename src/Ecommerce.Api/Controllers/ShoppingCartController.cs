@@ -13,7 +13,7 @@ namespace Ecommerce.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/shopping-carts")]
+    [Route("api/v{version:apiVersion}/customers/{customerId}/cart")]
     [Authorize]
     public class ShoppingCartController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace Ecommerce.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("customers/{customerId}/cart/items/{productId}")]
+        [HttpPost("items/{productId}")]
         [ProducesResponseType(typeof(AddItemToCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -52,7 +52,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpGet("customers/{customerId}/cart/items")]
+        [HttpGet]
         [ProducesResponseType(typeof(GetCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -73,7 +73,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpDelete("customers/{customerId}/cart/items/{productId}")]
+        [HttpDelete("items/{productId}")]
         [ProducesResponseType(typeof(RemoveItemFromCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -95,7 +95,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpPut("customers/{customerId}/cart/items/{productId}")]
+        [HttpPut("items/{productId}")]
         [ProducesResponseType(typeof(UpdateCartItemResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -123,7 +123,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpDelete("customers/{customerId}/cart/items")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ClearCartResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

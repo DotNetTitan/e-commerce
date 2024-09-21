@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
 
-namespace Ecommerce.Application.Features.ReviewManagement.AddReview
+namespace Ecommerce.Application.Features.ReviewManagement.UpdateReview
 {
-    public class AddReviewResponse
+    public class UpdateReviewCommand : IRequest<Result<UpdateReviewResponse>>
     {
         public required Guid ReviewId { get; init; }
         public required Guid ProductId { get; init; }
         public required Guid CustomerId { get; init; }
         public required int Rating { get; init; }
         public required string Comment { get; init; }
-        public required DateTime ReviewDate { get; init; }
     }
 }

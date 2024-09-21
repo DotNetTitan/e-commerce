@@ -97,6 +97,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<ICategoryRepository, CategoryRepository>();
     services.AddScoped<ICustomerRepository, CustomerRepository>();
     services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+    services.AddScoped<IReviewRepository, ReviewRepository>();
 }
 
 static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)

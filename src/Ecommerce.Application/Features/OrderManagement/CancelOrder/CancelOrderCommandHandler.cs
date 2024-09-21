@@ -1,40 +1,46 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
-using Ecommerce.Domain.Exceptions;
 using Ecommerce.Domain.Enums;
+using FluentResults;
 
 namespace Ecommerce.Application.Features.OrderManagement.CancelOrder
 {
-    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, bool>
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Result<CancelOrderCommandResponse>>
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public CancelOrderCommandHandler(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
+        public CancelOrderCommandHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
-            _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CancelOrderCommandResponse>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = await _orderRepository.GetOrderByOrderIdAsync(request.OrderId) ?? throw new OrderNotFoundException();
+            var order = await _orderRepository.GetOrderByOrderIdAsync(request.OrderId);
+
+            if (order == null)
+            {
+                return Result.Fail<CancelOrderCommandResponse>($"Order with ID {request.OrderId} not found.");
+            }
 
             if (order.CustomerId != request.CustomerId)
             {
-                throw new UnauthorizedAccessException("You are not authorized to cancel this order.");
+                return Result.Fail<CancelOrderCommandResponse>("You are not authorized to cancel this order.");
             }
 
-            if (order.Status != OrderStatus.Pending)
+            if (order.Status != OrderStatus.InProgress)
             {
-                throw new InvalidOperationException("Only pending orders can be cancelled.");
+                return Result.Fail<CancelOrderCommandResponse>($"Cannot cancel order with status {order.Status}.");
             }
 
             order.UpdateStatus(OrderStatus.Cancelled);
             await _orderRepository.UpdateOrderAsync(order);
-            await _unitOfWork.SaveChangesAsync();
 
-            return true;
+            return Result.Ok(new CancelOrderCommandResponse
+            {
+                OrderId = order.OrderId,
+                Status = order.Status
+            });
         }
     }
 }
