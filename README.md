@@ -4,7 +4,7 @@
 ![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
-Welcome to the **E-commerce API**, a robust and scalable solution built using **ASP.NET Core**. This API provides comprehensive functionalities for managing products, categories, user authentication, orders, and reviews, making it an ideal backbone for any online retail platform.
+Welcome to the **E-commerce API**, a robust and scalable solution built using **ASP.NET Core**. This API provides comprehensive functionalities for managing products, categories, user authentication, orders, reviews, shopping carts, customers, and inventory, making it an ideal backbone for any online retail platform.
 
 ## 🚀 Table of Contents
 
@@ -30,7 +30,10 @@ Welcome to the **E-commerce API**, a robust and scalable solution built using **
 - **Product Management**: Add, update, delete, and retrieve product details.
 - **Order Management**: Place, cancel, and get order details.
 - **Review Management**: Add, update, delete, and list product reviews.
-- **User Authentication**: Register, login, and manage user accounts with JWT authentication.
+- **Shopping Cart Management**: Add, update, and remove items from the shopping cart.
+- **Customer Management**: Edit and view customer details.
+- **Inventory Management**: Retrieve and update inventory information.
+- **User Authentication**: Register, login, change password, reset password, confirm email, and resend email confirmation with JWT authentication.
 - **Rate Limiting**: Protect your API with configurable rate limiting.
 - **Exception Handling**: Centralized exception handling for consistent error responses.
 - **Swagger Integration**: Comprehensive API documentation with Swagger UI.
