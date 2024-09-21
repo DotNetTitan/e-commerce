@@ -7,7 +7,7 @@ namespace Ecommerce.Infrastructure.Repositories
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly ApplicationDbContext _context;
-        private IDbContextTransaction _transaction;
+        private IDbContextTransaction? _transaction;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -31,7 +31,10 @@ namespace Ecommerce.Infrastructure.Repositories
             try
             {
                 await _context.SaveChangesAsync();
-                await _transaction.CommitAsync();
+                if (_transaction != null)
+                {
+                    await _transaction.CommitAsync();
+                }
             }
             catch
             {
@@ -40,8 +43,11 @@ namespace Ecommerce.Infrastructure.Repositories
             }
             finally
             {
-                _transaction.Dispose();
-                _transaction = null;
+                if (_transaction != null)
+                {
+                    await _transaction.DisposeAsync();
+                    _transaction = null;
+                }
             }
         }
 
@@ -63,6 +69,11 @@ namespace Ecommerce.Infrastructure.Repositories
         /// Use this method for simple operations that don't require explicit transaction control.
         /// </summary>
         public async Task<int> SaveChangesWithoutTransactionAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }

@@ -5,6 +5,6 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 {
     public class PlaceOrderCommand : IRequest<PlaceOrderResponse>
     {
-        public PlaceOrderDto OrderDetails { get; set; }
+        public required PlaceOrderDto OrderDetails { get; set; }
     }
 }

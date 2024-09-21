@@ -25,17 +25,13 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 
             try
             {
-                var customer = await _customerRepository.GetByIdAsync(request.OrderDetails.CustomerId);
-                if (customer == null)
-                {
-                    throw new CustomerNotFoundException();
-                }
+                var customer = await _customerRepository.GetByIdAsync(request.OrderDetails.CustomerId) ?? throw new CustomerNotFoundException();
 
                 var order = new Order
                 {
                     CustomerId = request.OrderDetails.CustomerId,
                     OrderDate = DateTime.UtcNow,
-                    ShippingAddress = customer.CustomerAddress
+                    ShippingAddress = customer.CustomerAddress!
                 };
 
                 foreach (var item in request.OrderDetails.OrderItems)
@@ -62,7 +58,7 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 
                 order.UpdateStatus(OrderStatus.InProgress);
 
-                await _orderRepository.CreateAsync(order);
+                await _orderRepository.CreateOrderAsync(order);
 
                 await _unitOfWork.CommitAsync(); // Commit the transaction if everything is successful
 

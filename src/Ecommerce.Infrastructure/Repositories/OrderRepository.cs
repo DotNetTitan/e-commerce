@@ -14,38 +14,30 @@ namespace Ecommerce.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Order> GetByIdAsync(Guid id)
+        public async Task<Order?> GetOrderByOrderIdAsync(Guid orderId)
         {
             return await _context.Orders
                 .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o => o.OrderId == id);
+                .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId)
-        {
-            return await _context.Orders
-                .Include(o => o.OrderItems)
-                .Where(o => o.CustomerId == userId)
-                .ToListAsync();
-        }
-
-        public async Task<Order> CreateAsync(Order order)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
             return order;
         }
 
-        public async Task<Order> UpdateAsync(Order order)
+        public async Task<Order> UpdateOrderAsync(Order order)
         {
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return order;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteOrderAsync(Guid orderId)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
             if (order == null)
                 return false;
 
@@ -54,9 +46,18 @@ namespace Ecommerce.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<bool> OrderExistsAsync(Guid id)
+        public async Task<bool> OrderExistsAsync(Guid orderId)
         {
-            return await _context.Orders.AnyAsync(o => o.OrderId == id);
+            return await _context.Orders.AnyAsync(o => o.OrderId == orderId);
+        }
+
+        public async Task<List<Order>> GetOrdersByCustomerIdAsync(Guid customerId)
+        {
+            return await _context.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.CustomerId == customerId)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
         }
     }
 }

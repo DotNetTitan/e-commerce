@@ -36,7 +36,7 @@ namespace Ecommerce.Infrastructure.Repositories
         public async Task<bool> ClearAsync(Guid customerId)
         {
             var itemsDeleted = await _context.ShoppingCartItems
-                .Where(sci => sci.ShoppingCart.CustomerId == customerId)
+                .Where(sci => sci.ShoppingCart != null && sci.ShoppingCart.CustomerId == customerId)
                 .ExecuteDeleteAsync();
 
             if (itemsDeleted > 0)

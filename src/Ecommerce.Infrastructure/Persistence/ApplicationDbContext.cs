@@ -9,7 +9,7 @@ namespace Ecommerce.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole<string>, string>
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService? _currentUserService;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
             base(options)
@@ -86,7 +86,7 @@ namespace Ecommerce.Infrastructure.Persistence
 
         private string GetCurrentUser()
         {
-            return _currentUserService.UserName ?? "system";
+            return _currentUserService?.UserName ?? "system";
         }
     }
 }

@@ -86,17 +86,17 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddHttpContextAccessor();
 
     services.AddSingleton(new EmailClient(configuration["AppSettings:AzureCommunicationService"]));
-    services.AddTransient<IEmailService, EmailService>();
     services.AddScoped<IAuthenticationService, AuthenticationService>();
+    services.AddScoped<ICurrentUserService, CurrentUserService>();
+    services.AddTransient<IEmailService, EmailService>();
     services.AddScoped<ITokenService, TokenService>();
     services.AddScoped<RefreshTokenService>();
-    services.AddScoped<ICurrentUserService, CurrentUserService>();
+    services.AddScoped<IUnitOfWork, UnitOfWork>();
+    services.AddScoped<IOrderRepository, OrderRepository>();
     services.AddScoped<IProductRepository, ProductRepository>();
     services.AddScoped<ICategoryRepository, CategoryRepository>();
     services.AddScoped<ICustomerRepository, CustomerRepository>();
     services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
-    services.AddScoped<IOrderRepository, OrderRepository>();
-    services.AddScoped<IUnitOfWork, UnitOfWork>(); // Add this line to register IUnitOfWork
 }
 
 static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)

@@ -1,17 +1,14 @@
 ﻿using Ecommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Application.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<Order> GetByIdAsync(Guid id);
-        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId);
-        Task<Order> CreateAsync(Order order);
-        Task<Order> UpdateAsync(Order order);
-        Task<bool> DeleteAsync(Guid id);
-        Task<bool> OrderExistsAsync(Guid id);
+        Task<Order> CreateOrderAsync(Order order);
+        Task<Order> UpdateOrderAsync(Order order);
+        Task<bool> DeleteOrderAsync(Guid orderId);
+        Task<bool> OrderExistsAsync(Guid orderId);
+        Task<Order?> GetOrderByOrderIdAsync(Guid orderId);
+        Task<List<Order>> GetOrdersByCustomerIdAsync(Guid customerId);
     }
 }

@@ -15,7 +15,7 @@ namespace Ecommerce.Domain.Entities
         public Guid OrderId { get; set; }
         public required DateTime OrderDate { get; set; }
         public required Guid CustomerId { get; set; }
-        public decimal TotalAmount { get; private set; }
+        public decimal TotalAmount => OrderItems.Sum(item => item.TotalPrice);
         public OrderStatus Status { get; private set; }
         public Customer? Customer { get; set; }
         public ICollection<OrderItem> OrderItems { get; private set; }
@@ -25,20 +25,12 @@ namespace Ecommerce.Domain.Entities
         public void AddOrderItem(OrderItem item)
         {
             OrderItems.Add(item);
-            UpdateTotalAmount();
         }
 
         // Remove an order item
         public void RemoveOrderItem(OrderItem item)
         {
             OrderItems.Remove(item);
-            UpdateTotalAmount();
-        }
-
-        // Calculate total amount
-        private void UpdateTotalAmount()
-        {
-            TotalAmount = OrderItems.Sum(item => item.Quantity * item.UnitPrice);
         }
 
         // Update order status

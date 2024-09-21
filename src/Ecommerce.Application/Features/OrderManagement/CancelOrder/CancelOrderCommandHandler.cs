@@ -18,12 +18,7 @@ namespace Ecommerce.Application.Features.OrderManagement.CancelOrder
 
         public async Task<bool> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = await _orderRepository.GetByIdAsync(request.OrderId);
-
-            if (order == null)
-            {
-                throw new OrderNotFoundException();
-            }
+            var order = await _orderRepository.GetOrderByOrderIdAsync(request.OrderId) ?? throw new OrderNotFoundException();
 
             if (order.CustomerId != request.CustomerId)
             {
@@ -36,7 +31,7 @@ namespace Ecommerce.Application.Features.OrderManagement.CancelOrder
             }
 
             order.UpdateStatus(OrderStatus.Cancelled);
-            await _orderRepository.UpdateAsync(order);
+            await _orderRepository.UpdateOrderAsync(order);
             await _unitOfWork.SaveChangesAsync();
 
             return true;
