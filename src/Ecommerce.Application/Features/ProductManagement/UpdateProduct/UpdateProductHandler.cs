@@ -28,29 +28,17 @@ namespace Ecommerce.Application.Features.ProductManagement.UpdateProduct
             existingProduct.CategoryId = request.CategoryId;
             existingProduct.LowStockThreshold = request.LowStockThreshold;
 
-            // Handle stock quantity update
-            int stockDifference = request.StockQuantity - existingProduct.StockQuantity;
-            if (stockDifference != 0)
+            try
             {
-                try
-                {
-                    if (stockDifference > 0)
-                    {
-                        existingProduct.IncreaseStock(stockDifference);
-                    }
-                    else
-                    {
-                        existingProduct.DecreaseStock(-stockDifference);
-                    }
-                }
-                catch (ArgumentException ex)
-                {
-                    return Result.Fail<UpdateProductResponse>(ex.Message);
-                }
-                catch (InvalidOperationException ex)
-                {
-                    return Result.Fail<UpdateProductResponse>(ex.Message);
-                }
+                existingProduct.UpdateStock(request.StockQuantity);
+            }
+            catch (ArgumentException ex)
+            {
+                return Result.Fail<UpdateProductResponse>(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Result.Fail<UpdateProductResponse>(ex.Message);
             }
 
             var updatedProduct = await _productRepository.UpdateAsync(existingProduct);

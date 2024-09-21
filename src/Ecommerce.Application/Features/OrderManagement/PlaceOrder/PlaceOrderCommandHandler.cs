@@ -51,7 +51,7 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
                     throw new InvalidOperationException("Cannot place an empty order.");
                 }
 
-                if(order.TotalAmount!= request.OrderDetails.TotalAmount)
+                if (!order.ValidateTotalAmount(request.OrderDetails.TotalAmount))
                 {
                     throw new InvalidOperationException("Calculation mismatch.");
                 }

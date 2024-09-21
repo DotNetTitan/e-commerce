@@ -47,5 +47,10 @@ namespace Ecommerce.Domain.Entities
 
         // Get the number of unique products in the order
         public int UniqueItemCount => OrderItems.Count;
+
+        public bool ValidateTotalAmount(decimal expectedTotal)
+        {
+            return Math.Abs(TotalAmount - expectedTotal) < 0.01m; // Using a small tolerance for decimal comparison
+        }
     }
 }

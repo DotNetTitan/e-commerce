@@ -24,7 +24,7 @@ namespace Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart
                 return Result.Fail<AddItemToCartResponse>($"Product with ID {request.ProductId} not found.");
             }
 
-            if (!product.IsInStock(request.Quantity))
+            if (!product.CanFulfillOrder(request.Quantity))
             {
                 return Result.Fail<AddItemToCartResponse>($"Not enough stock. Available: {product.StockQuantity}, Requested: {request.Quantity}");
             }

@@ -53,5 +53,24 @@
         {
             return StockQuantity <= LowStockThreshold;
         }
+
+        // Update stock quantity
+        public void UpdateStock(int newQuantity)
+        {
+            if (newQuantity < 0)
+                throw new ArgumentException("Stock quantity cannot be negative", nameof(newQuantity));
+            
+            int difference = newQuantity - StockQuantity;
+            if (difference > 0)
+                IncreaseStock(difference);
+            else if (difference < 0)
+                DecreaseStock(-difference);
+        }
+
+        // Check if the product can fulfill an order
+        public bool CanFulfillOrder(int quantity)
+        {
+            return IsInStock(quantity);
+        }
     }
 }
