@@ -73,11 +73,11 @@ namespace Ecommerce.Infrastructure.Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.Created = currentTime;
+                        entry.Entity.CreatedAt = currentTime;
                         entry.Entity.CreatedBy = currentUser;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModified = currentTime;
+                        entry.Entity.LastModifiedAt = currentTime;
                         entry.Entity.LastModifiedBy = currentUser;
                         break;
                 }

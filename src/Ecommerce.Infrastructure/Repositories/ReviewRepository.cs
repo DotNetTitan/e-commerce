@@ -44,7 +44,7 @@ namespace Ecommerce.Infrastructure.Repositories
         {
             var query = _context.Reviews
                 .Where(r => r.ProductId == productId)
-                .OrderByDescending(r => r.Created);
+                .OrderByDescending(r => r.CreatedAt);
 
             var totalCount = await query.CountAsync();
 
@@ -60,7 +60,7 @@ namespace Ecommerce.Infrastructure.Repositories
         {
             return await _context.Reviews
                 .Where(r => r.CustomerId == customerId)
-                .OrderByDescending(r => r.Created)
+                .OrderByDescending(r => r.CreatedAt)
                 .ToListAsync();
         }
     }
