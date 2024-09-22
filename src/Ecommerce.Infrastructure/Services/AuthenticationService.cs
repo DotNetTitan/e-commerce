@@ -1,5 +1,4 @@
-﻿using Ecommerce.Application.DTOs.Authentication;
-using Ecommerce.Application.Interfaces;
+﻿using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Exceptions;
 using FluentResults;
@@ -75,21 +74,9 @@ namespace Ecommerce.Infrastructure.Services
             return Result.Fail(["Invalid login attempt. Please check your credentials and try again."]);
         }
 
-        public async Task<UserDto?> GetUserByUsernameAsync(string userName)
+        public async Task<IdentityUser?> GetUserByUsernameAsync(string userName)
         {
-            var user = await _userManager.FindByNameAsync(userName);
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            return new UserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName!,
-                Email = user.Email!
-            };
+            return await _userManager.FindByNameAsync(userName);
         }
 
         public async Task<Result> ConfirmEmailAsync(string email, string token)

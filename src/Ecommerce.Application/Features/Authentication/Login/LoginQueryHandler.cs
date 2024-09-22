@@ -24,7 +24,7 @@ namespace Ecommerce.Application.Features.Authentication.Login
             {
                 var user = await _authenticationService.GetUserByUsernameAsync(request.UserName) ?? throw UserNotFoundException.FromUserName(request.UserName);
 
-                var tokens = await _tokenService.GenerateTokensAsync(user.UserName, user.Id);
+                var tokens = await _tokenService.GenerateTokensAsync(user.UserName!, user.Id);
 
                 return Result.Ok(new LoginQueryResponse
                 {

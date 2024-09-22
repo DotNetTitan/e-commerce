@@ -1,5 +1,5 @@
-﻿using Ecommerce.Application.DTOs.Authentication;
-using FluentResults;
+﻿using FluentResults;
+using Microsoft.AspNetCore.Identity;
 
 namespace Ecommerce.Application.Interfaces
 {
@@ -7,7 +7,7 @@ namespace Ecommerce.Application.Interfaces
     {
         Task<Result<string>> RegisterUserAsync(string userName, string email, string password);
         Task<Result> LoginUserAsync(string userName, string password);
-        Task<UserDto?> GetUserByUsernameAsync(string userName);
+        Task<IdentityUser?> GetUserByUsernameAsync(string userName);
         Task<Result> ConfirmEmailAsync(string email, string token);
         Task<Result<string>> GetPasswordResetTokenAsync(string email);
         Task<Result> ResetPasswordAsync(string email, string token, string newPassword);
