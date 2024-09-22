@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Ecommerce.Domain.Exceptions
+﻿namespace Ecommerce.Domain.Exceptions
 {
     /// <summary>
     /// Represents an exception that is thrown when a customer is not found.
