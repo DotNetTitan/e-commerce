@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Ecommerce.Application.Features.ReviewManagement.AddReview
+namespace Ecommerce.Application.Features.Reviews.Commands.AddReview
 {
-    public class AddReviewValidator : AbstractValidator<AddReviewCommand>
+    public class AddReviewCommandValidator : AbstractValidator<AddReviewCommand>
     {
-        public AddReviewValidator()
+        public AddReviewCommandValidator()
         {
             RuleFor(x => x.ProductId).NotEmpty();
             RuleFor(x => x.CustomerId).NotEmpty();

@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Ecommerce.Application.Features.ReviewManagement.UpdateReview
+namespace Ecommerce.Application.Features.Reviews.Commands.UpdateReview
 {
-    public class UpdateReviewValidator : AbstractValidator<UpdateReviewCommand>
+    public class UpdateReviewCommandValidator : AbstractValidator<UpdateReviewCommand>
     {
-        public UpdateReviewValidator()
+        public UpdateReviewCommandValidator()
         {
             RuleFor(x => x.ReviewId).NotEmpty().WithMessage("Review ID is required.");
             RuleFor(x => x.ProductId).NotEmpty().WithMessage("Product ID is required.");
