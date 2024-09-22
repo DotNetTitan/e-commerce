@@ -1,7 +1,7 @@
 using FluentResults;
 using MediatR;
 
-namespace Ecommerce.Application.Features.CategoryManagement.ListCategories
+namespace Ecommerce.Application.Features.Categories.Queries.ListCategories
 {
     public class ListCategoriesQuery : IRequest<Result<ListCategoriesQueryResponse>>
     {

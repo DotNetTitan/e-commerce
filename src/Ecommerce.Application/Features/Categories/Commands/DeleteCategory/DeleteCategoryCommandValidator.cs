@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Ecommerce.Application.Features.CategoryManagement.DeleteCategory
+namespace Ecommerce.Application.Features.Categories.Commands.DeleteCategory
 {
     public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
     {

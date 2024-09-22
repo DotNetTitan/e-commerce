@@ -2,7 +2,7 @@ using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
 
-namespace Ecommerce.Application.Features.CategoryManagement.DeleteCategory
+namespace Ecommerce.Application.Features.Categories.Commands.DeleteCategory
 {
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Result<DeleteCategoryCommandResponse>>
     {
@@ -35,5 +35,16 @@ namespace Ecommerce.Application.Features.CategoryManagement.DeleteCategory
 
             return Result.Fail<DeleteCategoryCommandResponse>($"Failed to delete category with ID {request.CategoryId}");
         }
+    }
+
+    public class DeleteCategoryCommand : IRequest<Result<DeleteCategoryCommandResponse>>
+    {
+        public required Guid CategoryId { get; init; }
+    }
+
+    public class DeleteCategoryCommandResponse
+    {
+        public required Guid CategoryId { get; set; }
+        public required bool IsDeleted { get; set; }
     }
 }

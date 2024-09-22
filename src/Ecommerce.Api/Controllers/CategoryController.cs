@@ -1,14 +1,14 @@
 using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Ecommerce.Application.Features.CategoryManagement.CreateCategory;
-using Ecommerce.Application.Features.CategoryManagement.GetCategory;
-using Ecommerce.Application.Features.CategoryManagement.UpdateCategory;
-using Ecommerce.Application.Features.CategoryManagement.DeleteCategory;
-using Ecommerce.Application.Features.CategoryManagement.ListCategories;
-using Ecommerce.Application.DTOs.CategoryManagement;
+using Ecommerce.Application.DTOs.Categories;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using Ecommerce.Application.Features.Categories.Commands.CreateCategory;
+using Ecommerce.Application.Features.Categories.Commands.DeleteCategory;
+using Ecommerce.Application.Features.Categories.Commands.UpdateCategory;
+using Ecommerce.Application.Features.Categories.Queries.GetCategory;
+using Ecommerce.Application.Features.Categories.Queries.ListCategories;
 
 namespace Ecommerce.Api.Controllers
 {

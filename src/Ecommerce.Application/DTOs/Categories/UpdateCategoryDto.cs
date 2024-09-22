@@ -1,6 +1,6 @@
-﻿namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
+namespace Ecommerce.Application.DTOs.Categories
 {
-    public class CreateCategoryCommandResponse
+    public class UpdateCategoryDto
     {
         public required Guid CategoryId { get; set; }
         public required string Name { get; set; }

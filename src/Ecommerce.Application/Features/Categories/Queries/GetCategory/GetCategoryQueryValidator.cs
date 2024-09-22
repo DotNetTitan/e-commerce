@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Ecommerce.Application.Features.CategoryManagement.GetCategory
+namespace Ecommerce.Application.Features.Categories.Queries.GetCategory
 {
     public class GetCategoryQueryValidator : AbstractValidator<GetCategoryQuery>
     {

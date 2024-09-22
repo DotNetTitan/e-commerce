@@ -3,7 +3,7 @@ using MediatR;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 
-namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
+namespace Ecommerce.Application.Features.Categories.Commands.CreateCategory
 {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<CreateCategoryCommandResponse>>
     {
@@ -43,5 +43,18 @@ namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
 
             return Result.Fail<CreateCategoryCommandResponse>("Failed to create category");
         }
+    }
+
+    public class CreateCategoryCommand : IRequest<Result<CreateCategoryCommandResponse>>
+    {
+        public required string Name { get; init; }
+        public string? Description { get; init; }
+    }
+
+    public class CreateCategoryCommandResponse
+    {
+        public required Guid CategoryId { get; set; }
+        public required string Name { get; set; }
+        public string? Description { get; set; }
     }
 }

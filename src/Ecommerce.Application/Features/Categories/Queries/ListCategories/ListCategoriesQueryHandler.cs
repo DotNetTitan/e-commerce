@@ -2,7 +2,7 @@ using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
 
-namespace Ecommerce.Application.Features.CategoryManagement.ListCategories
+namespace Ecommerce.Application.Features.Categories.Queries.ListCategories
 {
     public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, Result<ListCategoriesQueryResponse>>
     {

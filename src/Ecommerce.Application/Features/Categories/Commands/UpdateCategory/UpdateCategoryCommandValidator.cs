@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
 
-namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
+namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory
 {
-    public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
+    public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
     {
-        public CreateCategoryCommandValidator()
+        public UpdateCategoryCommandValidator()
         {
+            RuleFor(x => x.CategoryId)
+                .NotEmpty().WithMessage("Category ID is required.");
+
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Category name is required.")
                 .MaximumLength(100).WithMessage("Category name must not exceed 100 characters.");

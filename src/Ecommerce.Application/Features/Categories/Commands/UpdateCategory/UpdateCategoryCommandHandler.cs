@@ -2,7 +2,7 @@ using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
 
-namespace Ecommerce.Application.Features.CategoryManagement.UpdateCategory
+namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory
 {
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<UpdateCategoryCommandResponse>>
     {
@@ -39,5 +39,19 @@ namespace Ecommerce.Application.Features.CategoryManagement.UpdateCategory
 
             return Result.Fail<UpdateCategoryCommandResponse>("Failed to update category");
         }
+    }
+
+    public class UpdateCategoryCommand : IRequest<Result<UpdateCategoryCommandResponse>>
+    {
+        public required Guid CategoryId { get; init; }
+        public required string Name { get; init; }
+        public string? Description { get; init; }
+    }
+
+    public class UpdateCategoryCommandResponse
+    {
+        public required Guid Id { get; set; }
+        public required string Name { get; set; }
+        public string? Description { get; set; }
     }
 }

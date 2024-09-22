@@ -1,4 +1,4 @@
-namespace Ecommerce.Application.DTOs.CategoryManagement
+namespace Ecommerce.Application.DTOs.Categories
 {
     public class ListCategoriesDto
     {
