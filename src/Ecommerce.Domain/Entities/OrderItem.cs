@@ -1,19 +1,56 @@
 ﻿namespace Ecommerce.Domain.Entities
 {
+    /// <summary>
+    /// Represents an item within an order in the e-commerce system.
+    /// </summary>
     public class OrderItem
     {
+        /// <summary>
+        /// Gets or sets the unique identifier for the order item.
+        /// </summary>
+        public Guid OrderItemId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order identifier associated with this item.
+        /// </summary>
+        public required Guid OrderId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order associated with this item.
+        /// </summary>
+        public Order? Order { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product identifier associated with this item.
+        /// </summary>
+        public required Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product associated with this item.
+        /// </summary>
+        public Product? Product { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quantity of the product in this order item.
+        /// </summary>
+        public required int Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unit price of the product in this order item.
+        /// </summary>
+        public required decimal UnitPrice { get; set; }
+
+        /// <summary>
+        /// Calculates the total price for this order item.
+        /// </summary>
+        public decimal TotalPrice => Quantity * UnitPrice;
+
+        /// <summary>
+        /// Initializes a new instance of the OrderItem class.
+        /// </summary>
         public OrderItem()
         {
             OrderItemId = Guid.NewGuid();
         }
-
-        public Guid OrderItemId { get; set; }
-        public required Guid OrderId { get; set; }
-        public Order? Order { get; set; }
-        public required Guid ProductId { get; set; }
-        public Product? Product { get; set; }
-        public required int Quantity { get; set; }
-        public required decimal UnitPrice { get; set; }
-        public decimal TotalPrice => Quantity * UnitPrice;
     }
 }

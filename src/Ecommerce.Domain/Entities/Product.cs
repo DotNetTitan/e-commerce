@@ -1,30 +1,82 @@
 ﻿namespace Ecommerce.Domain.Entities
 {
+    /// <summary>
+    /// Represents a product in the e-commerce system.
+    /// </summary>
     public class Product : BaseEntity
     {
+        /// <summary>
+        /// Gets or sets the unique identifier for the product.
+        /// </summary>
+        public Guid ProductId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the product.
+        /// </summary>
+        public required string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description of the product.
+        /// </summary>
+        public required string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the price of the product.
+        /// </summary>
+        public required decimal Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category identifier of the product.
+        /// </summary>
+        public required Guid CategoryId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category of the product.
+        /// </summary>
+        public Category? Category { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection of reviews for the product.
+        /// </summary>
+        public ICollection<Review> Reviews { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current stock quantity of the product.
+        /// </summary>
+        public int StockQuantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the low stock threshold for the product.
+        /// </summary>
+        public int LowStockThreshold { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the Product class.
+        /// </summary>
         public Product()
         {
             ProductId = Guid.NewGuid();
             Reviews = new List<Review>();
         }
 
-        public Guid ProductId { get; set; }
-        public required string Name { get; set; }
-        public required string Description { get; set; }
-        public required decimal Price { get; set; }
-        public required Guid CategoryId { get; set; }
-        public Category? Category { get; set; }
-        public ICollection<Review> Reviews { get; set; }
-        public int StockQuantity { get; set; }
-        public int LowStockThreshold { get; set; }
-
-        // Check if the product is in stock for the requested quantity
+        /// <summary>
+        /// Checks if the product is in stock for the requested quantity.
+        /// </summary>
+        /// <param name="quantity">The requested quantity.</param>
+        /// <returns>True if the product is in stock for the requested quantity; otherwise, false.</returns>
         public bool IsInStock(int quantity) => StockQuantity >= quantity;
 
-        // Check if the product is out of stock
+        /// <summary>
+        /// Checks if the product is out of stock.
+        /// </summary>
         public bool IsOutOfStock => StockQuantity <= 0;
 
-        // Decrease the stock quantity
+        /// <summary>
+        /// Decreases the stock quantity of the product.
+        /// </summary>
+        /// <param name="quantity">The quantity to decrease.</param>
+        /// <exception cref="ArgumentException">Thrown when the quantity is negative.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when there's not enough stock.</exception>
         public void DecreaseStock(int quantity)
         {
             if (quantity < 0)
@@ -34,7 +86,11 @@
             StockQuantity -= quantity;
         }
 
-        // Increase the stock quantity
+        /// <summary>
+        /// Increases the stock quantity of the product.
+        /// </summary>
+        /// <param name="quantity">The quantity to increase.</param>
+        /// <exception cref="ArgumentException">Thrown when the quantity is negative.</exception>
         public void IncreaseStock(int quantity)
         {
             if (quantity < 0)
@@ -42,19 +98,30 @@
             StockQuantity += quantity;
         }
 
-        // Calculate the average rating of the product
+        /// <summary>
+        /// Calculates the average rating of the product.
+        /// </summary>
         public double AverageRating => Reviews.Any() ? Reviews.Average(r => r.Rating) : 0;
 
-        // Get the number of reviews
+        /// <summary>
+        /// Gets the number of reviews for the product.
+        /// </summary>
         public int ReviewCount => Reviews.Count;
 
-        // Check if the product is low on stock
+        /// <summary>
+        /// Checks if the product is low on stock.
+        /// </summary>
+        /// <returns>True if the product is low on stock; otherwise, false.</returns>
         public bool IsLowStock()
         {
             return StockQuantity <= LowStockThreshold;
         }
 
-        // Update stock quantity
+        /// <summary>
+        /// Updates the stock quantity of the product.
+        /// </summary>
+        /// <param name="newQuantity">The new stock quantity.</param>
+        /// <exception cref="ArgumentException">Thrown when the new quantity is negative.</exception>
         public void UpdateStock(int newQuantity)
         {
             if (newQuantity < 0)
@@ -67,7 +134,11 @@
                 DecreaseStock(-difference);
         }
 
-        // Check if the product can fulfill an order
+        /// <summary>
+        /// Checks if the product can fulfill an order for the specified quantity.
+        /// </summary>
+        /// <param name="quantity">The requested quantity.</param>
+        /// <returns>True if the product can fulfill the order; otherwise, false.</returns>
         public bool CanFulfillOrder(int quantity)
         {
             return IsInStock(quantity);
