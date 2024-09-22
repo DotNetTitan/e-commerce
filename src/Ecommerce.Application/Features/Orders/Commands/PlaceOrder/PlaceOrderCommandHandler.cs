@@ -3,7 +3,6 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Exceptions;
 using Ecommerce.Domain.Enums;
-using Ecommerce.Application.DTOs.Orders;
 
 namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 {
@@ -26,16 +25,16 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 
             try
             {
-                var customer = await _customerRepository.GetByIdAsync(request.OrderDetails.CustomerId) ?? throw CustomerNotFoundException.FromId(request.OrderDetails.CustomerId);
+                var customer = await _customerRepository.GetByIdAsync(request.CustomerId) ?? throw CustomerNotFoundException.FromId(request.OrderDetails.CustomerId);
 
                 var order = new Order
                 {
-                    CustomerId = request.OrderDetails.CustomerId,
+                    CustomerId = request.CustomerId,
                     OrderDate = DateTime.UtcNow,
                     ShippingAddress = customer.CustomerAddress!
                 };
 
-                foreach (var item in request.OrderDetails.OrderItems)
+                foreach (var item in request.Items)
                 {
                     var orderItem = new OrderItem
                     {
@@ -52,7 +51,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
                     throw new InvalidOperationException("Cannot place an empty order.");
                 }
 
-                if (!order.ValidateTotalAmount(request.OrderDetails.TotalAmount))
+                if (!order.ValidateTotalAmount(request.TotalAmount))
                 {
                     throw new InvalidOperationException("Calculation mismatch.");
                 }
@@ -75,7 +74,16 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 
     public class PlaceOrderCommand : IRequest<PlaceOrderResponse>
     {
-        public required PlaceOrderDto OrderDetails { get; set; }
+        public Guid CustomerId { get; set; }
+        public required List<Item> Items { get; set; }
+        public decimal TotalAmount { get; set; }
+    }
+
+    public class Item
+    {
+        public Guid ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
     }
 
     public class PlaceOrderResponse
