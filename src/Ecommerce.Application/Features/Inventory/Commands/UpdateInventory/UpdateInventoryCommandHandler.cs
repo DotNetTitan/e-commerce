@@ -2,13 +2,13 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
 
-namespace Ecommerce.Application.Features.InventoryManagement.UpdateInventory
+namespace Ecommerce.Application.Features.Inventory.Commands.UpdateInventory
 {
-    public class UpdateInventoryHandler : IRequestHandler<UpdateInventoryCommand, Result<UpdateInventoryResponse>>
+    public class UpdateInventoryCommandHandler : IRequestHandler<UpdateInventoryCommand, Result<UpdateInventoryResponse>>
     {
         private readonly IProductRepository _productRepository;
 
-        public UpdateInventoryHandler(IProductRepository productRepository)
+        public UpdateInventoryCommandHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
@@ -49,5 +49,19 @@ namespace Ecommerce.Application.Features.InventoryManagement.UpdateInventory
                 return Result.Fail<UpdateInventoryResponse>(ex.Message);
             }
         }
+    }
+
+    public class UpdateInventoryCommand : IRequest<Result<UpdateInventoryResponse>>
+    {
+        public required Guid ProductId { get; init; }
+        public required int NewQuantity { get; init; }
+        public required int LowStockThreshold { get; init; }
+    }
+
+    public class UpdateInventoryResponse
+    {
+        public required Guid ProductId { get; init; }
+        public required int NewStockQuantity { get; init; }
+        public required int LowStockThreshold { get; init; }
     }
 }

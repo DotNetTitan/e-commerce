@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Asp.Versioning;
-using Ecommerce.Application.Features.InventoryManagement.GetInventory;
-using Ecommerce.Application.Features.InventoryManagement.UpdateInventory;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Ecommerce.Application.Features.Inventory.Queries.GetInventory;
+using Ecommerce.Application.Features.Inventory.Commands.UpdateInventory;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -21,7 +21,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetInventoryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetInventoryQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetInventory([FromQuery] GetInventoryQuery query)
         {
