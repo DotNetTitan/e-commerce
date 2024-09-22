@@ -3,30 +3,30 @@ using MediatR;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 
-namespace Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart
+namespace Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart
 {
-    public class AddItemToCartHandler : IRequestHandler<AddItemToCartCommand, Result<AddItemToCartResponse>>
+    public class AddItemToCartCommandHandler : IRequestHandler<AddItemToCartCommand, Result<AddItemToCartCommandResponse>>
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IProductRepository _productRepository;
 
-        public AddItemToCartHandler(IShoppingCartRepository shoppingCartRepository, IProductRepository productRepository)
+        public AddItemToCartCommandHandler(IShoppingCartRepository shoppingCartRepository, IProductRepository productRepository)
         {
             _shoppingCartRepository = shoppingCartRepository;
             _productRepository = productRepository;
         }
 
-        public async Task<Result<AddItemToCartResponse>> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AddItemToCartCommandResponse>> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.ProductId);
             if (product == null)
             {
-                return Result.Fail<AddItemToCartResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<AddItemToCartCommandResponse>($"Product with ID {request.ProductId} not found.");
             }
 
             if (!product.CanFulfillOrder(request.Quantity))
             {
-                return Result.Fail<AddItemToCartResponse>($"Not enough stock. Available: {product.StockQuantity}, Requested: {request.Quantity}");
+                return Result.Fail<AddItemToCartCommandResponse>($"Not enough stock. Available: {product.StockQuantity}, Requested: {request.Quantity}");
             }
 
             var cart = await _shoppingCartRepository.GetByCustomerIdAsync(request.CustomerId);
@@ -40,7 +40,7 @@ namespace Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart
 
             await _shoppingCartRepository.UpdateAsync(cart);
 
-            return Result.Ok(new AddItemToCartResponse
+            return Result.Ok(new AddItemToCartCommandResponse
             {
                 CartId = cart.ShoppingCartId,
                 ProductId = request.ProductId,
@@ -49,5 +49,21 @@ namespace Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart
                 TotalPrice = cart.TotalPrice
             });
         }
+    }
+
+    public class AddItemToCartCommand : IRequest<Result<AddItemToCartCommandResponse>>
+    {
+        public required Guid CustomerId { get; init; }
+        public required Guid ProductId { get; init; }
+        public required int Quantity { get; init; }
+    }
+
+    public class AddItemToCartCommandResponse
+    {
+        public required Guid CartId { get; init; }
+        public required Guid ProductId { get; init; }
+        public required int Quantity { get; init; }
+        public required int TotalItems { get; init; }
+        public required decimal TotalPrice { get; init; }
     }
 }

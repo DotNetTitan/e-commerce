@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.DTOs.ShoppingCartManagement
+﻿namespace Ecommerce.Application.DTOs.ShoppingCarts
 {
     public class AddItemToCartDto
     {

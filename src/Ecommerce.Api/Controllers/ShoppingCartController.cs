@@ -2,12 +2,12 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Ecommerce.Application.DTOs.ShoppingCartManagement;
-using Ecommerce.Application.Features.ShoppingCartManagement.AddItemToCart;
-using Ecommerce.Application.Features.ShoppingCartManagement.GetCart;
-using Ecommerce.Application.Features.ShoppingCartManagement.RemoveItemFromCart;
-using Ecommerce.Application.Features.ShoppingCartManagement.UpdateCartItem;
-using Ecommerce.Application.Features.ShoppingCartManagement.ClearCart;
+using Ecommerce.Application.DTOs.ShoppingCarts;
+using Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart;
+using Ecommerce.Application.Features.ShoppingCarts.Commands.ClearCart;
+using Ecommerce.Application.Features.ShoppingCarts.Commands.RemoveItemFromCart;
+using Ecommerce.Application.Features.ShoppingCarts.Commands.UpdateCartItem;
+using Ecommerce.Application.Features.ShoppingCarts.Queries.GetCart;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -25,7 +25,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("items/{productId}")]
-        [ProducesResponseType(typeof(AddItemToCartResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AddItemToCartCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AddItemToCart(Guid customerId, Guid productId, [FromBody] AddItemToCartDto dto)
@@ -53,7 +53,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetCartResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetCartQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCart(Guid customerId)
@@ -74,7 +74,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("items/{productId}")]
-        [ProducesResponseType(typeof(RemoveItemFromCartResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RemoveItemFromCartCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemoveItemFromCart(Guid customerId, Guid productId)
@@ -96,7 +96,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("items/{productId}")]
-        [ProducesResponseType(typeof(UpdateCartItemResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UpdateCartItemCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateCartItem(Guid customerId, Guid productId, [FromBody] UpdateCartItemDto dto)
@@ -124,7 +124,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete]
-        [ProducesResponseType(typeof(ClearCartResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ClearCartCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ClearCart(Guid customerId)

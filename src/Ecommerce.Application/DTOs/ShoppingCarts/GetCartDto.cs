@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Application.DTOs.ShoppingCartManagement
+namespace Ecommerce.Application.DTOs.ShoppingCarts
 {
-    internal class RemoveItemFromCartDto
+    internal class GetCartDto
     {
     }
 }
