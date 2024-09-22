@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Categories.Queries.GetCategory
 {
-    public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, Result<GetCategoryQueryResponse>>
+    public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, Result<GetCategoryResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -13,16 +13,16 @@ namespace Ecommerce.Application.Features.Categories.Queries.GetCategory
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<GetCategoryQueryResponse>> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetCategoryResponse>> Handle(GetCategoryQuery request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
             if (category == null)
             {
-                return Result.Fail<GetCategoryQueryResponse>($"Category with ID {request.CategoryId} not found.");
+                return Result.Fail<GetCategoryResponse>($"Category with ID {request.CategoryId} not found.");
             }
 
-            return Result.Ok(new GetCategoryQueryResponse
+            return Result.Ok(new GetCategoryResponse
             {
                 Id = category.CategoryId,
                 Name = category.Name,
@@ -31,12 +31,12 @@ namespace Ecommerce.Application.Features.Categories.Queries.GetCategory
         }
     }
 
-    public class GetCategoryQuery : IRequest<Result<GetCategoryQueryResponse>>
+    public class GetCategoryQuery : IRequest<Result<GetCategoryResponse>>
     {
         public required Guid CategoryId { get; init; }
     }
 
-    public class GetCategoryQueryResponse
+    public class GetCategoryResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }

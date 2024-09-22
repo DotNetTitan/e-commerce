@@ -25,7 +25,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateCategoryCommandResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CreateCategoryResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [Authorize]
@@ -48,7 +48,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{categoryId}")]
-        [ProducesResponseType(typeof(GetCategoryQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetCategoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -67,7 +67,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("{categoryId}")]
-        [ProducesResponseType(typeof(UpdateCategoryCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UpdateCategoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [Authorize]
@@ -96,7 +96,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("{categoryId}")]
-        [ProducesResponseType(typeof(DeleteCategoryCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeleteCategoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -120,7 +120,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ListCategoriesQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListCategoriesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [Authorize]

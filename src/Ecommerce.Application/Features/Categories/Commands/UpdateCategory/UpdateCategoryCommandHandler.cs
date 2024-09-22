@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory
 {
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<UpdateCategoryCommandResponse>>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<UpdateCategoryResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -13,13 +13,13 @@ namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<UpdateCategoryCommandResponse>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UpdateCategoryResponse>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
             if (category == null)
             {
-                return Result.Fail<UpdateCategoryCommandResponse>($"Category with ID {request.CategoryId} not found.");
+                return Result.Fail<UpdateCategoryResponse>($"Category with ID {request.CategoryId} not found.");
             }
 
             category.Name = request.Name;
@@ -29,7 +29,7 @@ namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory
 
             if (updatedCategory != null)
             {
-                return Result.Ok(new UpdateCategoryCommandResponse
+                return Result.Ok(new UpdateCategoryResponse
                 {
                     Id = updatedCategory.CategoryId,
                     Name = updatedCategory.Name,
@@ -37,18 +37,18 @@ namespace Ecommerce.Application.Features.Categories.Commands.UpdateCategory
                 });
             }
 
-            return Result.Fail<UpdateCategoryCommandResponse>("Failed to update category");
+            return Result.Fail<UpdateCategoryResponse>("Failed to update category");
         }
     }
 
-    public class UpdateCategoryCommand : IRequest<Result<UpdateCategoryCommandResponse>>
+    public class UpdateCategoryCommand : IRequest<Result<UpdateCategoryResponse>>
     {
         public required Guid CategoryId { get; init; }
         public required string Name { get; init; }
         public string? Description { get; init; }
     }
 
-    public class UpdateCategoryCommandResponse
+    public class UpdateCategoryResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }
