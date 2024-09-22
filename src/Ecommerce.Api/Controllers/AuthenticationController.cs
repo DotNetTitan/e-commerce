@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Ecommerce.Application.Features.Authentication.Register;
-using Ecommerce.Application.DTOs.Authentication;
+using Ecommerce.Api.DTOs.Authentication;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Authentication.ConfirmEmail;
 using Ecommerce.Application.Features.Authentication.ForgotPassword;

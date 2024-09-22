@@ -1,7 +1,7 @@
 using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Ecommerce.Application.DTOs.Categories;
+using Ecommerce.Api.DTOs.Categories;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Ecommerce.Application.Features.Categories.Commands.CreateCategory;

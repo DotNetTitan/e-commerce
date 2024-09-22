@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
-using Ecommerce.Application.DTOs.Reviews;
+using Ecommerce.Api.DTOs.Reviews;
 using Ecommerce.Application.Features.Reviews.Commands.DeleteReview;
 using Ecommerce.Application.Features.Reviews.Commands.AddReview;
 using Ecommerce.Application.Features.Reviews.Commands.UpdateReview;

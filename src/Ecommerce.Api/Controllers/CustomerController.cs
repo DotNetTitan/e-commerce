@@ -3,7 +3,7 @@ using MediatR;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Customers.Commands.EditCustomer;
 using Ecommerce.Application.Features.Customers.Queries.ViewCustomer;
-using Ecommerce.Application.DTOs.Customers;
+using Ecommerce.Api.DTOs.Customers;
 
 namespace Ecommerce.Api.Controllers
 {

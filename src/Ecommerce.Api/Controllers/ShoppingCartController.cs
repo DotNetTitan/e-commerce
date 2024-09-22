@@ -2,7 +2,7 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Ecommerce.Application.DTOs.ShoppingCarts;
+using Ecommerce.Api.DTOs.ShoppingCarts;
 using Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart;
 using Ecommerce.Application.Features.ShoppingCarts.Commands.ClearCart;
 using Ecommerce.Application.Features.ShoppingCarts.Commands.RemoveItemFromCart;

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Ecommerce.Application.DTOs.Products;
+using Ecommerce.Api.DTOs.Products;
 using Ecommerce.Application.Features.Products.Commands.CreateProduct;
 using Ecommerce.Application.Features.Products.Commands.DeleteProduct;
 using Ecommerce.Application.Features.Products.Queries.GetProduct;

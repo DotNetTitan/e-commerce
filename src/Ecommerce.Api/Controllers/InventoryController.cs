@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Ecommerce.Application.Features.Inventory.Queries.GetInventory;
 using Ecommerce.Application.Features.Inventory.Commands.UpdateInventory;
-using Ecommerce.Application.DTOs.Inventory;
+using Ecommerce.Api.DTOs.Inventory;
 
 namespace Ecommerce.Api.Controllers
 {

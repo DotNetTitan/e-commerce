@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Ecommerce.Application.DTOs.Orders;
+using Ecommerce.Api.DTOs.Orders;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Orders.Commands.PlaceOrder;
 using Ecommerce.Application.Features.Orders.Commands.CancelOrder;
