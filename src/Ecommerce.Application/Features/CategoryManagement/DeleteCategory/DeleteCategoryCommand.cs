@@ -3,8 +3,8 @@ using MediatR;
 
 namespace Ecommerce.Application.Features.CategoryManagement.DeleteCategory
 {
-    public class DeleteCategoryCommand : IRequest<Result<DeleteCategoryResponse>>
+    public class DeleteCategoryCommand : IRequest<Result<DeleteCategoryCommandResponse>>
     {
-        public required Guid Id { get; init; }
+        public required Guid CategoryId { get; init; }
     }
 }

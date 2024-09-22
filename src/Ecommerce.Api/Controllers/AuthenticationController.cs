@@ -45,7 +45,7 @@ namespace Ecommerce.API.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(LoginCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(LoginQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -53,7 +53,7 @@ namespace Ecommerce.API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
-            var command = new LoginCommand
+            var command = new LoginQuery
             {
                 UserName = login.UserName,
                 Password = login.Password

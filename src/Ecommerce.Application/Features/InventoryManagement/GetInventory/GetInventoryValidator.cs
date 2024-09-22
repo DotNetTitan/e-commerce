@@ -12,6 +12,10 @@ namespace Ecommerce.Application.Features.InventoryManagement.GetInventory
             {
                 RuleFor(x => x.SearchTerm).MinimumLength(2).WithMessage("Search term must be at least 2 characters long.");
             });
+            When(x => x.CategoryId.HasValue, () =>
+            {
+                RuleFor(x => x.CategoryId.Value).NotEmpty().WithMessage("Category ID must not be empty.");
+            });
         }
     }
 }

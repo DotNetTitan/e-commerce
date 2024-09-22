@@ -1,6 +1,6 @@
-﻿namespace Ecommerce.Application.Features.ProductManagement.GetProductDetails
+﻿namespace Ecommerce.Application.Features.ProductManagement.GetProduct
 {
-    public class GetProductDetailsResponse
+    public class GetProductQueryResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }

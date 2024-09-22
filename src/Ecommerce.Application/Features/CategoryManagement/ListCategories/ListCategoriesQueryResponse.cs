@@ -1,6 +1,6 @@
 namespace Ecommerce.Application.Features.CategoryManagement.ListCategories
 {
-    public class ListCategoriesResponse
+    public class ListCategoriesQueryResponse
     {
         public required IReadOnlyCollection<CategoryDetails> Categories { get; set; }
         public required int TotalCount { get; set; }

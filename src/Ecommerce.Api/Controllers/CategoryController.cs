@@ -2,7 +2,7 @@ using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Ecommerce.Application.Features.CategoryManagement.CreateCategory;
-using Ecommerce.Application.Features.CategoryManagement.GetCategoryDetails;
+using Ecommerce.Application.Features.CategoryManagement.GetCategory;
 using Ecommerce.Application.Features.CategoryManagement.UpdateCategory;
 using Ecommerce.Application.Features.CategoryManagement.DeleteCategory;
 using Ecommerce.Application.Features.CategoryManagement.ListCategories;
@@ -25,7 +25,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateCategoryResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CreateCategoryCommandResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [Authorize]
@@ -41,21 +41,21 @@ namespace Ecommerce.Api.Controllers
 
             if (result.IsSuccess)
             {
-                return CreatedAtAction(nameof(GetCategory), new { id = result.Value.Id }, result.Value);
+                return CreatedAtAction(nameof(GetCategory), new { id = result.Value.CategoryId }, result.Value);
             }
 
             return BadRequest(result.Errors);
         }
 
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(GetCategoryDetailsResponse), StatusCodes.Status200OK)]
+        [HttpGet("{categoryId}")]
+        [ProducesResponseType(typeof(GetCategoryQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [Authorize]
-        public async Task<IActionResult> GetCategory(Guid id)
+        public async Task<IActionResult> GetCategory(Guid categoryId)
         {
-            var query = new GetCategoryDetailsQuery { Id = id };
+            var query = new GetCategoryQuery { CategoryId = categoryId };
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
@@ -66,14 +66,14 @@ namespace Ecommerce.Api.Controllers
             return NotFound(result.Errors);
         }
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UpdateCategoryResponse), StatusCodes.Status200OK)]
+        [HttpPut("{categoryId}")]
+        [ProducesResponseType(typeof(UpdateCategoryCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [Authorize]
-        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryDto dto)
+        public async Task<IActionResult> UpdateCategory(Guid categoryId, [FromBody] UpdateCategoryDto dto)
         {
-            if (id != dto.CategoryId)
+            if (categoryId != dto.CategoryId)
             {
                 return BadRequest("The ID in the URL does not match the ID in the request body.");
             }
@@ -95,15 +95,15 @@ namespace Ecommerce.Api.Controllers
             return NotFound(result.Errors.FirstOrDefault()?.Message);
         }
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(DeleteCategoryResponse), StatusCodes.Status200OK)]
+        [HttpDelete("{categoryId}")]
+        [ProducesResponseType(typeof(DeleteCategoryCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [Authorize]
-        public async Task<IActionResult> DeleteCategory(Guid id)
+        public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
-            var command = new DeleteCategoryCommand { Id = id };
+            var command = new DeleteCategoryCommand { CategoryId = categoryId };
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
@@ -120,7 +120,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ListCategoriesResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListCategoriesQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [Authorize]

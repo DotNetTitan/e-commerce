@@ -2,9 +2,9 @@
 
 namespace Ecommerce.Application.Features.Authentication.Login
 {
-    internal class LoginCommandValidator : AbstractValidator<LoginCommand>
+    internal class LoginQueryValidator : AbstractValidator<LoginQuery>
     {
-        public LoginCommandValidator()
+        public LoginQueryValidator()
         {
             RuleFor(x => x.UserName)
                 .NotEmpty().WithMessage("Username is required.");

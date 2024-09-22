@@ -1,29 +1,28 @@
 ﻿using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
-using Ecommerce.Domain.Entities;
 
-namespace Ecommerce.Application.Features.ProductManagement.GetProductDetails
+namespace Ecommerce.Application.Features.ProductManagement.GetProduct
 {
-    public class GetProductDetailsHandler : IRequestHandler<GetProductDetailsQuery, Result<GetProductDetailsResponse>>
+    public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Result<GetProductQueryResponse>>
     {
         private readonly IProductRepository _productRepository;
 
-        public GetProductDetailsHandler(IProductRepository productRepository)
+        public GetProductQueryHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
 
-        public async Task<Result<GetProductDetailsResponse>> Handle(GetProductDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetProductQueryResponse>> Handle(GetProductQuery request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.ProductId);
 
             if (product == null)
             {
-                return Result.Fail<GetProductDetailsResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<GetProductQueryResponse>($"Product with ID {request.ProductId} not found.");
             }
 
-            var response = new GetProductDetailsResponse
+            var response = new GetProductQueryResponse
             {
                 Id = product.ProductId,
                 Name = product.Name,

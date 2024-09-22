@@ -4,22 +4,22 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.CategoryManagement.UpdateCategory
 {
-    public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Result<UpdateCategoryResponse>>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Result<UpdateCategoryCommandResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public UpdateCategoryHandler(ICategoryRepository categoryRepository)
+        public UpdateCategoryCommandHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<UpdateCategoryResponse>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UpdateCategoryCommandResponse>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
 
             if (category == null)
             {
-                return Result.Fail<UpdateCategoryResponse>($"Category with ID {request.CategoryId} not found.");
+                return Result.Fail<UpdateCategoryCommandResponse>($"Category with ID {request.CategoryId} not found.");
             }
 
             category.Name = request.Name;
@@ -29,7 +29,7 @@ namespace Ecommerce.Application.Features.CategoryManagement.UpdateCategory
 
             if (updatedCategory != null)
             {
-                return Result.Ok(new UpdateCategoryResponse
+                return Result.Ok(new UpdateCategoryCommandResponse
                 {
                     Id = updatedCategory.CategoryId,
                     Name = updatedCategory.Name,
@@ -37,7 +37,7 @@ namespace Ecommerce.Application.Features.CategoryManagement.UpdateCategory
                 });
             }
 
-            return Result.Fail<UpdateCategoryResponse>("Failed to update category");
+            return Result.Fail<UpdateCategoryCommandResponse>("Failed to update category");
         }
     }
 }

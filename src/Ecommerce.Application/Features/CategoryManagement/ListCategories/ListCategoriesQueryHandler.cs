@@ -4,16 +4,16 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.CategoryManagement.ListCategories
 {
-    public class ListCategoriesHandler : IRequestHandler<ListCategoriesQuery, Result<ListCategoriesResponse>>
+    public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, Result<ListCategoriesQueryResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public ListCategoriesHandler(ICategoryRepository categoryRepository)
+        public ListCategoriesQueryHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<ListCategoriesResponse>> Handle(ListCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ListCategoriesQueryResponse>> Handle(ListCategoriesQuery request, CancellationToken cancellationToken)
         {
             var (categories, totalCount) = await _categoryRepository.GetAllAsync(
                 request.PageNumber,
@@ -28,7 +28,7 @@ namespace Ecommerce.Application.Features.CategoryManagement.ListCategories
                 Description = c.Description
             });
 
-            var response = new ListCategoriesResponse
+            var response = new ListCategoriesQueryResponse
             {
                 Categories = categoryDetails,
                 TotalCount = totalCount,

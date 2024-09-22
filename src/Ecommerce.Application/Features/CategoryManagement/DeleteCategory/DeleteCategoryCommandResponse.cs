@@ -1,8 +1,8 @@
 namespace Ecommerce.Application.Features.CategoryManagement.DeleteCategory
 {
-    public class DeleteCategoryResponse
+    public class DeleteCategoryCommandResponse
     {
-        public required Guid Id { get; set; }
+        public required Guid CategoryId { get; set; }
         public required bool IsDeleted { get; set; }
     }
 }

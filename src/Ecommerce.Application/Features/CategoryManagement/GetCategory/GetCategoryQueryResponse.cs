@@ -1,6 +1,6 @@
-namespace Ecommerce.Application.Features.CategoryManagement.GetCategoryDetails
+namespace Ecommerce.Application.Features.CategoryManagement.GetCategory
 {
-    public class GetCategoryDetailsResponse
+    public class GetCategoryQueryResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }

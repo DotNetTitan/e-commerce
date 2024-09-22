@@ -4,7 +4,7 @@ namespace Ecommerce.Application.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<Category?> GetByIdAsync(Guid id);
+        Task<Category?> GetByIdAsync(Guid categoryId);
         Task<Category?> CreateAsync(Category category);
         Task<Category?> UpdateAsync(Category category);
         Task<bool> DeleteAsync(Category category);

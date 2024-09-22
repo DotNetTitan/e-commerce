@@ -5,22 +5,22 @@ using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
 {
-    public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, Result<CreateCategoryResponse>>
+    public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<CreateCategoryCommandResponse>>
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CreateCategoryHandler(ICategoryRepository categoryRepository)
+        public CreateCategoryCommandHandler(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<CreateCategoryResponse>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CreateCategoryCommandResponse>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
             // Check if a category with the same name already exists
             var existingCategory = await _categoryRepository.GetByNameAsync(request.Name);
             if (existingCategory != null)
             {
-                return Result.Fail<CreateCategoryResponse>($"A category with the name '{request.Name}' already exists.");
+                return Result.Fail<CreateCategoryCommandResponse>($"A category with the name '{request.Name}' already exists.");
             }
 
             var category = new Category
@@ -33,15 +33,15 @@ namespace Ecommerce.Application.Features.CategoryManagement.CreateCategory
 
             if (createdCategory != null)
             {
-                return Result.Ok(new CreateCategoryResponse
+                return Result.Ok(new CreateCategoryCommandResponse
                 {
-                    Id = createdCategory.CategoryId,
+                    CategoryId = createdCategory.CategoryId,
                     Name = createdCategory.Name,
                     Description = createdCategory.Description
                 });
             }
 
-            return Result.Fail<CreateCategoryResponse>("Failed to create category");
+            return Result.Fail<CreateCategoryCommandResponse>("Failed to create category");
         }
     }
 }

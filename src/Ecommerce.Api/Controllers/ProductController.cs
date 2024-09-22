@@ -2,12 +2,11 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Ecommerce.Application.Features.ProductManagement.CreateProduct;
-using Ecommerce.Application.Features.ProductManagement.GetProductDetails;
+using Ecommerce.Application.Features.ProductManagement.GetProduct;
 using Ecommerce.Application.Features.ProductManagement.UpdateProduct;
 using Ecommerce.Application.Features.ProductManagement.ListProducts;
 using Ecommerce.Application.Features.ProductManagement.DeleteProduct;
 using Ecommerce.Application.DTOs.ProductManagement;
-using System.Net;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -50,12 +49,12 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(GetProductDetailsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProductQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProduct(Guid id)
         {
-            var query = new GetProductDetailsQuery { ProductId = id };
+            var query = new GetProductQuery { ProductId = id };
             
             var result = await _mediator.Send(query);
 
