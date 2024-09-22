@@ -4,23 +4,23 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Exceptions;
 using Ecommerce.Domain.ValueObjects;
 
-namespace Ecommerce.Application.Features.CustomerManagement.ViewCustomerDetails
+namespace Ecommerce.Application.Features.Customers.Queries.ViewCustomer
 {
-    public class ViewCustomerDetailsHandler : IRequestHandler<ViewCustomerDetailsQuery, Result<ViewCustomerDetailsResponse>>
+    public class ViewCustomerQueryHandler : IRequestHandler<ViewCustomerQuery, Result<ViewCustomerQuerysResponse>>
     {
         private readonly ICustomerRepository _customerRepository;
 
-        public ViewCustomerDetailsHandler(ICustomerRepository customerRepository)
+        public ViewCustomerQueryHandler(ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
         }
 
-        public async Task<Result<ViewCustomerDetailsResponse>> Handle(ViewCustomerDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ViewCustomerQuerysResponse>> Handle(ViewCustomerQuery request, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetByIdAsync(request.CustomerId)
                 ?? throw CustomerNotFoundException.FromId(request.CustomerId);
 
-            var response = new ViewCustomerDetailsResponse
+            var response = new ViewCustomerQuerysResponse
             {
                 CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
@@ -38,5 +38,18 @@ namespace Ecommerce.Application.Features.CustomerManagement.ViewCustomerDetails
 
             return Result.Ok(response);
         }
+    }
+
+    public class ViewCustomerQuery : IRequest<Result<ViewCustomerQuerysResponse>>
+    {
+        public Guid CustomerId { get; set; }
+    }
+
+    public class ViewCustomerQuerysResponse
+    {
+        public Guid CustomerId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public Address? Address { get; set; }
     }
 }

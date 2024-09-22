@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Ecommerce.Domain.ValueObjects;
 using FluentValidation;
 
-namespace Ecommerce.Application.Features.CustomerManagement.EditCustomer
+namespace Ecommerce.Application.Features.Customers.Commands.EditCustomer
 {
     public class EditCustomerValidator : AbstractValidator<EditCustomerCommand>
     {

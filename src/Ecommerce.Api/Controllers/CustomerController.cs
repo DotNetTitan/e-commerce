@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Ecommerce.Application.Features.CustomerManagement.EditCustomer;
-using Ecommerce.Application.Features.CustomerManagement.ViewCustomerDetails;
-using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
+using Ecommerce.Application.Features.Customers.Commands.EditCustomer;
+using Ecommerce.Application.Features.Customers.Queries.ViewCustomer;
 
 namespace Ecommerce.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/customers")]
-    [Authorize] // Ensure only authenticated users can access these endpoints
     public class CustomerController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -21,12 +19,12 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{customerId}")]
-        [ProducesResponseType(typeof(ViewCustomerDetailsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ViewCustomerQuerysResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetCustomerDetails(Guid customerId)
         {
-            var query = new ViewCustomerDetailsQuery { CustomerId = customerId };
+            var query = new ViewCustomerQuery { CustomerId = customerId };
             var result = await _mediator.Send(query);
 
             if (result.IsFailed)

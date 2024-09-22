@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Application.DTOs.CustomerManagement
+namespace Ecommerce.Application.DTOs.Customers
 {
     internal class ViewCustomerDetailsDto
     {
