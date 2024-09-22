@@ -22,7 +22,7 @@ namespace Ecommerce.Application.Features.Authentication.Login
 
             if (result.IsSuccess)
             {
-                var user = await _authenticationService.GetUserByUsernameAsync(request.UserName) ?? throw new UserNotFoundException();
+                var user = await _authenticationService.GetUserByUsernameAsync(request.UserName) ?? throw UserNotFoundException.FromUserName(request.UserName);
 
                 var tokens = await _tokenService.GenerateTokensAsync(user.UserName, user.Id);
 

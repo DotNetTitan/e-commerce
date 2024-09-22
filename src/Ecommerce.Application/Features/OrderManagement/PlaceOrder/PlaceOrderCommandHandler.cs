@@ -25,7 +25,7 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 
             try
             {
-                var customer = await _customerRepository.GetByIdAsync(request.OrderDetails.CustomerId) ?? throw new CustomerNotFoundException();
+                var customer = await _customerRepository.GetByIdAsync(request.OrderDetails.CustomerId) ?? throw CustomerNotFoundException.FromId(request.OrderDetails.CustomerId);
 
                 var order = new Order
                 {

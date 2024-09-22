@@ -18,7 +18,7 @@ namespace Ecommerce.Application.Features.CustomerManagement.ViewCustomerDetails
         public async Task<Result<ViewCustomerDetailsResponse>> Handle(ViewCustomerDetailsQuery request, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetByIdAsync(request.CustomerId)
-                ?? throw new CustomerNotFoundException($"Customer with ID {request.CustomerId} not found.");
+                ?? throw CustomerNotFoundException.FromId(request.CustomerId);
 
             var response = new ViewCustomerDetailsResponse
             {

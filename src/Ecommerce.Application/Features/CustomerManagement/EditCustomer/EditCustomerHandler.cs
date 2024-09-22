@@ -19,7 +19,7 @@ namespace Ecommerce.Application.Features.CustomerManagement.EditCustomer
         public async Task<Result<EditCustomerResponse>> Handle(EditCustomerCommand request, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetByIdAsync(request.CustomerId)
-                ?? throw new CustomerNotFoundException($"Customer with ID {request.CustomerId} not found.");
+                ?? throw CustomerNotFoundException.FromId(request.CustomerId);
 
             customer.FirstName = request.FirstName;
             customer.LastName = request.LastName;

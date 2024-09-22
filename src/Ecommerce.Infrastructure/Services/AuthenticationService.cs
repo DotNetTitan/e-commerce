@@ -94,7 +94,7 @@ namespace Ecommerce.Infrastructure.Services
 
         public async Task<Result> ConfirmEmailAsync(string email, string token)
         {
-            var user = await _userManager.FindByEmailAsync(email) ?? throw new UserNotFoundException();
+            var user = await _userManager.FindByEmailAsync(email) ?? throw UserNotFoundException.FromUserName(email);
 
             var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
 
@@ -110,7 +110,7 @@ namespace Ecommerce.Infrastructure.Services
 
         public async Task<Result<string>> GetPasswordResetTokenAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email) ?? throw new UserNotFoundException();
+            var user = await _userManager.FindByEmailAsync(email) ?? throw UserNotFoundException.FromUserName(email);
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -121,7 +121,7 @@ namespace Ecommerce.Infrastructure.Services
 
         public async Task<Result> ResetPasswordAsync(string email, string token, string newPassword)
         {
-            var user = await _userManager.FindByEmailAsync(email) ?? throw new UserNotFoundException();
+            var user = await _userManager.FindByEmailAsync(email) ?? throw UserNotFoundException.FromUserName(email);
 
             var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
 
@@ -137,7 +137,7 @@ namespace Ecommerce.Infrastructure.Services
 
         public async Task<Result> ChangePasswordAsync(string userName, string currentPassword, string newPassword)
         {
-            var user = await _userManager.FindByNameAsync(userName) ?? throw new UserNotFoundException();
+            var user = await _userManager.FindByNameAsync(userName) ?? throw UserNotFoundException.FromUserName(userName);
 
             var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
 
@@ -151,7 +151,7 @@ namespace Ecommerce.Infrastructure.Services
 
         public async Task<Result<string>> GetEmailConfirmationTokenAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email) ?? throw new UserNotFoundException();
+            var user = await _userManager.FindByEmailAsync(email) ?? throw UserNotFoundException.FromUserName(email);
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
