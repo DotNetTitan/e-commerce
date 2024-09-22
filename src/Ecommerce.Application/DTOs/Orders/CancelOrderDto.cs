@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ecommerce.Application.DTOs.OrderManagement
+namespace Ecommerce.Application.DTOs.Orders
 {
     public class CancelOrderDto
     {

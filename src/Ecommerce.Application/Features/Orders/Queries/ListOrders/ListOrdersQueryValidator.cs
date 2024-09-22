@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Ecommerce.Application.Features.OrderManagement.ListUserOrders
+namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
 {
-    public class ListUserOrdersValidator : AbstractValidator<ListUserOrdersQuery>
+    public class ListOrdersQueryValidator : AbstractValidator<ListOrdersQuery>
     {
-        public ListUserOrdersValidator()
+        public ListOrdersQueryValidator()
         {
             RuleFor(x => x.CustomerId).NotEmpty().WithMessage("Customer ID is required.");
             RuleFor(x => x.PageNumber).GreaterThan(0).WithMessage("Page number must be greater than 0.");

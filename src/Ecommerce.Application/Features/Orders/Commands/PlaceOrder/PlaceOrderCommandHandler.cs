@@ -3,10 +3,11 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Exceptions;
 using Ecommerce.Domain.Enums;
+using Ecommerce.Application.DTOs.Orders;
 
-namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
+namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 {
-    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, PlaceOrderResponse>
+    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, PlaceOrderCommandResponse>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICustomerRepository _customerRepository;
@@ -19,7 +20,7 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PlaceOrderResponse> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+        public async Task<PlaceOrderCommandResponse> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -62,7 +63,7 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
 
                 await _unitOfWork.CommitAsync(); // Commit the transaction if everything is successful
 
-                return new PlaceOrderResponse { OrderId = order.OrderId, TotalAmount = order.TotalAmount };
+                return new PlaceOrderCommandResponse { OrderId = order.OrderId, TotalAmount = order.TotalAmount };
             }
             catch
             {
@@ -70,5 +71,16 @@ namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
                 throw;
             }
         }
+    }
+
+    public class PlaceOrderCommand : IRequest<PlaceOrderCommandResponse>
+    {
+        public required PlaceOrderDto OrderDetails { get; set; }
+    }
+
+    public class PlaceOrderCommandResponse
+    {
+        public Guid OrderId { get; internal set; }
+        public decimal TotalAmount { get; internal set; }
     }
 }

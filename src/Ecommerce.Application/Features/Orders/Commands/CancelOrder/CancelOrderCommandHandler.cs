@@ -3,7 +3,7 @@ using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Enums;
 using FluentResults;
 
-namespace Ecommerce.Application.Features.OrderManagement.CancelOrder
+namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
 {
     public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Result<CancelOrderCommandResponse>>
     {
@@ -42,5 +42,17 @@ namespace Ecommerce.Application.Features.OrderManagement.CancelOrder
                 Status = order.Status
             });
         }
+    }
+
+    public class CancelOrderCommand : IRequest<Result<CancelOrderCommandResponse>>
+    {
+        public required Guid OrderId { get; init; }
+        public required Guid CustomerId { get; init; }
+    }
+
+    public class CancelOrderCommandResponse
+    {
+        public required Guid OrderId { get; init; }
+        public required OrderStatus Status { get; init; }
     }
 }

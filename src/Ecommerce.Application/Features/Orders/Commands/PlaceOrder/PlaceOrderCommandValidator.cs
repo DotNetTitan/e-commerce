@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Ecommerce.Application.Features.OrderManagement.PlaceOrder
+namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 {
     public class PlaceOrderCommandValidator : AbstractValidator<PlaceOrderCommand>
     {

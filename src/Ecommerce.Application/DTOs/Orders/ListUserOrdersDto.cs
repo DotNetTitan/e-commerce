@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Application.DTOs.OrderManagement
+namespace Ecommerce.Application.DTOs.Orders
 {
-    internal class GetOrderDetailsDto
+    internal class ListCustomerOrdersDto
     {
     }
 }

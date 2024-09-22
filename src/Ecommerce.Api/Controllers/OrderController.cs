@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Ecommerce.Application.Features.OrderManagement.PlaceOrder;
-using Ecommerce.Application.Features.OrderManagement.CancelOrder;
-using Ecommerce.Application.Features.OrderManagement.GetOrderDetails;
-using Ecommerce.Application.Features.OrderManagement.ListUserOrders;
-using Ecommerce.Application.DTOs.OrderManagement;
+using Ecommerce.Application.DTOs.Orders;
 using Asp.Versioning;
+using Ecommerce.Application.Features.Orders.Commands.PlaceOrder;
+using Ecommerce.Application.Features.Orders.Commands.CancelOrder;
+using Ecommerce.Application.Features.Orders.Queries.GetOrderDetails;
+using Ecommerce.Application.Features.Orders.Queries.ListUserOrders;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -57,12 +57,12 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{orderId}")]
-        [ProducesResponseType(typeof(GetOrderDetailsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetOrderQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetOrderDetails(Guid orderId, [FromQuery] Guid customerId)
         {
-            var query = new GetOrderDetailsQuery { OrderId = orderId, CustomerId = customerId };
+            var query = new GetOrderQuery { OrderId = orderId, CustomerId = customerId };
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
@@ -76,11 +76,11 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("customer/{customerId}")]
-        [ProducesResponseType(typeof(ListUserOrdersResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListOrdersQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ListUserOrders(Guid customerId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var query = new ListUserOrdersQuery { CustomerId = customerId, PageNumber = pageNumber, PageSize = pageSize };
+            var query = new ListOrdersQuery { CustomerId = customerId, PageNumber = pageNumber, PageSize = pageSize };
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
