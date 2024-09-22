@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Products.Queries.ListProducts
 {
-    public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, Result<ListProductsQueryResponse>>
+    public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, Result<ListProductsResponse>>
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,7 +13,7 @@ namespace Ecommerce.Application.Features.Products.Queries.ListProducts
             _productRepository = productRepository;
         }
 
-        public async Task<Result<ListProductsQueryResponse>> Handle(ListProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ListProductsResponse>> Handle(ListProductsQuery request, CancellationToken cancellationToken)
         {
             var (products, totalCount) = await _productRepository.GetProductsAsync(
                 request.PageNumber,
@@ -33,7 +33,7 @@ namespace Ecommerce.Application.Features.Products.Queries.ListProducts
                 CategoryName = p.Category?.Name ?? "Unknown Category"
             });
 
-            var response = new ListProductsQueryResponse
+            var response = new ListProductsResponse
             {
                 Products = productDetails,
                 TotalCount = totalCount,
@@ -45,7 +45,7 @@ namespace Ecommerce.Application.Features.Products.Queries.ListProducts
         }
     }
 
-    public class ListProductsQuery : IRequest<Result<ListProductsQueryResponse>>
+    public class ListProductsQuery : IRequest<Result<ListProductsResponse>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -53,7 +53,7 @@ namespace Ecommerce.Application.Features.Products.Queries.ListProducts
         public Guid? CategoryId { get; set; }
     }
 
-    public class ListProductsQueryResponse
+    public class ListProductsResponse
     {
         public required IReadOnlyCollection<ProductDetails> Products { get; set; }
         public required int TotalCount { get; set; }

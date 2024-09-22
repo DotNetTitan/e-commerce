@@ -22,7 +22,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(PlaceOrderCommandResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(PlaceOrderResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDto orderDetails)
         {
@@ -38,7 +38,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("{orderId}/cancel")]
-        [ProducesResponseType(typeof(CancelOrderCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CancelOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CancelOrder(Guid orderId, [FromBody] CancelOrderDto cancelOrderDto)
@@ -57,7 +57,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{orderId}")]
-        [ProducesResponseType(typeof(GetOrderQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetOrderDetails(Guid orderId, [FromQuery] Guid customerId)
@@ -76,7 +76,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("customer/{customerId}")]
-        [ProducesResponseType(typeof(ListOrdersQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListOrdersResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ListUserOrders(Guid customerId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {

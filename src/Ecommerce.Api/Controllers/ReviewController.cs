@@ -25,7 +25,7 @@ namespace Ecommerce.Api.Controllers
 
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(AddReviewCommandResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(AddReviewResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddReview(Guid productId, [FromBody] AddReviewDto dto)
         {
@@ -48,7 +48,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ListReviewsQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListReviewsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ListReviews(Guid productId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
@@ -64,7 +64,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{reviewId}")]
-        [ProducesResponseType(typeof(GetReviewQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetReviewResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetReview(Guid productId, Guid reviewId)
         {
@@ -81,7 +81,7 @@ namespace Ecommerce.Api.Controllers
 
         [HttpPut("{reviewId}")]
         [Authorize]
-        [ProducesResponseType(typeof(UpdateReviewCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UpdateReviewResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateReview(Guid productId, Guid reviewId, [FromBody] UpdateReviewDto dto)
@@ -109,7 +109,7 @@ namespace Ecommerce.Api.Controllers
 
         [HttpDelete("{reviewId}")]
         [Authorize]
-        [ProducesResponseType(typeof(DeleteReviewCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeleteReviewResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteReview(Guid productId, Guid reviewId, [FromQuery] Guid customerId)

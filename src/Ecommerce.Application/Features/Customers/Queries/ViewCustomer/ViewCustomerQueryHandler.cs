@@ -6,7 +6,7 @@ using Ecommerce.Domain.ValueObjects;
 
 namespace Ecommerce.Application.Features.Customers.Queries.ViewCustomer
 {
-    public class ViewCustomerQueryHandler : IRequestHandler<ViewCustomerQuery, Result<ViewCustomerQuerysResponse>>
+    public class ViewCustomerQueryHandler : IRequestHandler<ViewCustomerQuery, Result<ViewCustomerResponse>>
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -15,12 +15,12 @@ namespace Ecommerce.Application.Features.Customers.Queries.ViewCustomer
             _customerRepository = customerRepository;
         }
 
-        public async Task<Result<ViewCustomerQuerysResponse>> Handle(ViewCustomerQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ViewCustomerResponse>> Handle(ViewCustomerQuery request, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetByIdAsync(request.CustomerId)
                 ?? throw CustomerNotFoundException.FromId(request.CustomerId);
 
-            var response = new ViewCustomerQuerysResponse
+            var response = new ViewCustomerResponse
             {
                 CustomerId = customer.CustomerId,
                 FirstName = customer.FirstName,
@@ -40,12 +40,12 @@ namespace Ecommerce.Application.Features.Customers.Queries.ViewCustomer
         }
     }
 
-    public class ViewCustomerQuery : IRequest<Result<ViewCustomerQuerysResponse>>
+    public class ViewCustomerQuery : IRequest<Result<ViewCustomerResponse>>
     {
         public Guid CustomerId { get; set; }
     }
 
-    public class ViewCustomerQuerysResponse
+    public class ViewCustomerResponse
     {
         public Guid CustomerId { get; set; }
         public string? FirstName { get; set; }

@@ -23,7 +23,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateProductCommandResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto)
@@ -49,7 +49,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(GetProductQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetProduct(Guid id)
@@ -67,7 +67,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UpdateProductCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -105,7 +105,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ListProductsQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListProductsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ListProducts([FromQuery] ListProductsDto dto)
@@ -129,7 +129,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(DeleteProductCommandResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeleteProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteProduct(Guid id)

@@ -5,7 +5,7 @@ using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart
 {
-    public class AddItemToCartCommandHandler : IRequestHandler<AddItemToCartCommand, Result<AddItemToCartCommandResponse>>
+    public class AddItemToCartCommandHandler : IRequestHandler<AddItemToCartCommand, Result<AddItemToCartResponse>>
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
         private readonly IProductRepository _productRepository;
@@ -16,17 +16,17 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart
             _productRepository = productRepository;
         }
 
-        public async Task<Result<AddItemToCartCommandResponse>> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AddItemToCartResponse>> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.ProductId);
             if (product == null)
             {
-                return Result.Fail<AddItemToCartCommandResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<AddItemToCartResponse>($"Product with ID {request.ProductId} not found.");
             }
 
             if (!product.CanFulfillOrder(request.Quantity))
             {
-                return Result.Fail<AddItemToCartCommandResponse>($"Not enough stock. Available: {product.StockQuantity}, Requested: {request.Quantity}");
+                return Result.Fail<AddItemToCartResponse>($"Not enough stock. Available: {product.StockQuantity}, Requested: {request.Quantity}");
             }
 
             var cart = await _shoppingCartRepository.GetByCustomerIdAsync(request.CustomerId);
@@ -40,7 +40,7 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart
 
             await _shoppingCartRepository.UpdateAsync(cart);
 
-            return Result.Ok(new AddItemToCartCommandResponse
+            return Result.Ok(new AddItemToCartResponse
             {
                 CartId = cart.ShoppingCartId,
                 ProductId = request.ProductId,
@@ -51,14 +51,14 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Commands.AddItemToCart
         }
     }
 
-    public class AddItemToCartCommand : IRequest<Result<AddItemToCartCommandResponse>>
+    public class AddItemToCartCommand : IRequest<Result<AddItemToCartResponse>>
     {
         public required Guid CustomerId { get; init; }
         public required Guid ProductId { get; init; }
         public required int Quantity { get; init; }
     }
 
-    public class AddItemToCartCommandResponse
+    public class AddItemToCartResponse
     {
         public required Guid CartId { get; init; }
         public required Guid ProductId { get; init; }

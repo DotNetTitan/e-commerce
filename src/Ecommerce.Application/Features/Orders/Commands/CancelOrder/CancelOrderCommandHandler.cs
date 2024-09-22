@@ -5,7 +5,7 @@ using FluentResults;
 
 namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
 {
-    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Result<CancelOrderCommandResponse>>
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Result<CancelOrderResponse>>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -14,29 +14,29 @@ namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
             _orderRepository = orderRepository;
         }
 
-        public async Task<Result<CancelOrderCommandResponse>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CancelOrderResponse>> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrderByOrderIdAsync(request.OrderId);
 
             if (order == null)
             {
-                return Result.Fail<CancelOrderCommandResponse>($"Order with ID {request.OrderId} not found.");
+                return Result.Fail<CancelOrderResponse>($"Order with ID {request.OrderId} not found.");
             }
 
             if (order.CustomerId != request.CustomerId)
             {
-                return Result.Fail<CancelOrderCommandResponse>("You are not authorized to cancel this order.");
+                return Result.Fail<CancelOrderResponse>("You are not authorized to cancel this order.");
             }
 
             if (order.Status != OrderStatus.InProgress)
             {
-                return Result.Fail<CancelOrderCommandResponse>($"Cannot cancel order with status {order.Status}.");
+                return Result.Fail<CancelOrderResponse>($"Cannot cancel order with status {order.Status}.");
             }
 
             order.UpdateStatus(OrderStatus.Cancelled);
             await _orderRepository.UpdateOrderAsync(order);
 
-            return Result.Ok(new CancelOrderCommandResponse
+            return Result.Ok(new CancelOrderResponse
             {
                 OrderId = order.OrderId,
                 Status = order.Status
@@ -44,13 +44,13 @@ namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
         }
     }
 
-    public class CancelOrderCommand : IRequest<Result<CancelOrderCommandResponse>>
+    public class CancelOrderCommand : IRequest<Result<CancelOrderResponse>>
     {
         public required Guid OrderId { get; init; }
         public required Guid CustomerId { get; init; }
     }
 
-    public class CancelOrderCommandResponse
+    public class CancelOrderResponse
     {
         public required Guid OrderId { get; init; }
         public required OrderStatus Status { get; init; }

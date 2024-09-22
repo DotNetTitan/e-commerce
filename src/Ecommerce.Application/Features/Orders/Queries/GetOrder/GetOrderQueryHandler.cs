@@ -5,7 +5,7 @@ using Ecommerce.Domain.Enums;
 
 namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
 {
-    public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, Result<GetOrderQueryResponse>>
+    public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, Result<GetOrderResponse>>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -14,21 +14,21 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
             _orderRepository = orderRepository;
         }
 
-        public async Task<Result<GetOrderQueryResponse>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetOrderResponse>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrderByOrderIdAsync(request.OrderId);
 
             if (order == null)
             {
-                return Result.Fail<GetOrderQueryResponse>($"Order with ID {request.OrderId} not found.");
+                return Result.Fail<GetOrderResponse>($"Order with ID {request.OrderId} not found.");
             }
 
             if (order.CustomerId != request.CustomerId)
             {
-                return Result.Fail<GetOrderQueryResponse>("You are not authorized to view this order.");
+                return Result.Fail<GetOrderResponse>("You are not authorized to view this order.");
             }
 
-            var response = new GetOrderQueryResponse
+            var response = new GetOrderResponse
             {
                 OrderId = order.OrderId,
                 CustomerId = order.CustomerId,
@@ -49,13 +49,13 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
         }
     }
 
-    public class GetOrderQuery : IRequest<Result<GetOrderQueryResponse>>
+    public class GetOrderQuery : IRequest<Result<GetOrderResponse>>
     {
         public required Guid OrderId { get; init; }
         public required Guid CustomerId { get; init; }
     }
 
-    public class GetOrderQueryResponse
+    public class GetOrderResponse
     {
         public required Guid OrderId { get; init; }
         public required Guid CustomerId { get; init; }

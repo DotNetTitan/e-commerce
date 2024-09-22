@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.ShoppingCarts.Commands.RemoveItemFromCart
 {
-    public class RemoveItemFromCartCommandHandler : IRequestHandler<RemoveItemFromCartCommand, Result<RemoveItemFromCartCommandResponse>>
+    public class RemoveItemFromCartCommandHandler : IRequestHandler<RemoveItemFromCartCommand, Result<RemoveItemFromCartResponse>>
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
 
@@ -13,19 +13,19 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Commands.RemoveItemFromCa
             _shoppingCartRepository = shoppingCartRepository;
         }
 
-        public async Task<Result<RemoveItemFromCartCommandResponse>> Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken)
+        public async Task<Result<RemoveItemFromCartResponse>> Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken)
         {
             var cart = await _shoppingCartRepository.GetByCustomerIdAsync(request.CustomerId);
             if (cart == null)
             {
-                return Result.Fail<RemoveItemFromCartCommandResponse>($"Shopping cart not found for customer {request.CustomerId}");
+                return Result.Fail<RemoveItemFromCartResponse>($"Shopping cart not found for customer {request.CustomerId}");
             }
 
             cart.RemoveItem(request.ProductId);
 
             await _shoppingCartRepository.UpdateAsync(cart);
 
-            return Result.Ok(new RemoveItemFromCartCommandResponse
+            return Result.Ok(new RemoveItemFromCartResponse
             {
                 CartId = cart.ShoppingCartId,
                 RemovedProductId = request.ProductId,
@@ -35,13 +35,13 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Commands.RemoveItemFromCa
         }
     }
 
-    public class RemoveItemFromCartCommand : IRequest<Result<RemoveItemFromCartCommandResponse>>
+    public class RemoveItemFromCartCommand : IRequest<Result<RemoveItemFromCartResponse>>
     {
         public required Guid CustomerId { get; init; }
         public required Guid ProductId { get; init; }
     }
 
-    public class RemoveItemFromCartCommandResponse
+    public class RemoveItemFromCartResponse
     {
         public required Guid CartId { get; init; }
         public required Guid RemovedProductId { get; init; }

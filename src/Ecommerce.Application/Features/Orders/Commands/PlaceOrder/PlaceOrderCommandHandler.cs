@@ -7,7 +7,7 @@ using Ecommerce.Application.DTOs.Orders;
 
 namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 {
-    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, PlaceOrderCommandResponse>
+    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, PlaceOrderResponse>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICustomerRepository _customerRepository;
@@ -20,7 +20,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<PlaceOrderCommandResponse> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+        public async Task<PlaceOrderResponse> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -63,7 +63,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 
                 await _unitOfWork.CommitAsync(); // Commit the transaction if everything is successful
 
-                return new PlaceOrderCommandResponse { OrderId = order.OrderId, TotalAmount = order.TotalAmount };
+                return new PlaceOrderResponse { OrderId = order.OrderId, TotalAmount = order.TotalAmount };
             }
             catch
             {
@@ -73,12 +73,12 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
         }
     }
 
-    public class PlaceOrderCommand : IRequest<PlaceOrderCommandResponse>
+    public class PlaceOrderCommand : IRequest<PlaceOrderResponse>
     {
         public required PlaceOrderDto OrderDetails { get; set; }
     }
 
-    public class PlaceOrderCommandResponse
+    public class PlaceOrderResponse
     {
         public Guid OrderId { get; internal set; }
         public decimal TotalAmount { get; internal set; }

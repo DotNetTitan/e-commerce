@@ -5,7 +5,7 @@ using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Features.Reviews.Commands.AddReview
 {
-    public class AddReviewCommandHandler : IRequestHandler<AddReviewCommand, Result<AddReviewCommandResponse>>
+    public class AddReviewCommandHandler : IRequestHandler<AddReviewCommand, Result<AddReviewResponse>>
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IProductRepository _productRepository;
@@ -16,12 +16,12 @@ namespace Ecommerce.Application.Features.Reviews.Commands.AddReview
             _productRepository = productRepository;
         }
 
-        public async Task<Result<AddReviewCommandResponse>> Handle(AddReviewCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AddReviewResponse>> Handle(AddReviewCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.ProductId);
             if (product == null)
             {
-                return Result.Fail<AddReviewCommandResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<AddReviewResponse>($"Product with ID {request.ProductId} not found.");
             }
 
             var review = new Review
@@ -37,7 +37,7 @@ namespace Ecommerce.Application.Features.Reviews.Commands.AddReview
 
             if (createdReview != null)
             {
-                return Result.Ok(new AddReviewCommandResponse
+                return Result.Ok(new AddReviewResponse
                 {
                     ReviewId = createdReview.ReviewId,
                     ProductId = createdReview.ProductId,
@@ -48,11 +48,11 @@ namespace Ecommerce.Application.Features.Reviews.Commands.AddReview
                 });
             }
 
-            return Result.Fail<AddReviewCommandResponse>("Failed to create review");
+            return Result.Fail<AddReviewResponse>("Failed to create review");
         }
     }
 
-    public class AddReviewCommand : IRequest<Result<AddReviewCommandResponse>>
+    public class AddReviewCommand : IRequest<Result<AddReviewResponse>>
     {
         public required Guid ProductId { get; init; }
         public required Guid CustomerId { get; init; }
@@ -60,7 +60,7 @@ namespace Ecommerce.Application.Features.Reviews.Commands.AddReview
         public required string Comment { get; init; }
     }
 
-    public class AddReviewCommandResponse
+    public class AddReviewResponse
     {
         public required Guid ReviewId { get; init; }
         public required Guid ProductId { get; init; }

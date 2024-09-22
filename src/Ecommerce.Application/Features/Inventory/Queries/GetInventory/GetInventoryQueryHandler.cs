@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Inventory.Queries.GetInventory
 {
-    public class GetInventoryQueryHandler : IRequestHandler<GetInventoryQuery, Result<GetInventoryQueryResponse>>
+    public class GetInventoryQueryHandler : IRequestHandler<GetInventoryQuery, Result<GetInventoryResponse>>
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,7 +13,7 @@ namespace Ecommerce.Application.Features.Inventory.Queries.GetInventory
             _productRepository = productRepository;
         }
 
-        public async Task<Result<GetInventoryQueryResponse>> Handle(GetInventoryQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetInventoryResponse>> Handle(GetInventoryQuery request, CancellationToken cancellationToken)
         {
             var (products, totalCount) = await _productRepository.GetProductsAsync(
                 request.PageNumber,
@@ -31,7 +31,7 @@ namespace Ecommerce.Application.Features.Inventory.Queries.GetInventory
                 CategoryName = p.Category?.Name ?? "Unknown Category"
             });
 
-            return Result.Ok(new GetInventoryQueryResponse
+            return Result.Ok(new GetInventoryResponse
             {
                 InventoryItems = inventoryItems,
                 TotalCount = totalCount,
@@ -41,7 +41,7 @@ namespace Ecommerce.Application.Features.Inventory.Queries.GetInventory
         }
     }
 
-    public class GetInventoryQuery : IRequest<Result<GetInventoryQueryResponse>>
+    public class GetInventoryQuery : IRequest<Result<GetInventoryResponse>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -50,7 +50,7 @@ namespace Ecommerce.Application.Features.Inventory.Queries.GetInventory
         public Guid? CategoryId { get; set; }
     }
 
-    public class GetInventoryQueryResponse
+    public class GetInventoryResponse
     {
         public required List<InventoryItem> InventoryItems { get; init; }
         public int TotalCount { get; internal set; }

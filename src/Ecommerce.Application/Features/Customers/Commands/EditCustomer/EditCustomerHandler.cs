@@ -35,7 +35,6 @@ namespace Ecommerce.Application.Features.Customers.Commands.EditCustomer
             };
 
             return Result.Ok(response);
-
         }
     }
 

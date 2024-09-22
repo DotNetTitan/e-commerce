@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Ecommerce.Application.Features.Inventory.Queries.GetInventory;
 using Ecommerce.Application.Features.Inventory.Commands.UpdateInventory;
+using Ecommerce.Application.DTOs.Inventory;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -21,10 +22,19 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetInventoryQueryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetInventoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetInventory([FromQuery] GetInventoryQuery query)
+        public async Task<IActionResult> GetInventory([FromQuery] GetInventoryDto getInventoryDto)
         {
+            var query = new GetInventoryQuery
+            {
+                PageNumber = getInventoryDto.PageNumber,
+                PageSize = getInventoryDto.PageSize,
+                SearchTerm = getInventoryDto.SearchTerm,
+                LowStockOnly = getInventoryDto.LowStockOnly,
+                CategoryId = getInventoryDto.CategoryId
+            };
+
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
@@ -39,12 +49,19 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(UpdateInventoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateInventory(Guid productId, [FromBody] UpdateInventoryCommand command)
+        public async Task<IActionResult> UpdateInventory(Guid productId, [FromBody] UpdateInventoryDto updateInventoryDto)
         {
-            if (productId != command.ProductId)
+            if (productId != updateInventoryDto.ProductId)
             {
                 return BadRequest("Product ID in the route does not match the command.");
             }
+
+            var command = new UpdateInventoryCommand
+            {
+                ProductId = updateInventoryDto.ProductId,
+                NewQuantity = updateInventoryDto.NewQuantity,
+                LowStockThreshold = updateInventoryDto.LowStockThreshold
+            };
 
             var result = await _mediator.Send(command);
 

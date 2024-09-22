@@ -6,7 +6,7 @@ using Ecommerce.Domain.Enums;
 
 namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
 {
-    public class ListOrdersQueryHandler : IRequestHandler<ListOrdersQuery, Result<ListOrdersQueryResponse>>
+    public class ListOrdersQueryHandler : IRequestHandler<ListOrdersQuery, Result<ListOrdersResponse>>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -15,11 +15,11 @@ namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
             _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         }
 
-        public async Task<Result<ListOrdersQueryResponse>> Handle(ListOrdersQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ListOrdersResponse>> Handle(ListOrdersQuery request, CancellationToken cancellationToken)
         {
             if (request == null)
             {
-                return Result.Fail<ListOrdersQueryResponse>("Request cannot be null");
+                return Result.Fail<ListOrdersResponse>("Request cannot be null");
             }
 
             try
@@ -27,11 +27,11 @@ namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
                 var orders = await _orderRepository.GetOrdersByCustomerIdAsync(request.CustomerId);
                 var orderSummaries = MapOrdersToSummaries(orders);
 
-                return Result.Ok(new ListOrdersQueryResponse { Orders = orderSummaries });
+                return Result.Ok(new ListOrdersResponse { Orders = orderSummaries });
             }
             catch (Exception ex)
             {
-                return Result.Fail<ListOrdersQueryResponse>($"An error occurred while processing the request: {ex.Message}");
+                return Result.Fail<ListOrdersResponse>($"An error occurred while processing the request: {ex.Message}");
             }
         }
 
@@ -48,14 +48,14 @@ namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
         }
     }
 
-    public class ListOrdersQuery : IRequest<Result<ListOrdersQueryResponse>>
+    public class ListOrdersQuery : IRequest<Result<ListOrdersResponse>>
     {
         public required Guid CustomerId { get; init; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
 
-    public class ListOrdersQueryResponse
+    public class ListOrdersResponse
     {
         public required List<OrderSummary> Orders { get; init; }
     }

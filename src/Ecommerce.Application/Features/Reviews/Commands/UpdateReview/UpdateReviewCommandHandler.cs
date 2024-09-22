@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Reviews.Commands.UpdateReview
 {
-    public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand, Result<UpdateReviewCommandResponse>>
+    public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand, Result<UpdateReviewResponse>>
     {
         private readonly IReviewRepository _reviewRepository;
 
@@ -13,18 +13,18 @@ namespace Ecommerce.Application.Features.Reviews.Commands.UpdateReview
             _reviewRepository = reviewRepository;
         }
 
-        public async Task<Result<UpdateReviewCommandResponse>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UpdateReviewResponse>> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
         {
             var review = await _reviewRepository.GetByIdAsync(request.ReviewId);
 
             if (review == null)
             {
-                return Result.Fail<UpdateReviewCommandResponse>($"Review with ID {request.ReviewId} not found.");
+                return Result.Fail<UpdateReviewResponse>($"Review with ID {request.ReviewId} not found.");
             }
 
             if (review.ProductId != request.ProductId || review.CustomerId != request.CustomerId)
             {
-                return Result.Fail<UpdateReviewCommandResponse>("Invalid product or customer ID for this review.");
+                return Result.Fail<UpdateReviewResponse>("Invalid product or customer ID for this review.");
             }
 
             review.Rating = request.Rating;
@@ -34,7 +34,7 @@ namespace Ecommerce.Application.Features.Reviews.Commands.UpdateReview
 
             if (updatedReview != null)
             {
-                return Result.Ok(new UpdateReviewCommandResponse
+                return Result.Ok(new UpdateReviewResponse
                 {
                     ReviewId = updatedReview.ReviewId,
                     ProductId = updatedReview.ProductId,
@@ -45,11 +45,11 @@ namespace Ecommerce.Application.Features.Reviews.Commands.UpdateReview
                 });
             }
 
-            return Result.Fail<UpdateReviewCommandResponse>("Failed to update review");
+            return Result.Fail<UpdateReviewResponse>("Failed to update review");
         }
     }
 
-    public class UpdateReviewCommand : IRequest<Result<UpdateReviewCommandResponse>>
+    public class UpdateReviewCommand : IRequest<Result<UpdateReviewResponse>>
     {
         public required Guid ReviewId { get; init; }
         public required Guid ProductId { get; init; }
@@ -58,7 +58,7 @@ namespace Ecommerce.Application.Features.Reviews.Commands.UpdateReview
         public required string Comment { get; init; }
     }
 
-    public class UpdateReviewCommandResponse
+    public class UpdateReviewResponse
     {
         public required Guid ReviewId { get; init; }
         public required Guid ProductId { get; init; }

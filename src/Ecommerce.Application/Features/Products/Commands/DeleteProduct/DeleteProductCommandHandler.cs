@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Products.Commands.DeleteProduct
 {
-    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Result<DeleteProductCommandResponse>>
+    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Result<DeleteProductResponse>>
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,36 +13,36 @@ namespace Ecommerce.Application.Features.Products.Commands.DeleteProduct
             _productRepository = productRepository;
         }
 
-        public async Task<Result<DeleteProductCommandResponse>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<DeleteProductResponse>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.ProductId);
 
             if (product == null)
             {
-                return Result.Fail<DeleteProductCommandResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<DeleteProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
             var isDeleted = await _productRepository.DeleteAsync(product);
 
             if (isDeleted)
             {
-                return Result.Ok(new DeleteProductCommandResponse
+                return Result.Ok(new DeleteProductResponse
                 {
                     ProductId = request.ProductId,
                     IsDeleted = true
                 });
             }
 
-            return Result.Fail<DeleteProductCommandResponse>($"Failed to delete product  with ID {request.ProductId}");
+            return Result.Fail<DeleteProductResponse>($"Failed to delete product  with ID {request.ProductId}");
         }
     }
 
-    public class DeleteProductCommand : IRequest<Result<DeleteProductCommandResponse>>
+    public class DeleteProductCommand : IRequest<Result<DeleteProductResponse>>
     {
         public required Guid ProductId { get; init; }
     }
 
-    public class DeleteProductCommandResponse
+    public class DeleteProductResponse
     {
         public required Guid ProductId { get; set; }
         public required bool IsDeleted { get; set; }

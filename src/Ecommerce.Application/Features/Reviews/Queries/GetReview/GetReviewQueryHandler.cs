@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Reviews.Queries.GetReview
 {
-    public class GetReviewQueryHandler : IRequestHandler<GetReviewQuery, Result<GetReviewQueryResponse>>
+    public class GetReviewQueryHandler : IRequestHandler<GetReviewQuery, Result<GetReviewResponse>>
     {
         private readonly IReviewRepository _reviewRepository;
 
@@ -13,16 +13,16 @@ namespace Ecommerce.Application.Features.Reviews.Queries.GetReview
             _reviewRepository = reviewRepository;
         }
 
-        public async Task<Result<GetReviewQueryResponse>> Handle(GetReviewQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetReviewResponse>> Handle(GetReviewQuery request, CancellationToken cancellationToken)
         {
             var review = await _reviewRepository.GetByIdAsync(request.ReviewId);
 
             if (review == null || review.ProductId != request.ProductId)
             {
-                return Result.Fail<GetReviewQueryResponse>($"Review with ID {request.ReviewId} not found for product {request.ProductId}.");
+                return Result.Fail<GetReviewResponse>($"Review with ID {request.ReviewId} not found for product {request.ProductId}.");
             }
 
-            return Result.Ok(new GetReviewQueryResponse
+            return Result.Ok(new GetReviewResponse
             {
                 ReviewId = review.ReviewId,
                 ProductId = review.ProductId,
@@ -34,13 +34,13 @@ namespace Ecommerce.Application.Features.Reviews.Queries.GetReview
         }
     }
 
-    public class GetReviewQuery : IRequest<Result<GetReviewQueryResponse>>
+    public class GetReviewQuery : IRequest<Result<GetReviewResponse>>
     {
         public required Guid ProductId { get; init; }
         public required Guid ReviewId { get; init; }
     }
 
-    public class GetReviewQueryResponse
+    public class GetReviewResponse
     {
         public required Guid ReviewId { get; init; }
         public required Guid ProductId { get; init; }

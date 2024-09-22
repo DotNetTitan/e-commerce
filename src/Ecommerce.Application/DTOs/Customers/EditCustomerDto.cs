@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ecommerce.Domain.ValueObjects;
 
 namespace Ecommerce.Application.DTOs.Customers
 {
-    internal class EditCustomerDto
+    public class EditCustomerDto
     {
+        public Guid CustomerId { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public Address? Address { get; set; }
     }
 }

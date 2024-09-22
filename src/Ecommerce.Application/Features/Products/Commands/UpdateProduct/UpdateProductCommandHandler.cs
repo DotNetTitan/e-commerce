@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
 {
-    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<UpdateProductCommandResponse>>
+    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<UpdateProductResponse>>
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,13 +13,13 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
             _productRepository = productRepository;
         }
 
-        public async Task<Result<UpdateProductCommandResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var existingProduct = await _productRepository.GetByIdAsync(request.ProductId);
 
             if (existingProduct == null)
             {
-                return Result.Fail<UpdateProductCommandResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<UpdateProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
             existingProduct.Name = request.Name;
@@ -34,18 +34,18 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
             }
             catch (ArgumentException ex)
             {
-                return Result.Fail<UpdateProductCommandResponse>(ex.Message);
+                return Result.Fail<UpdateProductResponse>(ex.Message);
             }
             catch (InvalidOperationException ex)
             {
-                return Result.Fail<UpdateProductCommandResponse>(ex.Message);
+                return Result.Fail<UpdateProductResponse>(ex.Message);
             }
 
             var updatedProduct = await _productRepository.UpdateAsync(existingProduct);
 
             if (updatedProduct != null)
             {
-                return Result.Ok(new UpdateProductCommandResponse
+                return Result.Ok(new UpdateProductResponse
                 {
                     Id = updatedProduct.ProductId,
                     Name = updatedProduct.Name,
@@ -56,11 +56,11 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                 });
             }
 
-            return Result.Fail<UpdateProductCommandResponse>("Failed to update product");
+            return Result.Fail<UpdateProductResponse>("Failed to update product");
         }
     }
 
-    public class UpdateProductCommand : IRequest<Result<UpdateProductCommandResponse>>
+    public class UpdateProductCommand : IRequest<Result<UpdateProductResponse>>
     {
         public required Guid ProductId { get; init; }
         public required string Name { get; init; }
@@ -71,7 +71,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public required int LowStockThreshold { get; init; }
     }
 
-    public class UpdateProductCommandResponse
+    public class UpdateProductResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }

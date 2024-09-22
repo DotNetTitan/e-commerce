@@ -5,7 +5,7 @@ using Ecommerce.Domain.Entities;
 
 namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<CreateProductCommandResponse>>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<CreateProductResponse>>
     {
         private readonly IProductRepository _productRepository;
 
@@ -14,13 +14,13 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
             _productRepository = productRepository;
         }
 
-        public async Task<Result<CreateProductCommandResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             // Check if a product with the same name already exists
             var existingProduct = await _productRepository.GetByNameAsync(request.Name);
             if (existingProduct != null)
             {
-                return Result.Fail<CreateProductCommandResponse>($"A product with the name '{request.Name}' already exists.");
+                return Result.Fail<CreateProductResponse>($"A product with the name '{request.Name}' already exists.");
             }
 
             var product = new Product
@@ -37,7 +37,7 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 
             if (createdProduct != null)
             {
-                return Result.Ok(new CreateProductCommandResponse
+                return Result.Ok(new CreateProductResponse
                 {
                     Id = createdProduct.ProductId,
                     Name = createdProduct.Name,
@@ -48,11 +48,11 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
                 });
             }
 
-            return Result.Fail<CreateProductCommandResponse>("Failed to create product");
+            return Result.Fail<CreateProductResponse>("Failed to create product");
         }
     }
 
-    public class CreateProductCommand : IRequest<Result<CreateProductCommandResponse>>
+    public class CreateProductCommand : IRequest<Result<CreateProductResponse>>
     {
         public required string Name { get; init; }
         public required string Description { get; init; }
@@ -62,7 +62,7 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
         public required int LowStockThreshold { get; init; }
     }
 
-    public class CreateProductCommandResponse
+    public class CreateProductResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }

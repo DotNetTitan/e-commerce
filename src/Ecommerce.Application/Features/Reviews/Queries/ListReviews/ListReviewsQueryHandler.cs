@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Reviews.Queries.ListReviews
 {
-    public class ListReviewsQueryHandler : IRequestHandler<ListReviewsQuery, Result<ListReviewsQueryResponse>>
+    public class ListReviewsQueryHandler : IRequestHandler<ListReviewsQuery, Result<ListReviewsResponse>>
     {
         private readonly IReviewRepository _reviewRepository;
 
@@ -13,7 +13,7 @@ namespace Ecommerce.Application.Features.Reviews.Queries.ListReviews
             _reviewRepository = reviewRepository;
         }
 
-        public async Task<Result<ListReviewsQueryResponse>> Handle(ListReviewsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ListReviewsResponse>> Handle(ListReviewsQuery request, CancellationToken cancellationToken)
         {
             var (reviews, totalCount) = await _reviewRepository.GetReviewsByProductIdAsync(
                 request.ProductId,
@@ -30,7 +30,7 @@ namespace Ecommerce.Application.Features.Reviews.Queries.ListReviews
                 ReviewDate = r.ReviewDate
             });
 
-            var response = new ListReviewsQueryResponse
+            var response = new ListReviewsResponse
             {
                 ProductId = request.ProductId,
                 Reviews = reviewDetails,
@@ -43,14 +43,14 @@ namespace Ecommerce.Application.Features.Reviews.Queries.ListReviews
         }
     }
 
-    public class ListReviewsQuery : IRequest<Result<ListReviewsQueryResponse>>
+    public class ListReviewsQuery : IRequest<Result<ListReviewsResponse>>
     {
         public required Guid ProductId { get; init; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
 
-    public class ListReviewsQueryResponse
+    public class ListReviewsResponse
     {
         public required Guid ProductId { get; init; }
         public required List<ReviewDetails> Reviews { get; init; }

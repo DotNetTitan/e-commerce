@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.ShoppingCarts.Queries.GetCart
 {
-    public class GetCartQueryHandler : IRequestHandler<GetCartQuery, Result<GetCartQueryResponse>>
+    public class GetCartQueryHandler : IRequestHandler<GetCartQuery, Result<GetCartResponse>>
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
 
@@ -13,16 +13,16 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Queries.GetCart
             _shoppingCartRepository = shoppingCartRepository;
         }
 
-        public async Task<Result<GetCartQueryResponse>> Handle(GetCartQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetCartResponse>> Handle(GetCartQuery request, CancellationToken cancellationToken)
         {
             var cart = await _shoppingCartRepository.GetByCustomerIdAsync(request.CustomerId);
 
             if (cart == null)
             {
-                return Result.Fail<GetCartQueryResponse>($"Shopping cart not found for customer {request.CustomerId}");
+                return Result.Fail<GetCartResponse>($"Shopping cart not found for customer {request.CustomerId}");
             }
 
-            var response = new GetCartQueryResponse
+            var response = new GetCartResponse
             {
                 CartId = cart.ShoppingCartId,
                 CustomerId = cart.CustomerId,
@@ -42,12 +42,12 @@ namespace Ecommerce.Application.Features.ShoppingCarts.Queries.GetCart
         }
     }
 
-    public class GetCartQuery : IRequest<Result<GetCartQueryResponse>>
+    public class GetCartQuery : IRequest<Result<GetCartResponse>>
     {
         public required Guid CustomerId { get; init; }
     }
 
-    public class GetCartQueryResponse
+    public class GetCartResponse
     {
         public required Guid CartId { get; init; }
         public required Guid CustomerId { get; init; }

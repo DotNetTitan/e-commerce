@@ -4,7 +4,7 @@ using Ecommerce.Application.Interfaces;
 
 namespace Ecommerce.Application.Features.Products.Queries.GetProduct
 {
-    public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Result<GetProductQueryResponse>>
+    public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Result<GetProductResponse>>
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,16 +13,16 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
             _productRepository = productRepository;
         }
 
-        public async Task<Result<GetProductQueryResponse>> Handle(GetProductQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetProductResponse>> Handle(GetProductQuery request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.ProductId);
 
             if (product == null)
             {
-                return Result.Fail<GetProductQueryResponse>($"Product with ID {request.ProductId} not found.");
+                return Result.Fail<GetProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
-            var response = new GetProductQueryResponse
+            var response = new GetProductResponse
             {
                 Id = product.ProductId,
                 Name = product.Name,
@@ -37,12 +37,12 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
         }
     }
 
-    public class GetProductQuery : IRequest<Result<GetProductQueryResponse>>
+    public class GetProductQuery : IRequest<Result<GetProductResponse>>
     {
         public required Guid ProductId { get; init; }
     }
 
-    public class GetProductQueryResponse
+    public class GetProductResponse
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }
