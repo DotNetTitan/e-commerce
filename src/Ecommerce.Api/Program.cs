@@ -19,6 +19,10 @@ using System.Globalization;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using Ecommerce.Infrastructure.Repositories;
+using MediatR;
+using Ecommerce.Application.Common.Behaviors;
+using System.Reflection;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,7 +82,13 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
-    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IRegisterAssembly).Assembly));
+    services.AddMediatR(cfg =>
+    {
+        cfg.RegisterServicesFromAssembly(typeof(IRegisterAssembly).Assembly);
+        cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    });
+
+    services.AddValidatorsFromAssembly(typeof(IRegisterAssembly).Assembly);
 
     ConfigureAuthentication(services, configuration);
     ConfigureIdentityOptions(services);
@@ -224,4 +234,5 @@ void ConfigurePipeline(WebApplication webApplication)
     webApplication.MapControllers();
 
     webApplication.UseRateLimiter();
+    webApplication.UseExceptionHandler();
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using Ecommerce.Domain.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,39 +41,47 @@ namespace Ecommerce.Api.Middlewares.ExceptionHandler
         {
             _logger.LogError(exception, "An exception occurred while processing the request.");
 
-            // Explicitly handle only user-defined exceptions that can be presented directly to the end user.
-            // All other exceptions should result in an Internal Server Error.
-            var (statusCode, title) = exception switch
-            {
-                CustomerNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
-                OrderNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
-                ProductNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
-                UserNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
-                _ => ((int)HttpStatusCode.InternalServerError, "An internal server error occurred.")
-            };
+            var problemDetails = new ProblemDetails();
+            problemDetails.Instance = httpContext.Request.Path;
 
-            var rfcTypeUrl = statusCode switch
+            if (exception is ValidationException validationFailedException)
             {
-                StatusCodes.Status404NotFound => RfcTypeUrls.NotFound,
-                StatusCodes.Status401Unauthorized => RfcTypeUrls.Unauthorized,
-                StatusCodes.Status500InternalServerError => RfcTypeUrls.InternalServerError,
-                _ => RfcTypeUrls.Default
-            };
-
-            var problemDetails = new ProblemDetails()
+                problemDetails.Title = "One or more validation errors occurred.";
+                problemDetails.Type = RfcTypeUrls.BadRequest;
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                problemDetails.Status = StatusCodes.Status400BadRequest;
+                var validationErrors = validationFailedException.Errors.Select(e => new { e.PropertyName, e.ErrorMessage }).ToList();
+                problemDetails.Extensions.Add("errors", validationErrors);
+            }
+            else
             {
-                Instance = httpContext.Request.Path,
-                Title = title,
-                Status = statusCode,
-                Type = rfcTypeUrl,
-                Detail = _env.IsDevelopment() ? exception.StackTrace : null
-            };
+                var (statusCode, title) = exception switch
+                {
+                    CustomerNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
+                    OrderNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
+                    ProductNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
+                    UserNotFoundException => ((int)HttpStatusCode.NotFound, exception.Message),
+                    _ => ((int)HttpStatusCode.InternalServerError, "An internal server error occurred.")
+                };
 
-            httpContext.Response.StatusCode = statusCode;
+                var rfcTypeUrl = statusCode switch
+                {
+                    StatusCodes.Status404NotFound => RfcTypeUrls.NotFound,
+                    StatusCodes.Status401Unauthorized => RfcTypeUrls.Unauthorized,
+                    StatusCodes.Status500InternalServerError => RfcTypeUrls.InternalServerError,
+                    _ => RfcTypeUrls.Default
+                };
+
+                problemDetails.Title = title;
+                problemDetails.Status = statusCode;
+                problemDetails.Type = rfcTypeUrl;
+                problemDetails.Detail = _env.IsDevelopment() ? exception.StackTrace : null;
+
+                httpContext.Response.StatusCode = statusCode;
+            }
+
             httpContext.Response.ContentType = "application/problem+json";
-
             var json = JsonSerializer.Serialize(problemDetails);
-
             await httpContext.Response.WriteAsync(json, cancellationToken);
 
             return true;

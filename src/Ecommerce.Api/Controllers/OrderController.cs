@@ -5,7 +5,6 @@ using Ecommerce.Application.Features.OrderManagement.CancelOrder;
 using Ecommerce.Application.Features.OrderManagement.GetOrderDetails;
 using Ecommerce.Application.Features.OrderManagement.ListUserOrders;
 using Ecommerce.Application.DTOs.OrderManagement;
-using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
 
 namespace Ecommerce.Api.Controllers
@@ -13,7 +12,6 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/orders")]
-    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
