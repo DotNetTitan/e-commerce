@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.DTOs.ProductManagement
+﻿namespace Ecommerce.Application.DTOs.Products
 {
     public class CreateProductDto
     {

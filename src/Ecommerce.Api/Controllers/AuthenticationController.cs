@@ -5,7 +5,6 @@ using Ecommerce.Application.Features.Authentication.Register;
 using Ecommerce.Application.DTOs.Authentication;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Authentication.ConfirmEmail;
-using Ecommerce.Application.Common.Models;
 using Ecommerce.Application.Features.Authentication.ForgotPassword;
 using Ecommerce.Application.Features.Authentication.ResetPassword;
 using Ecommerce.Application.Features.Authentication.ResendEmailConfirmation;

@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Ecommerce.Application.Features.ProductManagement.CreateProduct;
-using Ecommerce.Application.Features.ProductManagement.GetProduct;
-using Ecommerce.Application.Features.ProductManagement.UpdateProduct;
-using Ecommerce.Application.Features.ProductManagement.ListProducts;
-using Ecommerce.Application.Features.ProductManagement.DeleteProduct;
-using Ecommerce.Application.DTOs.ProductManagement;
+using Ecommerce.Application.DTOs.Products;
+using Ecommerce.Application.Features.Products.Commands.CreateProduct;
+using Ecommerce.Application.Features.Products.Commands.DeleteProduct;
+using Ecommerce.Application.Features.Products.Queries.GetProduct;
+using Ecommerce.Application.Features.Products.Queries.ListProducts;
+using Ecommerce.Application.Features.Products.Commands.UpdateProduct;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -23,7 +23,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CreateProductCommandResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto)
@@ -67,7 +67,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UpdateProductCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -105,7 +105,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ListProductsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ListProductsQueryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ListProducts([FromQuery] ListProductsDto dto)
@@ -129,7 +129,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(DeleteProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(DeleteProductCommandResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteProduct(Guid id)

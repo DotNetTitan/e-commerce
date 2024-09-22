@@ -4,8 +4,8 @@ using Ecommerce.Application.DTOs.Orders;
 using Asp.Versioning;
 using Ecommerce.Application.Features.Orders.Commands.PlaceOrder;
 using Ecommerce.Application.Features.Orders.Commands.CancelOrder;
-using Ecommerce.Application.Features.Orders.Queries.GetOrderDetails;
-using Ecommerce.Application.Features.Orders.Queries.ListUserOrders;
+using Ecommerce.Application.Features.Orders.Queries.GetOrder;
+using Ecommerce.Application.Features.Orders.Queries.ListOrders;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -22,7 +22,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(PlaceOrderResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(PlaceOrderCommandResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDto orderDetails)
         {

@@ -2,7 +2,7 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
 
-namespace Ecommerce.Application.Features.ProductManagement.GetProduct
+namespace Ecommerce.Application.Features.Products.Queries.GetProduct
 {
     public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Result<GetProductQueryResponse>>
     {
@@ -35,5 +35,21 @@ namespace Ecommerce.Application.Features.ProductManagement.GetProduct
 
             return Result.Ok(response);
         }
+    }
+
+    public class GetProductQuery : IRequest<Result<GetProductQueryResponse>>
+    {
+        public required Guid ProductId { get; init; }
+    }
+
+    public class GetProductQueryResponse
+    {
+        public required Guid Id { get; set; }
+        public required string Name { get; set; }
+        public required string Description { get; set; }
+        public required decimal Price { get; set; }
+        public required int StockQuantity { get; set; }
+        public required Guid CategoryId { get; set; }
+        public required string CategoryName { get; set; }
     }
 }
