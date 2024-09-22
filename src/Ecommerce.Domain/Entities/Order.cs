@@ -11,12 +11,12 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Gets or sets the unique identifier for the order.
         /// </summary>
-        public Guid OrderId { get; set; }
+        public Guid OrderId { get; private set; }
 
         /// <summary>
         /// Gets or sets the date and time when the order was placed.
         /// </summary>
-        public required DateTime OrderDate { get; set; }
+        public DateTime OrderDate { get; private set; }
 
         /// <summary>
         /// Gets or sets the customer identifier associated with the order.
@@ -51,6 +51,7 @@ namespace Ecommerce.Domain.Entities
             OrderId = Guid.NewGuid();
             OrderItems = new List<OrderItem>();
             Status = OrderStatus.InProgress;
+            OrderDate = DateTime.UtcNow;
         }
 
         /// <summary>

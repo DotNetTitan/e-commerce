@@ -24,9 +24,20 @@ namespace Ecommerce.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(PlaceOrderResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDto orderDetails)
+        public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDto placeOrderDto)
         {
-            var command = new PlaceOrderCommand { OrderDetails = orderDetails };
+            var command = new PlaceOrderCommand
+            {
+                CustomerId = placeOrderDto.CustomerId,
+                Items = placeOrderDto.Items.ConvertAll(item => new Item
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice
+                }),
+                TotalAmount = placeOrderDto.TotalAmount
+            };
+
             var result = await _mediator.Send(command);
 
             if (result.OrderId != Guid.Empty)

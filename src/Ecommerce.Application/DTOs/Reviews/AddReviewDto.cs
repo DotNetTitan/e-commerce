@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ecommerce.Application.DTOs.Reviews
+﻿namespace Ecommerce.Application.DTOs.Reviews
 {
     public class AddReviewDto
     {
@@ -8,5 +6,6 @@ namespace Ecommerce.Application.DTOs.Reviews
         public required Guid CustomerId { get; init; }
         public required int Rating { get; init; }
         public required string Comment { get; init; }
+        public DateTime ReviewDate { get; init; }
     }
 }

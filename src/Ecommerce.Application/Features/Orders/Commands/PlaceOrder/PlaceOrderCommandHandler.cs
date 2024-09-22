@@ -25,12 +25,11 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 
             try
             {
-                var customer = await _customerRepository.GetByIdAsync(request.CustomerId) ?? throw CustomerNotFoundException.FromId(request.OrderDetails.CustomerId);
+                var customer = await _customerRepository.GetByIdAsync(request.CustomerId) ?? throw CustomerNotFoundException.FromId(request.CustomerId);
 
                 var order = new Order
                 {
                     CustomerId = request.CustomerId,
-                    OrderDate = DateTime.UtcNow,
                     ShippingAddress = customer.CustomerAddress!
                 };
 
