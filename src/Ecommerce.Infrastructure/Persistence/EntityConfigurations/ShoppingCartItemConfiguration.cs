@@ -17,6 +17,10 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
 
             builder.Property(sci => sci.Quantity).IsRequired();
 
+            // Add this line to specify the column type for Price
+            builder.Property(sci => sci.Price)
+                .HasColumnType("decimal(18, 2)");
+
             builder.HasOne(sci => sci.ShoppingCart)
                 .WithMany(sc => sc.ShoppingCartItems)
                 .HasForeignKey(sci => sci.ShoppingCartId)
