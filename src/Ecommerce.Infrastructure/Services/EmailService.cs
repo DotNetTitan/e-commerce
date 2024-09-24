@@ -1,6 +1,6 @@
 ﻿using Azure.Communication.Email;
 using Azure;
-using Ecommerce.Domain.Settings;
+using Ecommerce.Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using Ecommerce.Application.Interfaces;
 
@@ -25,13 +25,7 @@ namespace Ecommerce.Infrastructure.Services
             _senderAddress = appSettings.Value.EmailSenderAddress;
         }
 
-        /// <summary>
-        /// Sends an email asynchronously.
-        /// </summary>
-        /// <param name="to">The recipient email address.</param>
-        /// <param name="subject">The email subject.</param>
-        /// <param name="body">The email body.</param>
-        /// <returns>A task representing the asynchronous operation.</returns>
+        /// <inheritdoc />
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             var emailMessage = new EmailMessage(
@@ -44,6 +38,42 @@ namespace Ecommerce.Infrastructure.Services
             );
 
             await _emailClient.SendAsync(WaitUntil.Started, emailMessage);
+        }
+
+        /// <inheritdoc />
+        public async Task SendOrderConfirmationEmail(Guid orderId, string email)
+        {
+            var subject = "Order Confirmation";
+            var body = $@"
+                <html>
+                <body>
+                    <p>Dear Customer,</p>
+                    <p>Thank you for your order. Your order ID is {orderId}.</p>
+                    <p>We will notify you once your order is shipped.</p>
+                    <p>Best regards,<br/>The Ecommerce Team</p>
+                </body>
+                </html>";
+
+            // Assuming you have a method to get the customer's email by their ID
+            await SendEmailAsync(email, subject, body);
+        }
+
+        /// <inheritdoc />
+        public async Task SendOrderCancellationEmail(Guid orderId, string email)
+        {
+            var subject = "Order Cancellation";
+            var body = $@"
+                <html>
+                <body>
+                    <p>Dear Customer,</p>
+                    <p>Your order with ID {orderId} has been cancelled.</p>
+                    <p>If you have any questions, please contact our support team.</p>
+                    <p>Best regards,<br/>The Ecommerce Team</p>
+                </body>
+                </html>";
+
+            // Assuming you have a method to get the customer's email by their ID
+            await SendEmailAsync(email, subject, body);
         }
     }
 }

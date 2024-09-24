@@ -36,6 +36,7 @@ namespace Ecommerce.Infrastructure.Services
                 var customer = new Customer
                 {
                     IdentityId = user.Id,
+                    Email = email,
                 };
 
                 await _customerRepository.AddAsync(customer);

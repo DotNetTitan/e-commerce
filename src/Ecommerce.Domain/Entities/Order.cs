@@ -19,6 +19,11 @@ namespace Ecommerce.Domain.Entities
         public DateTime OrderDate { get; private set; }
 
         /// <summary>
+        /// Gets or sets the unique order number.
+        /// </summary>
+        public string OrderNumber { get; private set; }
+
+        /// <summary>
         /// Gets or sets the customer identifier associated with the order.
         /// </summary>
         public required Guid CustomerId { get; set; }
@@ -52,6 +57,18 @@ namespace Ecommerce.Domain.Entities
             OrderItems = new List<OrderItem>();
             Status = OrderStatus.InProgress;
             OrderDate = DateTime.UtcNow;
+            OrderNumber = GenerateOrderNumber();
+        }
+
+        /// <summary>
+        /// Generates a unique order number using the OrderId and a precise timestamp.
+        /// </summary>
+        /// <returns>A string representing the unique order number.</returns>
+        private string GenerateOrderNumber()
+        {
+            string datePrefix = OrderDate.ToString("yyyyMMddHHmmssfff");
+            string guidSuffix = OrderId.ToString("N").Substring(0, 8).ToUpper();
+            return $"ORDN-{datePrefix}-{guidSuffix}";
         }
 
         /// <summary>
@@ -84,6 +101,18 @@ namespace Ecommerce.Domain.Entities
         public void UpdateStatus(OrderStatus status)
         {
             Status = status;
+        }
+
+        public void CancelOrder()
+        {
+            if (Status == OrderStatus.InProgress)
+            {
+                Status = OrderStatus.Cancelled;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Cannot cancel order with status {Status}.");
+            }
         }
 
         /// <summary>

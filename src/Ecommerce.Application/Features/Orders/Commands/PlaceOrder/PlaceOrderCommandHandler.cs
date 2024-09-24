@@ -1,25 +1,33 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Domain.Events;
 using Ecommerce.Domain.Exceptions;
-using Ecommerce.Domain.Enums;
+using MassTransit;
+using FluentResults;
 
 namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 {
-    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, PlaceOrderResponse>
+    public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Result<PlaceOrderResponse>>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IBus _bus;
 
-        public PlaceOrderCommandHandler(IOrderRepository orderRepository, ICustomerRepository customerRepository, IUnitOfWork unitOfWork)
+        public PlaceOrderCommandHandler(
+            IOrderRepository orderRepository, 
+            ICustomerRepository customerRepository, 
+            IUnitOfWork unitOfWork,
+            IBus bus)
         {
             _orderRepository = orderRepository;
             _customerRepository = customerRepository;
             _unitOfWork = unitOfWork;
+            _bus = bus;
         }
 
-        public async Task<PlaceOrderResponse> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Result<PlaceOrderResponse>> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -47,31 +55,42 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
 
                 if (order.IsEmpty())
                 {
-                    throw new InvalidOperationException("Cannot place an empty order.");
+                    return Result.Fail<PlaceOrderResponse>("Cannot place an empty order.");
                 }
 
                 if (!order.ValidateTotalAmount(request.TotalAmount))
                 {
-                    throw new InvalidOperationException("Calculation mismatch.");
+                    return Result.Fail<PlaceOrderResponse>("Calculation mismatch.");
                 }
-
-                order.UpdateStatus(OrderStatus.InProgress);
 
                 await _orderRepository.CreateOrderAsync(order);
 
-                await _unitOfWork.CommitAsync(); // Commit the transaction if everything is successful
+                await _unitOfWork.CommitAsync();
 
-                return new PlaceOrderResponse { OrderId = order.OrderId, TotalAmount = order.TotalAmount };
+                // Publish event to Azure Service Bus
+                await _bus.Publish(new OrderPlacedEvent
+                {
+                    OrderId = order.OrderId,
+                    CustomerId = order.CustomerId,
+                    Email = customer.Email
+                }, cancellationToken);
+
+                return Result.Ok(new PlaceOrderResponse
+                {
+                    OrderId = order.OrderId,
+                    TotalAmount = order.TotalAmount,
+                    OrderNumber = order.OrderNumber
+                });
             }
-            catch
+            catch (Exception ex)
             {
-                await _unitOfWork.RollbackAsync(); // Rollback the transaction in case of an exception
-                throw;
+                await _unitOfWork.RollbackAsync();
+                return Result.Fail<PlaceOrderResponse>(ex.Message);
             }
         }
     }
 
-    public class PlaceOrderCommand : IRequest<PlaceOrderResponse>
+    public class PlaceOrderCommand : IRequest<Result<PlaceOrderResponse>>
     {
         public Guid CustomerId { get; set; }
         public required List<Item> Items { get; set; }
@@ -89,5 +108,6 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
     {
         public Guid OrderId { get; internal set; }
         public decimal TotalAmount { get; internal set; }
+        public required string OrderNumber { get; init; }
     }
 }

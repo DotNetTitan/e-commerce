@@ -51,12 +51,29 @@
         public int LowStockThreshold { get; set; }
 
         /// <summary>
+        /// Gets or sets the Stock Keeping Unit (SKU) of the product.
+        /// </summary>
+        public string SKU { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the Product class.
         /// </summary>
         public Product()
         {
             ProductId = Guid.NewGuid();
             Reviews = new List<Review>();
+            SKU = GenerateSKU();
+        }
+
+        /// <summary>
+        /// Generates a unique SKU for the product.
+        /// </summary>
+        /// <returns>A string representing the unique SKU.</returns>
+        private string GenerateSKU()
+        {
+            string categoryPrefix = CategoryId.ToString("N").Substring(0, 4).ToUpper();
+            string productSuffix = ProductId.ToString("N").Substring(0, 8).ToUpper();
+            return $"SKU-{categoryPrefix}-{productSuffix}";
         }
 
         /// <summary>

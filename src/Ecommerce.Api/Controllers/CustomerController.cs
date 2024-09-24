@@ -52,6 +52,7 @@ namespace Ecommerce.Api.Controllers
             var command = new EditCustomerCommand
             {
                 CustomerId = editCustomerDto.CustomerId,
+                Email = editCustomerDto.Email,
                 FirstName = editCustomerDto.FirstName,
                 LastName = editCustomerDto.LastName,
                 Address = editCustomerDto.Address

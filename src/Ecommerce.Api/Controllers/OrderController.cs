@@ -40,12 +40,12 @@ namespace Ecommerce.Api.Controllers
 
             var result = await _mediator.Send(command);
 
-            if (result.OrderId != Guid.Empty)
+            if (result.IsSuccess)
             {
-                return CreatedAtAction(nameof(GetOrderDetails), new { orderId = result.OrderId }, result);
+                return CreatedAtAction(nameof(GetOrder), new { orderId = result.Value.OrderId }, result.Value);
             }
 
-            return BadRequest("Failed to place the order");
+            return BadRequest(result.Errors);
         }
 
         [HttpPost("{orderId}/cancel")]
@@ -71,7 +71,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(GetOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetOrderDetails(Guid orderId, [FromQuery] Guid customerId)
+        public async Task<IActionResult> GetOrder(Guid orderId, [FromQuery] Guid customerId)
         {
             var query = new GetOrderQuery { OrderId = orderId, CustomerId = customerId };
             var result = await _mediator.Send(query);
@@ -89,7 +89,7 @@ namespace Ecommerce.Api.Controllers
         [HttpGet("customer/{customerId}")]
         [ProducesResponseType(typeof(ListOrdersResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ListUserOrders(Guid customerId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> ListOrders(Guid customerId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new ListOrdersQuery { CustomerId = customerId, PageNumber = pageNumber, PageSize = pageSize };
             var result = await _mediator.Send(query);

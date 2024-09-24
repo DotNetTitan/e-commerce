@@ -42,6 +42,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
                 OrderId = order.OrderId,
                 OrderDate = order.OrderDate,
                 Status = order.Status,
+                OrderNumber = order.OrderNumber,
                 TotalAmount = order.TotalAmount,
                 ItemCount = order.OrderItems.Count
             });
@@ -65,6 +66,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.ListOrders
         public required Guid OrderId { get; init; }
         public required DateTime OrderDate { get; init; }
         public required OrderStatus Status { get; init; }
+        public required string OrderNumber { get; init; }
         public required decimal TotalAmount { get; init; }
         public required int ItemCount { get; init; }
     }

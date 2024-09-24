@@ -1,6 +1,5 @@
 using Ecommerce.Api.Middlewares.ExceptionHandler;
-using Ecommerce.Domain.Settings;
-using Ecommerce.Infrastructure.Tokens;
+using Ecommerce.Infrastructure.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -18,11 +17,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text.Json;
 using System.Threading.RateLimiting;
-using Ecommerce.Infrastructure.Repositories;
 using MediatR;
 using Ecommerce.Application.Common.Behaviors;
 using System.Reflection;
+using Ecommerce.Infrastructure.Persistence.Repositories;
 using FluentValidation;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +71,21 @@ await app.RunAsync();
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
+    services.AddMassTransit(x =>
+    {
+        x.SetKebabCaseEndpointNameFormatter();
+
+        x.AddConsumers(Assembly.GetExecutingAssembly());
+        x.AddConsumers(typeof(IRegisterAssembly).Assembly);
+
+        x.UsingAzureServiceBus((context, cfg) =>
+        {
+            cfg.Host(configuration["AppSettings:AzureServiceBusConnectionString"]);
+
+            cfg.ConfigureEndpoints(context);
+        });
+    });
+
     services.AddControllers();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen(ConfigureSwagger);

@@ -49,6 +49,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                 {
                     Id = updatedProduct.ProductId,
                     Name = updatedProduct.Name,
+                    SKU = updatedProduct.SKU,
                     Description = updatedProduct.Description,
                     Price = updatedProduct.Price,
                     StockQuantity = updatedProduct.StockQuantity,
@@ -76,6 +77,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public required Guid Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
+        public required string SKU { get; init; }
         public required decimal Price { get; set; }
         public required int StockQuantity { get; set; }
         public required Guid CategoryId { get; set; }

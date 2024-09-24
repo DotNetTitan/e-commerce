@@ -41,6 +41,7 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
                 {
                     Id = createdProduct.ProductId,
                     Name = createdProduct.Name,
+                    SKU = createdProduct.SKU,
                     Description = createdProduct.Description,
                     Price = createdProduct.Price,
                     StockQuantity = createdProduct.StockQuantity,
@@ -64,11 +65,12 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
 
     public class CreateProductResponse
     {
-        public required Guid Id { get; set; }
-        public required string Name { get; set; }
-        public required string Description { get; set; }
-        public required decimal Price { get; set; }
-        public required int StockQuantity { get; set; }
-        public required Guid CategoryId { get; set; }
+        public required Guid Id { get; init; }
+        public required string Name { get; init; }
+        public required string SKU { get; init; }
+        public required string Description { get; init; }
+        public required decimal Price { get; init; }
+        public required int StockQuantity { get; init; }
+        public required Guid CategoryId { get; init; }
     }
 }

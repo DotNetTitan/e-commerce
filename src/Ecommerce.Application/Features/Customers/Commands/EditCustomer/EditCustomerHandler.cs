@@ -22,6 +22,7 @@ namespace Ecommerce.Application.Features.Customers.Commands.EditCustomer
 
             customer.FirstName = request.FirstName;
             customer.LastName = request.LastName;
+            customer.Email = request.Email;
             customer.CustomerAddress = request.Address;
 
             var updatedCustomer = await _customerRepository.UpdateAsync(customer);
@@ -40,17 +41,18 @@ namespace Ecommerce.Application.Features.Customers.Commands.EditCustomer
 
     public class EditCustomerCommand : IRequest<Result<EditCustomerResponse>>
     {
-        public Guid CustomerId { get; set; }
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public Address? Address { get; set; }
+        public Guid CustomerId { get; init; }
+        public required string Email { get; init; }
+        public required string FirstName { get; init; }
+        public required string LastName { get; init; }
+        public Address? Address { get; init; }
     }
 
     public class EditCustomerResponse
     {
-        public Guid CustomerId { get; set; }
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public Address? Address { get; set; }
+        public Guid CustomerId { get; init; }
+        public required string FirstName { get; init; }
+        public required string LastName { get; init; }
+        public Address? Address { get; init; }
     }
 }

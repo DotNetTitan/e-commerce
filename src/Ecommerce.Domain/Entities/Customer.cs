@@ -28,6 +28,11 @@ namespace Ecommerce.Domain.Entities
         public string? LastName { get; set; }
 
         /// <summary>
+        /// Gets or sets the email of the customer.
+        /// </summary>
+        public string Email { get; set; }
+        
+        /// <summary>
         /// Gets or sets the address of the customer.
         /// </summary>
         public Address? CustomerAddress { get; set; }

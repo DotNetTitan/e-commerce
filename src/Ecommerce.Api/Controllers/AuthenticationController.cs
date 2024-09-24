@@ -1,13 +1,13 @@
-﻿using Ecommerce.Application.Features.Authentication.Login;
+﻿using Ecommerce.Infrastructure.Authentication.Login;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Ecommerce.Application.Features.Authentication.Register;
+using Ecommerce.Infrastructure.Authentication.Register;
 using Ecommerce.Api.DTOs.Authentication;
 using Asp.Versioning;
-using Ecommerce.Application.Features.Authentication.ConfirmEmail;
-using Ecommerce.Application.Features.Authentication.ForgotPassword;
-using Ecommerce.Application.Features.Authentication.ResetPassword;
-using Ecommerce.Application.Features.Authentication.ResendEmailConfirmation;
+using Ecommerce.Infrastructure.Authentication.ConfirmEmail;
+using Ecommerce.Infrastructure.Authentication.ForgotPassword;
+using Ecommerce.Infrastructure.Authentication.ResetPassword;
+using Ecommerce.Infrastructure.Authentication.ResendEmailConfirmation;
 
 namespace Ecommerce.API.Controllers
 {

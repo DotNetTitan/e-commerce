@@ -34,6 +34,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
                 CustomerId = order.CustomerId,
                 OrderDate = order.OrderDate,
                 Status = order.Status,
+                OrderNumber = order.OrderNumber,
                 TotalAmount = order.TotalAmount,
                 Items = order.OrderItems.Select(item => new OrderItemDetails
                 {
@@ -61,6 +62,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
         public required Guid CustomerId { get; init; }
         public required DateTime OrderDate { get; init; }
         public required OrderStatus Status { get; init; }
+        public required string OrderNumber { get; init; }
         public required decimal TotalAmount { get; init; }
         public required List<OrderItemDetails> Items { get; init; }
     }
