@@ -41,9 +41,9 @@
         public required decimal UnitPrice { get; set; }
 
         /// <summary>
-        /// Calculates the total price for this order item.
+        /// Gets or sets the total price for this order item.
         /// </summary>
-        public decimal TotalPrice => Quantity * UnitPrice;
+        public decimal TotalPrice { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the OrderItem class.
@@ -51,6 +51,15 @@
         public OrderItem()
         {
             OrderItemId = Guid.NewGuid();
+            CalculateTotalPrice();
+        }
+
+        /// <summary>
+        /// Calculates and updates the total price for this order item.
+        /// </summary>
+        public void CalculateTotalPrice()
+        {
+            TotalPrice = Quantity * UnitPrice;
         }
     }
 }
