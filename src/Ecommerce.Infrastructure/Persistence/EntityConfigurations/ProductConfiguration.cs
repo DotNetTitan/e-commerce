@@ -8,14 +8,17 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey(p => p.ProductId);
+            builder.HasKey(p => p.ProductId)
+                .IsClustered(false);
 
             builder.Property<int>("ClusterId")
                 .UseIdentityColumn();
 
-            builder.HasIndex("ClusterId").IsClustered();
+            builder.HasIndex("ClusterId")
+                .IsClustered();
 
-            builder.Property(p => p.Name).IsRequired();
+            builder.Property(p => p.Name)
+                .IsRequired();
 
             builder.Property(p => p.Price)
                 .HasColumnType("decimal(18, 2)");

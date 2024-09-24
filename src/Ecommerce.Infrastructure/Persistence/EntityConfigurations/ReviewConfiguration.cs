@@ -8,12 +8,14 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Review> builder)
         {
-            builder.HasKey(r => r.ReviewId);
+            builder.HasKey(r => r.ReviewId)
+                .IsClustered(false);
 
             builder.Property<int>("ClusterId")
                 .UseIdentityColumn();
 
-            builder.HasIndex("ClusterId").IsClustered();
+            builder.HasIndex("ClusterId")
+                .IsClustered();
 
             builder.HasOne(r => r.Product)
                 .WithMany(p => p.Reviews)

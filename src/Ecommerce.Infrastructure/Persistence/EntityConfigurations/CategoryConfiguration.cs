@@ -8,12 +8,14 @@ internal sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.HasKey(c => c.CategoryId);
+        builder.HasKey(c => c.CategoryId)
+            .IsClustered(false);
 
         builder.Property<int>("ClusterId")
             .UseIdentityColumn();
 
-        builder.HasIndex("ClusterId").IsClustered();
+        builder.HasIndex("ClusterId")
+            .IsClustered();
 
         builder.Property(c => c.Name)
             .IsRequired();

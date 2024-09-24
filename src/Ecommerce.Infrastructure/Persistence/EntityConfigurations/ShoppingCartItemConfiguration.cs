@@ -8,12 +8,14 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<ShoppingCartItem> builder)
         {
-            builder.HasKey(sci => sci.ShoppingCartItemId);
+            builder.HasKey(sci => sci.ShoppingCartItemId)
+                .IsClustered(false);
 
             builder.Property<int>("ClusterId")
                 .UseIdentityColumn();
 
-            builder.HasIndex("ClusterId").IsClustered();
+            builder.HasIndex("ClusterId")
+                .IsClustered();
 
             builder.Property(sci => sci.Quantity).IsRequired();
 
