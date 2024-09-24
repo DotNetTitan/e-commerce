@@ -72,9 +72,17 @@ namespace Ecommerce.Domain.Entities
         }
 
         /// <summary>
-        /// Calculates the total amount of the order.
+        /// Gets or sets the total amount of the order.
         /// </summary>
-        public decimal TotalAmount => OrderItems.Sum(item => item.TotalPrice);
+        public decimal TotalAmount { get; private set; }
+
+        /// <summary>
+        /// Calculates and updates the total amount of the order.
+        /// </summary>
+        public void CalculateTotalAmount()
+        {
+            TotalAmount = OrderItems.Sum(item => item.TotalPrice);
+        }
 
         /// <summary>
         /// Adds an order item to the order.
@@ -83,6 +91,7 @@ namespace Ecommerce.Domain.Entities
         public void AddOrderItem(OrderItem item)
         {
             OrderItems.Add(item);
+            CalculateTotalAmount();
         }
 
         /// <summary>
@@ -92,6 +101,7 @@ namespace Ecommerce.Domain.Entities
         public void RemoveOrderItem(OrderItem item)
         {
             OrderItems.Remove(item);
+            CalculateTotalAmount();
         }
 
         /// <summary>
