@@ -11,6 +11,11 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
             // Configure primary key
             builder.HasKey(p => p.OrderItemId);
 
+            builder.Property<int>("ClusterId")
+                .UseIdentityColumn();
+
+            builder.HasIndex("ClusterId").IsClustered();
+
             // Configure properties
             builder.Property(p => p.UnitPrice)
                 .HasColumnType("decimal(18, 2)");

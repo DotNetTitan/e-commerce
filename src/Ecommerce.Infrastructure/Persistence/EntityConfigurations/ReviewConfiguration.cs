@@ -10,6 +10,11 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
         {
             builder.HasKey(r => r.ReviewId);
 
+            builder.Property<int>("ClusterId")
+                .UseIdentityColumn();
+
+            builder.HasIndex("ClusterId").IsClustered();
+
             builder.HasOne(r => r.Product)
                 .WithMany(p => p.Reviews)
                 .HasForeignKey(r => r.ProductId)

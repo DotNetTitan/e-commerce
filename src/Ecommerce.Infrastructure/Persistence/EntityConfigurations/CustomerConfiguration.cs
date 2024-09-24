@@ -11,6 +11,11 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
         {
             builder.HasKey(c => c.CustomerId);
 
+            builder.Property<int>("ClusterId")
+                .UseIdentityColumn();
+
+            builder.HasIndex("ClusterId").IsClustered();
+
             builder.Property(c => c.IdentityId)
                 .IsRequired()
                 .HasColumnName("IdentityId");

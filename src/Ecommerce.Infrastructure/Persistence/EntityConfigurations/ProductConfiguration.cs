@@ -9,6 +9,12 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasKey(p => p.ProductId);
+
+            builder.Property<int>("ClusterId")
+                .UseIdentityColumn();
+
+            builder.HasIndex("ClusterId").IsClustered();
+
             builder.Property(p => p.Name).IsRequired();
 
             builder.Property(p => p.Price)

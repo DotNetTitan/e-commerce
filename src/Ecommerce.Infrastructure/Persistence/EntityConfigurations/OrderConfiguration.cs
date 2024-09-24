@@ -10,6 +10,11 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
         {
             builder.HasKey(o => o.OrderId);
 
+            builder.Property<int>("ClusterId")
+                .UseIdentityColumn();
+
+            builder.HasIndex("ClusterId").IsClustered();
+
             builder.Property(o => o.OrderDate).IsRequired();
 
             builder.Property(p => p.TotalAmount)

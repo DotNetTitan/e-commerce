@@ -10,6 +10,11 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
         {
             builder.HasKey(sci => sci.ShoppingCartItemId);
 
+            builder.Property<int>("ClusterId")
+                .UseIdentityColumn();
+
+            builder.HasIndex("ClusterId").IsClustered();
+
             builder.Property(sci => sci.Quantity).IsRequired();
 
             builder.HasOne(sci => sci.ShoppingCart)
