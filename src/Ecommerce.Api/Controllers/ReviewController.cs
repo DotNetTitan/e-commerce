@@ -24,7 +24,6 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ProducesResponseType(typeof(AddReviewResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddReview(Guid productId, [FromBody] AddReviewDto dto)
@@ -80,7 +79,6 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPut("{reviewId}")]
-        [Authorize]
         [ProducesResponseType(typeof(UpdateReviewResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

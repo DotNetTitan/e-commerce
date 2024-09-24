@@ -14,7 +14,6 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/customers/{customerId}/cart")]
-    [Authorize]
     public class ShoppingCartController : ControllerBase
     {
         private readonly IMediator _mediator;

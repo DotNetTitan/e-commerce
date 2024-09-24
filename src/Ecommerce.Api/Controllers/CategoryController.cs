@@ -28,7 +28,6 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(CreateCategoryResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        [Authorize]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto dto)
         {
             var command = new CreateCategoryCommand
@@ -52,7 +51,6 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        [Authorize]
         public async Task<IActionResult> GetCategory(Guid categoryId)
         {
             var query = new GetCategoryQuery { CategoryId = categoryId };
@@ -70,7 +68,6 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(UpdateCategoryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [Authorize]
         public async Task<IActionResult> UpdateCategory(Guid categoryId, [FromBody] UpdateCategoryDto dto)
         {
             if (categoryId != dto.CategoryId)
@@ -100,7 +97,6 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        [Authorize]
         public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             var command = new DeleteCategoryCommand { CategoryId = categoryId };
@@ -123,7 +119,6 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ListCategoriesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [Authorize]
         public async Task<IActionResult> ListCategories([FromQuery] ListCategoriesDto dto)
         {
             var query = new ListCategoriesQuery

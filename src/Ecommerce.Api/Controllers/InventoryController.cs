@@ -11,7 +11,6 @@ namespace Ecommerce.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/products/{productId}/inventory")]
-    [Authorize]
     public class InventoryController : ControllerBase
     {
         private readonly IMediator _mediator;
