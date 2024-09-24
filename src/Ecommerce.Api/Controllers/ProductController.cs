@@ -48,13 +48,13 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{productId}")]
         [ProducesResponseType(typeof(GetProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetProduct(Guid id)
+        public async Task<IActionResult> GetProduct(Guid productId)
         {
-            var query = new GetProductQuery { ProductId = id };
+            var query = new GetProductQuery { ProductId = productId };
             
             var result = await _mediator.Send(query);
 
@@ -66,16 +66,16 @@ namespace Ecommerce.Api.Controllers
             return NotFound(result.Errors);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{productId}")]
         [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductDto dto)
+        public async Task<IActionResult> UpdateProduct(Guid productId, [FromBody] UpdateProductDto dto)
         {
-            if (id != dto.ProductId)
+            if (productId != dto.ProductId)
             {
-                return BadRequest("The ID in the URL does not match the ID in the request body.");
+                return BadRequest("The Product ID in the URL does not match the Product ID in the request body.");
             }
 
             var command = new UpdateProductCommand
@@ -128,13 +128,13 @@ namespace Ecommerce.Api.Controllers
             return NotFound(result.Errors.FirstOrDefault()?.Message);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{productId}")]
         [ProducesResponseType(typeof(DeleteProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> DeleteProduct(Guid productId)
         {
-            var command = new DeleteProductCommand { ProductId = id };
+            var command = new DeleteProductCommand { ProductId = productId };
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)

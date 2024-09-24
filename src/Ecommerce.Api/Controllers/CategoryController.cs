@@ -40,7 +40,7 @@ namespace Ecommerce.Api.Controllers
 
             if (result.IsSuccess)
             {
-                return CreatedAtAction(nameof(GetCategory), new { id = result.Value.CategoryId }, result.Value);
+                return CreatedAtAction(nameof(GetCategory), new { categoryId = result.Value.CategoryId }, result.Value);
             }
 
             return BadRequest(result.Errors);
