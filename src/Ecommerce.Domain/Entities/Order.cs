@@ -171,7 +171,6 @@ namespace Ecommerce.Domain.Entities
                     if (newStatus == PaymentStatus.Refunded)
                         PaymentStatus = newStatus;
                     break;
-                // Add more cases as needed
                 default:
                     throw new InvalidOperationException(
                         $"Invalid payment status transition from {PaymentStatus} to {newStatus}");

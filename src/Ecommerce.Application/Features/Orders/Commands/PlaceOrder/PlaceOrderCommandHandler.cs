@@ -77,6 +77,8 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
                     Email = customer.Email
                 }, cancellationToken);
 
+                order.UpdateOrderStatus(OrderStatus.Processing);
+                
                 return Result.Ok(new PlaceOrderResponse
                 {
                     OrderId = order.OrderId,
