@@ -36,7 +36,8 @@ namespace Ecommerce.Api.Controllers
                     Quantity = item.Quantity,
                     UnitPrice = item.UnitPrice
                 }),
-                TotalAmount = placeOrderDto.TotalAmount
+                TotalAmount = placeOrderDto.TotalAmount,
+                PaymentMethod = placeOrderDto.PaymentMethod
             };
 
             var result = await _mediator.Send(command);

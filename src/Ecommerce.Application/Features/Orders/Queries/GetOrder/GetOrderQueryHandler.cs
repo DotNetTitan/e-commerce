@@ -44,7 +44,8 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
                     Quantity = item.Quantity,
                     UnitPrice = item.UnitPrice,
                     TotalPrice = item.TotalPrice
-                }).ToList()
+                }).ToList(),
+                PaymentMethod = order.PaymentMethod
             };
 
             return Result.Ok(response);
@@ -67,6 +68,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
         public required decimal TotalAmount { get; init; }
         public required List<OrderItemDetails> Items { get; init; }
         public string? TrackingNumber { get; init; }
+        public required PaymentMethod PaymentMethod { get; init; }
     }
 
     public class OrderItemDetails

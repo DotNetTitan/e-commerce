@@ -167,5 +167,7 @@ namespace Ecommerce.Domain.Entities
         {
             return TotalAmount == expectedTotal;
         }
+
+        public PaymentMethod PaymentMethod { get; init; }
     }
 }

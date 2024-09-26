@@ -1,6 +1,7 @@
 using MediatR;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Entities;
+using Ecommerce.Domain.Enums;
 using Ecommerce.Domain.Events;
 using Ecommerce.Domain.Exceptions;
 using MassTransit;
@@ -38,7 +39,8 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
                 var order = new Order
                 {
                     CustomerId = request.CustomerId,
-                    ShippingAddress = customer.CustomerAddress!
+                    ShippingAddress = customer.CustomerAddress!,
+                    PaymentMethod = request.PaymentMethod
                 };
 
                 foreach (var item in request.Items)
@@ -97,6 +99,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
         public Guid CustomerId { get; set; }
         public required List<Item> Items { get; set; }
         public decimal TotalAmount { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
     }
 
     public class Item
