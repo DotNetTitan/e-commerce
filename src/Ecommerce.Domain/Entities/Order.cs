@@ -11,22 +11,27 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Gets or sets the unique identifier for the order.
         /// </summary>
-        public Guid OrderId { get; private set; }
+        public Guid OrderId { get; }
 
         /// <summary>
         /// Gets or sets the date and time when the order was placed.
         /// </summary>
-        public DateTime OrderDate { get; private set; }
+        public DateTime OrderDate { get;}
 
         /// <summary>
-        /// Gets or sets the unique order number.
+        /// Gets or sets the unique order number.s
         /// </summary>
-        public string OrderNumber { get; private set; }
-
+        public string OrderNumber { get;}
+        
+        /// <summary>
+        /// Gets or sets the unique tracking number.
+        /// </summary>
+        public string TrackingNumber { get; }
+        
         /// <summary>
         /// Gets or sets the customer identifier associated with the order.
         /// </summary>
-        public required Guid CustomerId { get; set; }
+        public required Guid CustomerId { get; init; }
 
         /// <summary>
         /// Gets or sets the status of the order.
@@ -36,17 +41,17 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Gets or sets the customer associated with the order.
         /// </summary>
-        public Customer? Customer { get; set; }
+        public Customer? Customer { get; init; }
 
         /// <summary>
-        /// Gets or sets the collection of order items.
+        /// Gets or sets  the collection of order items.
         /// </summary>
-        public ICollection<OrderItem> OrderItems { get; private set; }
+        public ICollection<OrderItem> OrderItems { get; init; }
 
         /// <summary>
         /// Gets or sets the shipping address for the order.
         /// </summary>
-        public required Address ShippingAddress { get; set; }
+        public required Address ShippingAddress { get; init; }
 
         /// <summary>
         /// Initializes a new instance of the Order class.
@@ -58,6 +63,7 @@ namespace Ecommerce.Domain.Entities
             Status = OrderStatus.Pending;
             OrderDate = DateTime.UtcNow;
             OrderNumber = GenerateOrderNumber();
+            TrackingNumber = GenerateTrackingNumber();
         }
 
         /// <summary>
@@ -66,11 +72,22 @@ namespace Ecommerce.Domain.Entities
         /// <returns>A string representing the unique order number.</returns>
         private string GenerateOrderNumber()
         {
-            string datePrefix = OrderDate.ToString("yyyyMMddHHmmssfff");
-            string guidSuffix = OrderId.ToString("N").Substring(0, 8).ToUpper();
-            return $"ORDN-{datePrefix}-{guidSuffix}";
+            var datePrefix = OrderDate.ToString("yyyyMMddHHmmssfff");
+            var guidSuffix = OrderId.ToString("N").Substring(0, 8).ToUpper();
+            return $"ORD-{datePrefix}-{guidSuffix}";
         }
 
+        /// <summary>
+        /// Generates a unique tracking number.
+        /// </summary>
+        /// <returns>A string representing the unique tracking number.</returns>
+        public string GenerateTrackingNumber()
+        {
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+            var uniqueId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+            return $"TRK-{OrderId.ToString().Substring(0, 8).ToUpper()}-{CustomerId.ToString().Substring(0, 8).ToUpper()}-{timestamp}-{uniqueId}";
+        }
+        
         /// <summary>
         /// Gets or sets the total amount of the order.
         /// </summary>
@@ -79,7 +96,7 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Calculates and updates the total amount of the order.
         /// </summary>
-        public void CalculateTotalAmount()
+        private void CalculateTotalAmount()
         {
             TotalAmount = OrderItems.Sum(item => item.TotalPrice);
         }
@@ -129,7 +146,7 @@ namespace Ecommerce.Domain.Entities
         /// Checks if the order is empty.
         /// </summary>
         /// <returns>True if the order has no items; otherwise, false.</returns>
-        public bool IsEmpty() => !OrderItems.Any();
+        public bool IsEmpty() => OrderItems.Count == 0;
 
         /// <summary>
         /// Gets the total number of items in the order.
@@ -149,14 +166,6 @@ namespace Ecommerce.Domain.Entities
         public bool ValidateTotalAmount(decimal expectedTotal)
         {
             return TotalAmount == expectedTotal;
-        }
-
-        public string? TrackingNumber { get; private set; }
-
-        public void SetTrackingNumber(string trackingNumber)
-        {
-            TrackingNumber = trackingNumber;
-            Status = OrderStatus.Shipped;
         }
     }
 }

@@ -30,14 +30,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.UpdateOrderStatus
                 return Result.Fail<UpdateOrderStatusResponse>("Tracking number is required when setting status to Shipped.");
             }
 
-            if (request.Status == OrderStatus.Shipped)
-            {
-                order.SetTrackingNumber(request.TrackingNumber!);
-            }
-            else
-            {
-                order.UpdateStatus(request.Status);
-            }
+            order.UpdateStatus(request.Status);
 
             await _orderRepository.UpdateOrderAsync(order);
             await _unitOfWork.CommitAsync();
