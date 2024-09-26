@@ -22,7 +22,7 @@ namespace Ecommerce.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("{orderId}/place-order")]
         [ProducesResponseType(typeof(PlaceOrderResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDto placeOrderDto)
@@ -50,7 +50,7 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpPost("{orderId}/cancel")]
+        [HttpPost("{orderId}/cancel-order")]
         [ProducesResponseType(typeof(CancelOrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -104,11 +104,11 @@ namespace Ecommerce.Api.Controllers
             return BadRequest(result.Errors);
         }
 
-        [HttpPut("{orderId}/status")]
+        [HttpPut("{orderId}/order-status")]
         [ProducesResponseType(typeof(UpdateOrderStatusResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateOrderStatus(Guid orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
+        public async Task<IActionResult> UpdateStatus(Guid orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
         {
             var command = new UpdateOrderStatusCommand
             {
