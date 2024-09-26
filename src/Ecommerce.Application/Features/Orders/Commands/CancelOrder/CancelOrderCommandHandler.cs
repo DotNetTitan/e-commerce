@@ -38,9 +38,9 @@ namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
                 return Result.Fail<CancelOrderResponse>("You are not authorized to cancel this order.");
             }
 
-            if (order.Status != OrderStatus.Processing)
+            if (order.OrderStatus != OrderStatus.Processing)
             {
-                return Result.Fail<CancelOrderResponse>($"Cannot cancel order with status {order.Status}.");
+                return Result.Fail<CancelOrderResponse>($"Cannot cancel order with status {order.OrderStatus}.");
             }
 
             order.CancelOrder();
@@ -58,7 +58,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
             return Result.Ok(new CancelOrderResponse
             {
                 OrderId = order.OrderId,
-                Status = order.Status,
+                OrderStatus = order.OrderStatus,
                 OrderNumber = order.OrderNumber
             });
         }
@@ -73,7 +73,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
     public class CancelOrderResponse
     {
         public required Guid OrderId { get; init; }
-        public required OrderStatus Status { get; init; }
+        public required OrderStatus OrderStatus { get; init; }
         public required string OrderNumber { get; init; }
     }
 }

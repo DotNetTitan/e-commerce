@@ -113,8 +113,9 @@ namespace Ecommerce.Api.Controllers
             var command = new UpdateOrderStatusCommand
             {
                 OrderId = orderId,
-                Status = updateOrderStatusDto.Status,
-                TrackingNumber = updateOrderStatusDto.TrackingNumber
+                OrderStatus = updateOrderStatusDto.OrderStatus,
+                TrackingNumber = updateOrderStatusDto.TrackingNumber,
+                PaymentStatus = updateOrderStatusDto.PaymentStatus,
             };
 
             var result = await _mediator.Send(command);

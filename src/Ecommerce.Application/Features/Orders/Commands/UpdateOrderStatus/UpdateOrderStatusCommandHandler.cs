@@ -25,12 +25,14 @@ namespace Ecommerce.Application.Features.Orders.Commands.UpdateOrderStatus
                 return Result.Fail<UpdateOrderStatusResponse>($"Order with ID {request.OrderId} not found.");
             }
 
-            if (request.Status == OrderStatus.Shipped && string.IsNullOrEmpty(request.TrackingNumber))
+            if (request.OrderStatus == OrderStatus.Shipped && string.IsNullOrEmpty(request.TrackingNumber))
             {
                 return Result.Fail<UpdateOrderStatusResponse>("Tracking number is required when setting status to Shipped.");
             }
 
-            order.UpdateStatus(request.Status);
+            order.UpdateOrderStatus(request.OrderStatus);
+            
+            order.UpdatePaymentStatus(request.PaymentStatus);
 
             await _orderRepository.UpdateOrderAsync(order);
             await _unitOfWork.CommitAsync();
@@ -38,7 +40,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.UpdateOrderStatus
             return Result.Ok(new UpdateOrderStatusResponse
             {
                 OrderId = order.OrderId,
-                Status = order.Status,
+                OrderStatus = order.OrderStatus,
                 TrackingNumber = order.TrackingNumber
             });
         }
@@ -47,14 +49,15 @@ namespace Ecommerce.Application.Features.Orders.Commands.UpdateOrderStatus
     public class UpdateOrderStatusCommand : IRequest<Result<UpdateOrderStatusResponse>>
     {
         public required Guid OrderId { get; init; }
-        public required OrderStatus Status { get; init; }
+        public required OrderStatus OrderStatus { get; init; }
+        public required PaymentStatus PaymentStatus { get; init; }
         public string? TrackingNumber { get; init; }
     }
 
     public class UpdateOrderStatusResponse
     {
         public required Guid OrderId { get; init; }
-        public required OrderStatus Status { get; init; }
+        public required OrderStatus OrderStatus { get; init; }
         public string? TrackingNumber { get; init; }
     }
 }

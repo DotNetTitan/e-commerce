@@ -64,9 +64,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
                 {
                     return Result.Fail<PlaceOrderResponse>("Calculation mismatch.");
                 }
-
-                order.GenerateTrackingNumber(); // Generate tracking number
-
+               
                 await _orderRepository.CreateOrderAsync(order);
 
                 await _unitOfWork.CommitAsync();

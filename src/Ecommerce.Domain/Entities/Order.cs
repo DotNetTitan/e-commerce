@@ -16,18 +16,18 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Gets or sets the date and time when the order was placed.
         /// </summary>
-        public DateTime OrderDate { get;}
+        public DateTime OrderDate { get; }
 
         /// <summary>
         /// Gets or sets the unique order number.s
         /// </summary>
-        public string OrderNumber { get;}
-        
+        public string OrderNumber { get; }
+
         /// <summary>
         /// Gets or sets the unique tracking number.
         /// </summary>
         public string TrackingNumber { get; }
-        
+
         /// <summary>
         /// Gets or sets the customer identifier associated with the order.
         /// </summary>
@@ -36,7 +36,12 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Gets or sets the status of the order.
         /// </summary>
-        public OrderStatus Status { get; private set; }
+        public OrderStatus OrderStatus { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the status of the payment.
+        /// </summary>
+        public PaymentStatus PaymentStatus { get; private set; }
 
         /// <summary>
         /// Gets or sets the customer associated with the order.
@@ -60,7 +65,9 @@ namespace Ecommerce.Domain.Entities
         {
             OrderId = Guid.NewGuid();
             OrderItems = new List<OrderItem>();
-            Status = OrderStatus.Pending;
+            OrderStatus = OrderStatus.Pending;
+            PaymentStatus = PaymentStatus.Pending;
+            PaymentMethod = PaymentMethod.CashOnDelivery;
             OrderDate = DateTime.UtcNow;
             OrderNumber = GenerateOrderNumber();
             TrackingNumber = GenerateTrackingNumber();
@@ -85,9 +92,10 @@ namespace Ecommerce.Domain.Entities
         {
             var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
             var uniqueId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
-            return $"TRK-{OrderId.ToString().Substring(0, 8).ToUpper()}-{CustomerId.ToString().Substring(0, 8).ToUpper()}-{timestamp}-{uniqueId}";
+            return
+                $"TRK-{OrderId.ToString().Substring(0, 8).ToUpper()}-{CustomerId.ToString().Substring(0, 8).ToUpper()}-{timestamp}-{uniqueId}";
         }
-        
+
         /// <summary>
         /// Gets or sets the total amount of the order.
         /// </summary>
@@ -124,21 +132,69 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Updates the status of the order.
         /// </summary>
-        /// <param name="status">The new status of the order.</param>
-        public void UpdateStatus(OrderStatus status)
+        /// <param name="newStatus">The new status of the order.</param>
+        public void UpdateOrderStatus(OrderStatus newStatus)
         {
-            Status = status;
+            switch (OrderStatus)
+            {
+                case OrderStatus.Pending:
+                    if (newStatus == OrderStatus.Processing || newStatus == OrderStatus.Cancelled)
+                        OrderStatus = newStatus;
+                    break;
+                case OrderStatus.Processing:
+                    if (newStatus == OrderStatus.Shipped || newStatus == OrderStatus.Cancelled)
+                        OrderStatus = newStatus;
+                    break;
+                case OrderStatus.Shipped:
+                    if (newStatus == OrderStatus.Delivered)
+                        OrderStatus = newStatus;
+                    break;
+                // Add more cases as needed
+                default:
+                    throw new InvalidOperationException($"Invalid status transition from {OrderStatus} to {newStatus}");
+            }
+        }
+
+        /// <summary>
+        /// Updates the status of the payment.
+        /// </summary>
+        /// <param name="newStatus">The new status of the payment.</param>
+        public void UpdatePaymentStatus(PaymentStatus newStatus)
+        {
+            switch (PaymentStatus)
+            {
+                case PaymentStatus.Pending:
+                    if (newStatus == PaymentStatus.Paid)
+                        PaymentStatus = newStatus;
+                    break;
+                case PaymentStatus.Paid:
+                    if (newStatus == PaymentStatus.Refunded)
+                        PaymentStatus = newStatus;
+                    break;
+                // Add more cases as needed
+                default:
+                    throw new InvalidOperationException(
+                        $"Invalid payment status transition from {PaymentStatus} to {newStatus}");
+            }
         }
 
         public void CancelOrder()
         {
-            if (Status == OrderStatus.Processing)
+            switch (OrderStatus)
             {
-                Status = OrderStatus.Cancelled;
-            }
-            else
-            {
-                throw new InvalidOperationException($"Cannot cancel order with status {Status}.");
+                case OrderStatus.Pending:
+                case OrderStatus.Processing:
+                    OrderStatus = OrderStatus.Cancelled;
+                    PaymentStatus = PaymentStatus.Pending;
+                    break;
+                case OrderStatus.Shipped:
+                    throw new InvalidOperationException("Cannot cancel an order that has been shipped.");
+                case OrderStatus.Delivered:
+                    throw new InvalidOperationException("Cannot cancel an order that has been delivered.");
+                case OrderStatus.Cancelled:
+                    throw new InvalidOperationException("Order is already cancelled.");
+                default:
+                    throw new InvalidOperationException($"Cannot cancel order with status {OrderStatus}.");
             }
         }
 

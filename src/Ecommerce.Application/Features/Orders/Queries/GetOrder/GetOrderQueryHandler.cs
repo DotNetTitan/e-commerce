@@ -33,7 +33,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
                 OrderId = order.OrderId,
                 CustomerId = order.CustomerId,
                 OrderDate = order.OrderDate,
-                Status = order.Status,
+                OrderStatus = order.OrderStatus,
                 OrderNumber = order.OrderNumber,
                 TotalAmount = order.TotalAmount,
                 TrackingNumber = order.TrackingNumber,
@@ -63,7 +63,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
         public required Guid OrderId { get; init; }
         public required Guid CustomerId { get; init; }
         public required DateTime OrderDate { get; init; }
-        public required OrderStatus Status { get; init; }
+        public required OrderStatus OrderStatus { get; init; }
         public required string OrderNumber { get; init; }
         public required decimal TotalAmount { get; init; }
         public required List<OrderItemDetails> Items { get; init; }
