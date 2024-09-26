@@ -38,7 +38,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.CancelOrder
                 return Result.Fail<CancelOrderResponse>("You are not authorized to cancel this order.");
             }
 
-            if (order.Status != OrderStatus.InProgress)
+            if (order.Status != OrderStatus.Processing)
             {
                 return Result.Fail<CancelOrderResponse>($"Cannot cancel order with status {order.Status}.");
             }

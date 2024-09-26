@@ -55,7 +55,7 @@ namespace Ecommerce.Domain.Entities
         {
             OrderId = Guid.NewGuid();
             OrderItems = new List<OrderItem>();
-            Status = OrderStatus.InProgress;
+            Status = OrderStatus.Pending;
             OrderDate = DateTime.UtcNow;
             OrderNumber = GenerateOrderNumber();
         }
@@ -115,7 +115,7 @@ namespace Ecommerce.Domain.Entities
 
         public void CancelOrder()
         {
-            if (Status == OrderStatus.InProgress)
+            if (Status == OrderStatus.Processing)
             {
                 Status = OrderStatus.Cancelled;
             }
@@ -149,6 +149,14 @@ namespace Ecommerce.Domain.Entities
         public bool ValidateTotalAmount(decimal expectedTotal)
         {
             return TotalAmount == expectedTotal;
+        }
+
+        public string? TrackingNumber { get; private set; }
+
+        public void SetTrackingNumber(string trackingNumber)
+        {
+            TrackingNumber = trackingNumber;
+            Status = OrderStatus.Shipped;
         }
     }
 }

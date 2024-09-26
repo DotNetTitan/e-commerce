@@ -6,6 +6,7 @@ using Ecommerce.Application.Features.Orders.Commands.PlaceOrder;
 using Ecommerce.Application.Features.Orders.Commands.CancelOrder;
 using Ecommerce.Application.Features.Orders.Queries.GetOrder;
 using Ecommerce.Application.Features.Orders.Queries.ListOrders;
+using Ecommerce.Application.Features.Orders.Commands.UpdateOrderStatus;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -100,6 +101,31 @@ namespace Ecommerce.Api.Controllers
             }
 
             return BadRequest(result.Errors);
+        }
+
+        [HttpPut("{orderId}/status")]
+        [ProducesResponseType(typeof(UpdateOrderStatusResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateOrderStatus(Guid orderId, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
+        {
+            var command = new UpdateOrderStatusCommand
+            {
+                OrderId = orderId,
+                Status = updateOrderStatusDto.Status,
+                TrackingNumber = updateOrderStatusDto.TrackingNumber
+            };
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return result.Errors.First().Message.Contains("not found")
+                ? NotFound(result.Errors)
+                : BadRequest(result.Errors);
         }
     }
 }

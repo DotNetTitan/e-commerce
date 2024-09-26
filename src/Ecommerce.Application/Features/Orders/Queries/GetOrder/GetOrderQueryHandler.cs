@@ -36,6 +36,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
                 Status = order.Status,
                 OrderNumber = order.OrderNumber,
                 TotalAmount = order.TotalAmount,
+                TrackingNumber = order.TrackingNumber,
                 Items = order.OrderItems.Select(item => new OrderItemDetails
                 {
                     ProductId = item.ProductId,
@@ -65,6 +66,7 @@ namespace Ecommerce.Application.Features.Orders.Queries.GetOrder
         public required string OrderNumber { get; init; }
         public required decimal TotalAmount { get; init; }
         public required List<OrderItemDetails> Items { get; init; }
+        public string? TrackingNumber { get; init; }
     }
 
     public class OrderItemDetails
