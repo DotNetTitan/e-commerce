@@ -8,37 +8,37 @@
         /// <summary>
         /// Gets or sets the unique identifier for the order item.
         /// </summary>
-        public Guid OrderItemId { get; set; }
+        public Guid OrderItemId { get; private set; }
 
         /// <summary>
         /// Gets or sets the order identifier associated with this item.
         /// </summary>
-        public required Guid OrderId { get; set; }
+        public required Guid OrderId { get; init; }
 
         /// <summary>
         /// Gets or sets the order associated with this item.
         /// </summary>
-        public Order? Order { get; set; }
+        public Order? Order { get; init; }
 
         /// <summary>
         /// Gets or sets the product identifier associated with this item.
         /// </summary>
-        public required Guid ProductId { get; set; }
+        public required Guid ProductId { get; init; }
 
         /// <summary>
         /// Gets or sets the product associated with this item.
         /// </summary>
-        public Product? Product { get; set; }
+        public Product? Product { get; init; }
 
         /// <summary>
         /// Gets or sets the quantity of the product in this order item.
         /// </summary>
-        public required int Quantity { get; set; }
+        public required int Quantity { get; init; }
 
         /// <summary>
         /// Gets or sets the unit price of the product in this order item.
         /// </summary>
-        public required decimal UnitPrice { get; set; }
+        public required decimal UnitPrice { get; init; }
 
         /// <summary>
         /// Gets or sets the total price for this order item.
@@ -57,7 +57,7 @@
         /// <summary>
         /// Calculates and updates the total price for this order item.
         /// </summary>
-        public void CalculateTotalPrice()
+        private void CalculateTotalPrice()
         {
             TotalPrice = Quantity * UnitPrice;
         }

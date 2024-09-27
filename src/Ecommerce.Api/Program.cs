@@ -251,3 +251,5 @@ void ConfigurePipeline(WebApplication webApplication)
     webApplication.UseRateLimiter();
     webApplication.UseExceptionHandler();
 }
+
+public partial class Program { }
