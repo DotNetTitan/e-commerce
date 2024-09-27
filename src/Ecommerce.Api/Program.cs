@@ -113,7 +113,16 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
     services.AddHttpContextAccessor();
 
-    services.AddSingleton(new EmailClient(configuration["AppSettings:AzureCommunicationService"]));
+    var azureCommunicationServiceConnectionString = configuration["AppSettings:AzureCommunicationService"];
+    if (!string.IsNullOrEmpty(azureCommunicationServiceConnectionString))
+    {
+        services.AddSingleton(new EmailClient(azureCommunicationServiceConnectionString));
+    }
+    else
+    {
+        services.AddSingleton<EmailClient>(sp => null);
+    }
+
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ICurrentUserService, CurrentUserService>();
     services.AddTransient<IEmailService, EmailService>();
