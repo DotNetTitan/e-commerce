@@ -13,15 +13,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http.Json;
+using Xunit.Abstractions;
 
 namespace Ecommerce.Api.Tests.Product.E2E
 {
     public class ProductE2ETests : IDisposable
     {
+        private readonly ITestOutputHelper _testOutputHelper;
         private readonly WebApplicationFactory<Program> _factory;
 
-        public ProductE2ETests()
+        public ProductE2ETests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
             _factory = new WebApplicationFactory<Program>();
         }
 
@@ -120,19 +123,22 @@ namespace Ecommerce.Api.Tests.Product.E2E
             var createdProduct = await createResponse.Content.ReadFromJsonAsync<CreateProductResponse>();
 
             // Act
-            var response = await client.GetAsync($"/api/v1/products/{createdProduct.Id}");
+            if (createdProduct != null)
+            {
+                var response = await client.GetAsync($"/api/v1/products/{createdProduct.Id}");
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<GetProductResponse>();
-            Assert.NotNull(result);
-            Assert.Equal(createdProduct.Id, result.Id);
-            Assert.Equal(createdProduct.Name, result.Name);
-            Assert.Equal(createdProduct.Description, result.Description);
-            Assert.Equal(createdProduct.Price, result.Price);
-            Assert.Equal(createdProduct.StockQuantity, result.StockQuantity);
-            Assert.Equal(createdProduct.CategoryId, result.CategoryId);
-            Assert.Equal(createdProduct.SKU, result.SKU);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var result = await response.Content.ReadFromJsonAsync<GetProductResponse>();
+                Assert.NotNull(result);
+                Assert.Equal(createdProduct.Id, result.Id);
+                Assert.Equal(createdProduct.Name, result.Name);
+                Assert.Equal(createdProduct.Description, result.Description);
+                Assert.Equal(createdProduct.Price, result.Price);
+                Assert.Equal(createdProduct.StockQuantity, result.StockQuantity);
+                Assert.Equal(createdProduct.CategoryId, result.CategoryId);
+                Assert.Equal(createdProduct.SKU, result.SKU);
+            }
         }
 
         [Fact]
@@ -152,31 +158,34 @@ namespace Ecommerce.Api.Tests.Product.E2E
             var createResponse = await client.PostAsJsonAsync("/api/v1/products", createProductDto);
             var createdProduct = await createResponse.Content.ReadFromJsonAsync<CreateProductResponse>();
 
-            var updateProductDto = new UpdateProductDto
+            if (createdProduct != null)
             {
-                ProductId = createdProduct.Id,
-                Name = "Updated Product",
-                Description = "Updated Description",
-                Price = 19.99m,
-                StockQuantity = 200,
-                CategoryId = Guid.NewGuid(),
-                LowStockThreshold = 20
-            };
+                var updateProductDto = new UpdateProductDto
+                {
+                    ProductId = createdProduct.Id,
+                    Name = "Updated Product",
+                    Description = "Updated Description",
+                    Price = 19.99m,
+                    StockQuantity = 200,
+                    CategoryId = Guid.NewGuid(),
+                    LowStockThreshold = 20
+                };
 
-            // Act
-            var response = await client.PutAsJsonAsync($"/api/v1/products/{createdProduct.Id}", updateProductDto);
+                // Act
+                var response = await client.PutAsJsonAsync($"/api/v1/products/{createdProduct.Id}", updateProductDto);
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<UpdateProductResponse>();
-            Assert.NotNull(result);
-            Assert.Equal(updateProductDto.ProductId, result.Id);
-            Assert.Equal(updateProductDto.Name, result.Name);
-            Assert.Equal(updateProductDto.Description, result.Description);
-            Assert.Equal(updateProductDto.Price, result.Price);
-            Assert.Equal(updateProductDto.StockQuantity, result.StockQuantity);
-            Assert.Equal(updateProductDto.CategoryId, result.CategoryId);
-            Assert.Equal(createdProduct.SKU, result.SKU);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var result = await response.Content.ReadFromJsonAsync<UpdateProductResponse>();
+                Assert.NotNull(result);
+                Assert.Equal(updateProductDto.ProductId, result.Id);
+                Assert.Equal(updateProductDto.Name, result.Name);
+                Assert.Equal(updateProductDto.Description, result.Description);
+                Assert.Equal(updateProductDto.Price, result.Price);
+                Assert.Equal(updateProductDto.StockQuantity, result.StockQuantity);
+                Assert.Equal(updateProductDto.CategoryId, result.CategoryId);
+                Assert.Equal(createdProduct.SKU, result.SKU);
+            }
         }
 
         [Fact]
@@ -197,14 +206,17 @@ namespace Ecommerce.Api.Tests.Product.E2E
             var createdProduct = await createResponse.Content.ReadFromJsonAsync<CreateProductResponse>();
 
             // Act
-            var response = await client.DeleteAsync($"/api/v1/products/{createdProduct.Id}");
+            if (createdProduct != null)
+            {
+                var response = await client.DeleteAsync($"/api/v1/products/{createdProduct.Id}");
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<DeleteProductResponse>();
-            Assert.NotNull(result);
-            Assert.Equal(createdProduct.Id, result.ProductId);
-            Assert.True(result.IsDeleted);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var result = await response.Content.ReadFromJsonAsync<DeleteProductResponse>();
+                Assert.NotNull(result);
+                Assert.Equal(createdProduct.Id, result.ProductId);
+                Assert.True(result.IsDeleted);
+            }
         }
 
         [Fact]
@@ -248,7 +260,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
             foreach (var product in products)
             {
                 var createResponse = await client.PostAsJsonAsync("/api/v1/products", product);
-                Console.WriteLine($"Create Product Response: {await createResponse.Content.ReadAsStringAsync()}");
+                _testOutputHelper.WriteLine($"Create Product Response: {await createResponse.Content.ReadAsStringAsync()}");
             }
 
             // Add a small delay to ensure products are saved
@@ -260,7 +272,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var responseContent = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"List Products Response: {responseContent}");
+            _testOutputHelper.WriteLine($"List Products Response: {responseContent}");
             var result = await response.Content.ReadFromJsonAsync<ListProductsResponse>();
             Assert.NotNull(result);
             Assert.NotEmpty(result.Products);

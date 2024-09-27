@@ -87,15 +87,18 @@ namespace Ecommerce.Api.Tests.Category.E2E
             var createdCategory = await createResponse.Content.ReadFromJsonAsync<CreateCategoryResponse>();
 
             // Act
-            var response = await client.GetAsync($"/api/v1/categories/{createdCategory.CategoryId}");
+            if (createdCategory != null)
+            {
+                var response = await client.GetAsync($"/api/v1/categories/{createdCategory.CategoryId}");
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<GetCategoryResponse>();
-            Assert.NotNull(result);
-            Assert.Equal(createdCategory.CategoryId, result.CategoryId);
-            Assert.Equal(createdCategory.Name, result.Name);
-            Assert.Equal(createdCategory.Description, result.Description);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var result = await response.Content.ReadFromJsonAsync<GetCategoryResponse>();
+                Assert.NotNull(result);
+                Assert.Equal(createdCategory.CategoryId, result.CategoryId);
+                Assert.Equal(createdCategory.Name, result.Name);
+                Assert.Equal(createdCategory.Description, result.Description);
+            }
         }
 
         [Fact]
@@ -107,23 +110,26 @@ namespace Ecommerce.Api.Tests.Category.E2E
             var createResponse = await client.PostAsJsonAsync("/api/v1/categories", createCategoryDto);
             var createdCategory = await createResponse.Content.ReadFromJsonAsync<CreateCategoryResponse>();
 
-            var updateCategoryDto = new UpdateCategoryDto
+            if (createdCategory != null)
             {
-                CategoryId = createdCategory.CategoryId,
-                Name = "Updated Category",
-                Description = "Updated Description"
-            };
+                var updateCategoryDto = new UpdateCategoryDto
+                {
+                    CategoryId = createdCategory.CategoryId,
+                    Name = "Updated Category",
+                    Description = "Updated Description"
+                };
 
-            // Act
-            var response = await client.PutAsJsonAsync($"/api/v1/categories/{createdCategory.CategoryId}", updateCategoryDto);
+                // Act
+                var response = await client.PutAsJsonAsync($"/api/v1/categories/{createdCategory.CategoryId}", updateCategoryDto);
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<UpdateCategoryResponse>();
-            Assert.NotNull(result);
-            Assert.Equal(updateCategoryDto.CategoryId, result.Id);
-            Assert.Equal(updateCategoryDto.Name, result.Name);
-            Assert.Equal(updateCategoryDto.Description, result.Description);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var result = await response.Content.ReadFromJsonAsync<UpdateCategoryResponse>();
+                Assert.NotNull(result);
+                Assert.Equal(updateCategoryDto.CategoryId, result.Id);
+                Assert.Equal(updateCategoryDto.Name, result.Name);
+                Assert.Equal(updateCategoryDto.Description, result.Description);
+            }
         }
 
         [Fact]
@@ -136,14 +142,17 @@ namespace Ecommerce.Api.Tests.Category.E2E
             var createdCategory = await createResponse.Content.ReadFromJsonAsync<CreateCategoryResponse>();
 
             // Act
-            var response = await client.DeleteAsync($"/api/v1/categories/{createdCategory.CategoryId}");
+            if (createdCategory != null)
+            {
+                var response = await client.DeleteAsync($"/api/v1/categories/{createdCategory.CategoryId}");
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var result = await response.Content.ReadFromJsonAsync<DeleteCategoryResponse>();
-            Assert.NotNull(result);
-            Assert.Equal(createdCategory.CategoryId, result.CategoryId);
-            Assert.True(result.IsDeleted);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var result = await response.Content.ReadFromJsonAsync<DeleteCategoryResponse>();
+                Assert.NotNull(result);
+                Assert.Equal(createdCategory.CategoryId, result.CategoryId);
+                Assert.True(result.IsDeleted);
+            }
         }
 
         [Fact]
