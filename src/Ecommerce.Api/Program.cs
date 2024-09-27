@@ -26,6 +26,9 @@ using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add configuration from environment variables
+builder.Configuration.AddEnvironmentVariables();
+
 // Determine the current environment
 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
