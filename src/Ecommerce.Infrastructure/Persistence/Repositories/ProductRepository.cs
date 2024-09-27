@@ -58,9 +58,20 @@ namespace Ecommerce.Infrastructure.Persistence.Repositories
 
             var totalCount = await query.CountAsync();
 
+            // Ensure pageNumber is valid
+            pageNumber = Math.Max(1, pageNumber);
+            var skipAmount = (pageNumber - 1) * pageSize;
+
+            // Adjust skip amount if it's greater than total count
+            if (skipAmount >= totalCount)
+            {
+                skipAmount = 0;
+                pageNumber = 1;
+            }
+
             var products = await query
                 .OrderBy(p => p.Name)
-                .Skip((pageNumber - 1) * pageSize)
+                .Skip(skipAmount)
                 .Take(pageSize)
                 .ToListAsync();
 
