@@ -16,14 +16,14 @@ namespace Ecommerce.Application.Features.Customers.Commands.EditCustomer
             RuleFor(x => x.FirstName).NotEmpty().MaximumLength(50).WithMessage("First name is required and should not exceed 50 characters.");
             RuleFor(x => x.LastName).NotEmpty().MaximumLength(50).WithMessage("Last name is required and should not exceed 50 characters.");
             RuleFor(x => x.Address)
-                .SetValidator(new AddressValidator())
+                .SetValidator(new AddressValidator()!)
                 .When(x => x.Address != null)
                 .WithMessage("Invalid address.");
 
             When(x => x.Address != null, () =>
             {
                 RuleFor(x => x.Address)
-                    .SetValidator(new AddressValidator());
+                    .SetValidator(new AddressValidator()!);
             }).Otherwise(() =>
             {
                 RuleFor(x => x.Address).Null();
