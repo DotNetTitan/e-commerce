@@ -48,6 +48,12 @@ namespace Ecommerce.Api.Tests.Product.E2E
                         options.UseInMemoryDatabase(dbName);
                     });
 
+                    var emailClientDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(Azure.Communication.Email.EmailClient));
+                    if (emailClientDescriptor != null)
+                    {
+                        services.Remove(emailClientDescriptor);
+                    }
+
                     services.AddLogging(loggingBuilder =>
                     {
                         loggingBuilder.AddConsole();
