@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http.Json;
+using Ecommerce.Application.Interfaces;
+using NSubstitute;
 
 namespace Ecommerce.Api.Tests.Product.E2E
 {
@@ -33,6 +35,8 @@ namespace Ecommerce.Api.Tests.Product.E2E
         private HttpClient CreateClient()
         {
             string dbName = Guid.NewGuid().ToString();
+            IEmailService mockEmailService = null;
+
             return _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
@@ -48,11 +52,24 @@ namespace Ecommerce.Api.Tests.Product.E2E
                         options.UseInMemoryDatabase(dbName);
                     });
 
+                    // Remove the real EmailClient service
                     var emailClientDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(Azure.Communication.Email.EmailClient));
                     if (emailClientDescriptor != null)
                     {
                         services.Remove(emailClientDescriptor);
                     }
+
+                    // Remove the real EmailService if it exists
+                    var emailServiceDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IEmailService));
+                    if (emailServiceDescriptor != null)
+                    {
+                        services.Remove(emailServiceDescriptor);
+                    }
+
+                    // Add a substitute EmailService
+                    mockEmailService = Substitute.For<IEmailService>();
+                    services.AddSingleton(mockEmailService);
+
 
                     services.AddLogging(loggingBuilder =>
                     {

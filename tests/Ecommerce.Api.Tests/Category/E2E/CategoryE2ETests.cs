@@ -4,11 +4,13 @@ using Ecommerce.Application.Features.Categories.Commands.DeleteCategory;
 using Ecommerce.Application.Features.Categories.Commands.UpdateCategory;
 using Ecommerce.Application.Features.Categories.Queries.GetCategory;
 using Ecommerce.Application.Features.Categories.Queries.ListCategories;
+using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -31,6 +33,8 @@ namespace Ecommerce.Api.Tests.Category.E2E
         private HttpClient CreateClient()
         {
             string dbName = Guid.NewGuid().ToString();
+            IEmailService mockEmailService = null;
+
             return _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
@@ -46,12 +50,25 @@ namespace Ecommerce.Api.Tests.Category.E2E
                         options.UseInMemoryDatabase(dbName);
                     });
 
+                    // Remove the real EmailClient service
                     var emailClientDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(Azure.Communication.Email.EmailClient));
                     if (emailClientDescriptor != null)
                     {
                         services.Remove(emailClientDescriptor);
                     }
-                    
+
+                    // Remove the real EmailService if it exists
+                    var emailServiceDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IEmailService));
+                    if (emailServiceDescriptor != null)
+                    {
+                        services.Remove(emailServiceDescriptor);
+                    }
+
+                    // Add a substitute EmailService
+                    mockEmailService = Substitute.For<IEmailService>();
+                    services.AddSingleton(mockEmailService);
+
+
                     services.AddLogging(loggingBuilder =>
                     {
                         loggingBuilder.AddConsole();
