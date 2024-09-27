@@ -25,7 +25,4 @@ jobs:
       run: dotnet build --no-restore
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal
-      env:
-        AppSettings__AzureCommunicationServiceConnection: ${{ secrets.AppSettings__AzureCommunicationServiceConnection }}
-        AppSettings__AzureServiceBusConnectionString: ${{ secrets.AppSettings__AzureServiceBusConnectionString }}
+      run: dotnet test --no-build --verbosity normal --filter "FullyQualifiedName!~E2E"

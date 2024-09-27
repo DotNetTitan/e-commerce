@@ -4,17 +4,13 @@ using Ecommerce.Application.Features.Categories.Commands.DeleteCategory;
 using Ecommerce.Application.Features.Categories.Commands.UpdateCategory;
 using Ecommerce.Application.Features.Categories.Queries.GetCategory;
 using Ecommerce.Application.Features.Categories.Queries.ListCategories;
-using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
 using System.Net;
 using System.Net.Http.Json;
-using Azure.Communication.Email;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Ecommerce.Api.Tests.Category.E2E
 {
@@ -52,17 +48,7 @@ namespace Ecommerce.Api.Tests.Category.E2E
                     {
                         options.UseInMemoryDatabase(dbName);
                     });
-
-                    // Remove real email services
-                    services.RemoveAll(typeof(Azure.Communication.Email.EmailClient));
-                    services.RemoveAll(typeof(IEmailService));
-
-                    // Add mock email service
-                    services.AddSingleton(Substitute.For<IEmailService>());
-
-                    // Add null EmailClient
-                    services.AddSingleton<EmailClient>(sp => null);
-
+                    
                     // Add minimal logging
                     services.AddLogging(loggingBuilder =>
                     {

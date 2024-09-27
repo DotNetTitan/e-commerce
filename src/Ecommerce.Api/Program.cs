@@ -48,16 +48,16 @@ ConfigureServices(builder.Services, builder.Configuration);
 ConfigureRateLimiter(builder.Services, builder.Configuration);
 
 builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-})
-.AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+    })
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
 
 // Add exception handling middleware
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -113,15 +113,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
     services.AddHttpContextAccessor();
 
-    var azureCommunicationServiceConnectionString = configuration["AppSettings:AzureCommunicationService"];
-    if (!string.IsNullOrEmpty(azureCommunicationServiceConnectionString))
-    {
-        services.AddSingleton(new EmailClient(azureCommunicationServiceConnectionString));
-    }
-    else
-    {
-        services.AddSingleton<EmailClient>(sp => null);
-    }
+    services.AddSingleton(new EmailClient(configuration["AppSettings:AzureCommunicationService"]));
 
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -169,7 +161,8 @@ static void ConfigureRateLimiter(IServiceCollection services, IConfiguration con
             {
                 Status = StatusCodes.Status429TooManyRequests,
                 Title = "Too Many Requests",
-                Detail = $"You have exceeded the allowed number of requests. Your current limit is {permitLimit} requests per {rateLimitWindowSeconds} seconds. Please try again later in {rateLimitWindowSeconds} seconds.",
+                Detail =
+                    $"You have exceeded the allowed number of requests. Your current limit is {permitLimit} requests per {rateLimitWindowSeconds} seconds. Please try again later in {rateLimitWindowSeconds} seconds.",
                 Instance = context.HttpContext.Request.Path,
                 Type = RfcTypeUrls.TooManyRequests
             };
@@ -214,22 +207,23 @@ void ConfigureSwagger(SwaggerGenOptions options)
 
 void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
 {
-    var key = configuration["AppSettings:Jwt:Key"] ?? throw new ArgumentNullException(nameof(configuration), "AppSettings:Jwt:Key is not configured");
+    var key = configuration["AppSettings:Jwt:Key"] ??
+              throw new ArgumentNullException(nameof(configuration), "AppSettings:Jwt:Key is not configured");
 
     services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
+        .AddJwtBearer(options =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration["AppSettings:Jwt:Issuer"],
-            ValidAudience = configuration["AppSettings:Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-        };
-    });
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["AppSettings:Jwt:Issuer"],
+                ValidAudience = configuration["AppSettings:Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+            };
+        });
 }
 
 void ConfigureIdentityOptions(IServiceCollection services)
@@ -264,4 +258,6 @@ void ConfigurePipeline(WebApplication webApplication)
     webApplication.UseExceptionHandler();
 }
 
-public partial class Program { }
+public partial class Program
+{
+}

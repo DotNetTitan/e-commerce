@@ -13,10 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http.Json;
-using Azure.Communication.Email;
-using Ecommerce.Application.Interfaces;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using NSubstitute;
 
 namespace Ecommerce.Api.Tests.Product.E2E
 {
@@ -54,17 +50,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
                     {
                         options.UseInMemoryDatabase(dbName);
                     });
-
-                    // Remove real email services
-                    services.RemoveAll(typeof(Azure.Communication.Email.EmailClient));
-                    services.RemoveAll(typeof(IEmailService));
-
-                    // Add mock email service
-                    services.AddSingleton(Substitute.For<IEmailService>());
-
-                    // Add null EmailClient
-                    services.AddSingleton<EmailClient>(sp => null);
-
+                    
                     // Add minimal logging
                     services.AddLogging(loggingBuilder =>
                     {
