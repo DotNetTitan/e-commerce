@@ -30,7 +30,7 @@ namespace Ecommerce.Domain.Entities
         /// <summary>
         /// Gets or sets the email of the customer.
         /// </summary>
-        public string Email { get; set; }
+        public required string Email { get; set; }
         
         /// <summary>
         /// Gets or sets the address of the customer.
