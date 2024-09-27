@@ -19,6 +19,15 @@ namespace Ecommerce.Application.Features.Customers.Commands.EditCustomer
                 .SetValidator(new AddressValidator())
                 .When(x => x.Address != null)
                 .WithMessage("Invalid address.");
+
+            When(x => x.Address != null, () =>
+            {
+                RuleFor(x => x.Address)
+                    .SetValidator(new AddressValidator());
+            }).Otherwise(() =>
+            {
+                RuleFor(x => x.Address).Null();
+            });
         }
     }
 
