@@ -1,8 +1,7 @@
 ﻿using Ecommerce.Application.Features.Orders.EventHandlers.OrderPlaced;
 using Ecommerce.Application.Features.Orders.EventHandlers.OrderCancelled;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Ecommerce.Application.Configuration
+namespace Ecommerce.Api.Configuration
 {
     public static class Consumers
     {
