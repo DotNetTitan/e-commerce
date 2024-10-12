@@ -135,21 +135,29 @@ namespace Ecommerce.Domain.Entities
         /// <param name="newStatus">The new status of the order.</param>
         public void UpdateOrderStatus(OrderStatus newStatus)
         {
+            if (newStatus == OrderStatus)
+                return;
+
             switch (OrderStatus)
             {
                 case OrderStatus.Pending:
                     if (newStatus == OrderStatus.Processing || newStatus == OrderStatus.Cancelled)
                         OrderStatus = newStatus;
+                    else
+                        throw new InvalidOperationException($"Invalid status transition from {OrderStatus} to {newStatus}");
                     break;
                 case OrderStatus.Processing:
                     if (newStatus == OrderStatus.Shipped || newStatus == OrderStatus.Cancelled)
                         OrderStatus = newStatus;
+                    else
+                        throw new InvalidOperationException($"Invalid status transition from {OrderStatus} to {newStatus}");
                     break;
                 case OrderStatus.Shipped:
                     if (newStatus == OrderStatus.Delivered)
                         OrderStatus = newStatus;
+                    else
+                        throw new InvalidOperationException($"Invalid status transition from {OrderStatus} to {newStatus}");
                     break;
-                // Add more cases as needed
                 default:
                     throw new InvalidOperationException($"Invalid status transition from {OrderStatus} to {newStatus}");
             }
@@ -161,19 +169,25 @@ namespace Ecommerce.Domain.Entities
         /// <param name="newStatus">The new status of the payment.</param>
         public void UpdatePaymentStatus(PaymentStatus newStatus)
         {
+            if (newStatus == PaymentStatus)
+                return;
+
             switch (PaymentStatus)
             {
                 case PaymentStatus.Pending:
                     if (newStatus == PaymentStatus.Paid)
                         PaymentStatus = newStatus;
+                    else
+                        throw new InvalidOperationException($"Invalid payment status transition from {PaymentStatus} to {newStatus}");
                     break;
                 case PaymentStatus.Paid:
                     if (newStatus == PaymentStatus.Refunded)
                         PaymentStatus = newStatus;
+                    else
+                        throw new InvalidOperationException($"Invalid payment status transition from {PaymentStatus} to {newStatus}");
                     break;
                 default:
-                    throw new InvalidOperationException(
-                        $"Invalid payment status transition from {PaymentStatus} to {newStatus}");
+                    throw new InvalidOperationException($"Invalid payment status transition from {PaymentStatus} to {newStatus}");
             }
         }
 
