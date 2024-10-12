@@ -52,6 +52,7 @@ namespace Ecommerce.Application.Features.Orders.Commands.PlaceOrder
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     };
+                    orderItem.CalculateTotalPrice();
                     order.AddOrderItem(orderItem);
                 }
 

@@ -33,12 +33,12 @@
         /// <summary>
         /// Gets or sets the quantity of the product in this order item.
         /// </summary>
-        public required int Quantity { get; init; }
+        public required int Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the unit price of the product in this order item.
         /// </summary>
-        public required decimal UnitPrice { get; init; }
+        public required decimal UnitPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the total price for this order item.
@@ -51,13 +51,12 @@
         public OrderItem()
         {
             OrderItemId = Guid.NewGuid();
-            CalculateTotalPrice();
         }
 
         /// <summary>
         /// Calculates and updates the total price for this order item.
         /// </summary>
-        private void CalculateTotalPrice()
+        public void CalculateTotalPrice()
         {
             TotalPrice = Quantity * UnitPrice;
         }
