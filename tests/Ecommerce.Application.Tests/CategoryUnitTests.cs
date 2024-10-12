@@ -6,7 +6,7 @@ using Ecommerce.Application.Features.Categories.Queries.ListCategories;
 using Ecommerce.Application.Interfaces;
 using NSubstitute;
 
-namespace Ecommerce.Application.Tests.Category.Unit;
+namespace Ecommerce.Application.Tests;
 
 public class CategoryUnitTests
 {
