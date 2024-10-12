@@ -57,6 +57,7 @@ namespace Ecommerce.Domain.Tests
             // Arrange
             var cart = CreateValidShoppingCart();
             var product = CreateValidProduct();
+            product.StockQuantity = 10; // Set available stock
             cart.AddItem(product, 2);
 
             // Act

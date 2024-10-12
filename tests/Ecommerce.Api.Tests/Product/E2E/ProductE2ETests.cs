@@ -17,27 +17,35 @@ using Xunit.Abstractions;
 
 namespace Ecommerce.Api.Tests.Product.E2E
 {
-    public class ProductE2ETests : IDisposable
+    public class ProductE2ETests : IAsyncLifetime
     {
         private readonly ITestOutputHelper _testOutputHelper;
-        private readonly WebApplicationFactory<Program> _factory;
+        private WebApplicationFactory<Program>? _factory;
 
         public ProductE2ETests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
-            _factory = new WebApplicationFactory<Program>();
         }
 
-        public void Dispose()
+        public Task InitializeAsync()
         {
-            _factory.Dispose();
+            _factory = new WebApplicationFactory<Program>();
+            return Task.CompletedTask;
+        }
+
+        public async Task DisposeAsync()
+        {
+            if (_factory != null)
+            {
+                await _factory.DisposeAsync();
+            }
         }
 
         private HttpClient CreateClient()
         {
             string dbName = Guid.NewGuid().ToString();
 
-            return _factory.WithWebHostBuilder(builder =>
+            return _factory!.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
@@ -57,6 +65,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
                     // Add minimal logging
                     services.AddLogging(loggingBuilder =>
                     {
+                        loggingBuilder.ClearProviders();
                         loggingBuilder.AddConsole();
                         loggingBuilder.AddDebug();
                     });

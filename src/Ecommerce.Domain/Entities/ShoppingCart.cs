@@ -58,7 +58,7 @@ namespace Ecommerce.Domain.Entities
             var existingItem = ShoppingCartItems.FirstOrDefault(item => item.ProductId == product.ProductId);
             if (existingItem != null)
             {
-                existingItem.IncreaseQuantity(quantity);
+                existingItem.UpdateQuantity(quantity);
             }
             else
             {

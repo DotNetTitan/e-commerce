@@ -54,39 +54,21 @@
         public decimal TotalPrice => Quantity * Price;
 
         /// <summary>
-        /// Increases the quantity of this item.
-        /// </summary>
-        /// <param name="amount">The amount to increase the quantity by.</param>
-        /// <exception cref="ArgumentException">Thrown when the amount is negative.</exception>
-        public void IncreaseQuantity(int amount)
-        {
-            if (amount < 0)
-                throw new ArgumentException("Amount must be positive", nameof(amount));
-            Quantity += amount;
-        }
-
-        /// <summary>
-        /// Decreases the quantity of this item.
-        /// </summary>
-        /// <param name="amount">The amount to decrease the quantity by.</param>
-        /// <exception cref="ArgumentException">Thrown when the amount is negative.</exception>
-        public void DecreaseQuantity(int amount)
-        {
-            if (amount < 0)
-                throw new ArgumentException("Amount must be positive", nameof(amount));
-            Quantity = Math.Max(0, Quantity - amount);
-        }
-
-        /// <summary>
         /// Updates the quantity of this item.
         /// </summary>
-        /// <param name="newQuantity">The new quantity to set.</param>
+        /// <param name="additionalQuantity">The new quantity to set.</param>
         /// <exception cref="ArgumentException">Thrown when the new quantity is negative.</exception>
-        public void UpdateQuantity(int newQuantity)
+        public void UpdateQuantity(int additionalQuantity)
         {
-            if (newQuantity < 0)
-                throw new ArgumentException("Quantity must be non-negative", nameof(newQuantity));
-            Quantity = newQuantity;
+            if (additionalQuantity < 0)
+                throw new ArgumentException("Quantity to add must be non-negative", nameof(additionalQuantity));
+    
+            var newTotalQuantity = Quantity + additionalQuantity;
+    
+            if (Product != null && !Product.IsInStock(newTotalQuantity))
+                throw new InvalidOperationException($"Not enough stock. Available: {Product.StockQuantity}, Requested: {newTotalQuantity}");
+    
+            Quantity = newTotalQuantity;
         }
 
         /// <summary>

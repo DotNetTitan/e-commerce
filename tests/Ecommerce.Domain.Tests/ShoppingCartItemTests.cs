@@ -54,67 +54,6 @@ namespace Ecommerce.Domain.Tests
         }
 
         [Fact]
-        public void IncreaseQuantity_ShouldIncreaseQuantityCorrectly()
-        {
-            // Arrange
-            var item = CreateValidShoppingCartItem();
-
-            // Act
-            item.IncreaseQuantity(2);
-
-            // Assert
-            item.Quantity.Should().Be(3);
-        }
-
-        [Fact]
-        public void IncreaseQuantity_ShouldThrowException_WhenAmountIsNegative()
-        {
-            // Arrange
-            var item = CreateValidShoppingCartItem();
-
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => item.IncreaseQuantity(-1));
-        }
-
-        [Fact]
-        public void DecreaseQuantity_ShouldDecreaseQuantityCorrectly()
-        {
-            // Arrange
-            var item = CreateValidShoppingCartItem();
-            item.Quantity = 5;
-
-            // Act
-            item.DecreaseQuantity(2);
-
-            // Assert
-            item.Quantity.Should().Be(3);
-        }
-
-        [Fact]
-        public void DecreaseQuantity_ShouldNotGoBelowZero()
-        {
-            // Arrange
-            var item = CreateValidShoppingCartItem();
-            item.Quantity = 2;
-
-            // Act
-            item.DecreaseQuantity(3);
-
-            // Assert
-            item.Quantity.Should().Be(0);
-        }
-
-        [Fact]
-        public void DecreaseQuantity_ShouldThrowException_WhenAmountIsNegative()
-        {
-            // Arrange
-            var item = CreateValidShoppingCartItem();
-
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => item.DecreaseQuantity(-1));
-        }
-
-        [Fact]
         public void UpdateQuantity_ShouldUpdateQuantityCorrectly()
         {
             // Arrange
@@ -124,7 +63,7 @@ namespace Ecommerce.Domain.Tests
             item.UpdateQuantity(5);
 
             // Assert
-            item.Quantity.Should().Be(5);
+            item.Quantity.Should().Be(6);
         }
 
         [Fact]

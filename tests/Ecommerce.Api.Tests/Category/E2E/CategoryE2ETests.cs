@@ -11,28 +11,39 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http.Json;
+using Xunit.Abstractions;
 
 namespace Ecommerce.Api.Tests.Category.E2E
 {
-    public class CategoryE2ETests : IDisposable
+    public class CategoryE2ETests : IAsyncLifetime
     {
-        private readonly WebApplicationFactory<Program> _factory;
+        private readonly ITestOutputHelper _testOutputHelper;
+        private WebApplicationFactory<Program>? _factory;
 
-        public CategoryE2ETests()
+        public CategoryE2ETests(ITestOutputHelper testOutputHelper)
         {
-            _factory = new WebApplicationFactory<Program>();
+            _testOutputHelper = testOutputHelper;
         }
 
-        public void Dispose()
+        public Task InitializeAsync()
         {
-            _factory.Dispose();
+            _factory = new WebApplicationFactory<Program>();
+            return Task.CompletedTask;
+        }
+
+        public async Task DisposeAsync()
+        {
+            if (_factory != null)
+            {
+                await _factory.DisposeAsync();
+            }
         }
 
         private HttpClient CreateClient()
         {
             string dbName = Guid.NewGuid().ToString();
 
-            return _factory.WithWebHostBuilder(builder =>
+            return _factory!.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
@@ -52,13 +63,14 @@ namespace Ecommerce.Api.Tests.Category.E2E
                     // Add minimal logging
                     services.AddLogging(loggingBuilder =>
                     {
+                        loggingBuilder.ClearProviders();
                         loggingBuilder.AddConsole();
                         loggingBuilder.AddDebug();
                     });
                 });
             }).CreateClient();
         }
-
+        
         [Fact]
         public async Task CreateCategory_ValidData_ReturnsCreatedResult()
         {

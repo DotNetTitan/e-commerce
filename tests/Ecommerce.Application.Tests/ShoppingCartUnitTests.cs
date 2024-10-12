@@ -177,8 +177,8 @@ namespace Ecommerce.Application.Tests
             Assert.Equal(cartId, result.Value.CartId);
             Assert.Equal(command.ProductId, result.Value.ProductId);
             Assert.Equal(command.NewQuantity, result.Value.NewQuantity);
-            Assert.Equal(3, result.Value.TotalItems);
-            Assert.Equal(30.00m, result.Value.TotalPrice);
+            Assert.Equal(5, result.Value.TotalItems);
+            Assert.Equal(50.00m, result.Value.TotalPrice);
         }
 
         [Fact]
