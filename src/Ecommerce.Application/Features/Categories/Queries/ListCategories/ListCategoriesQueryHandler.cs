@@ -23,7 +23,7 @@ namespace Ecommerce.Application.Features.Categories.Queries.ListCategories
 
             var categoryDetails = categories.ConvertAll(c => new CategoryDetails
             {
-                Id = c.CategoryId,
+                CategoryId = c.CategoryId,
                 Name = c.Name,
                 Description = c.Description
             });
@@ -57,7 +57,7 @@ namespace Ecommerce.Application.Features.Categories.Queries.ListCategories
 
     public class CategoryDetails
     {
-        public required Guid Id { get; set; }
+        public required Guid CategoryId { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
     }

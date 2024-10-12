@@ -259,8 +259,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
 
             foreach (var product in products)
             {
-                var createResponse = await client.PostAsJsonAsync("/api/v1/products", product);
-                _testOutputHelper.WriteLine($"Create Product Response: {await createResponse.Content.ReadAsStringAsync()}");
+               await client.PostAsJsonAsync("/api/v1/products", product);
             }
 
             // Add a small delay to ensure products are saved
@@ -272,7 +271,6 @@ namespace Ecommerce.Api.Tests.Product.E2E
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var responseContent = await response.Content.ReadAsStringAsync();
-            _testOutputHelper.WriteLine($"List Products Response: {responseContent}");
             var result = await response.Content.ReadFromJsonAsync<ListProductsResponse>();
             Assert.NotNull(result);
             Assert.NotEmpty(result.Products);

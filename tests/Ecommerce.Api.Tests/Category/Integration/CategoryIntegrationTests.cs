@@ -123,7 +123,7 @@ namespace Ecommerce.Api.Tests.Category.Integration
             var listCategoriesQuery = new ListCategoriesQuery { PageNumber = listCategoriesDto.PageNumber, PageSize = listCategoriesDto.PageSize };
             var listCategoriesResponse = new ListCategoriesResponse
             {
-                Categories = new List<CategoryDetails> { new CategoryDetails { Id = Guid.NewGuid(), Name = "Test Category", Description = "Test Description" } },
+                Categories = new List<CategoryDetails> { new CategoryDetails { CategoryId = Guid.NewGuid(), Name = "Test Category", Description = "Test Description" } },
                 TotalCount = 1,
                 PageNumber = 1,
                 PageSize = 10
