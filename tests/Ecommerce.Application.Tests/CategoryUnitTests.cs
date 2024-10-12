@@ -10,13 +10,8 @@ namespace Ecommerce.Application.Tests;
 
 public class CategoryUnitTests
 {
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoryRepository _categoryRepository = Substitute.For<ICategoryRepository>();
 
-    public CategoryUnitTests()
-    {
-        _categoryRepository = Substitute.For<ICategoryRepository>();
-    }
-    
     [Fact]
     public async Task CreateCategoryHandler_ValidCommand_ReturnsSuccessResult()
     {
@@ -36,7 +31,8 @@ public class CategoryUnitTests
         };
 
         _categoryRepository.GetByNameAsync(command.Name).Returns(Task.FromResult((Domain.Entities.Category?)null));
-        _categoryRepository.CreateAsync(Arg.Any<Domain.Entities.Category>()).Returns(Task.FromResult((Domain.Entities.Category?)createdCategory));
+        _categoryRepository.CreateAsync(Arg.Any<Domain.Entities.Category>())
+            .Returns(Task.FromResult((Domain.Entities.Category?)createdCategory));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -67,7 +63,8 @@ public class CategoryUnitTests
             Description = "Existing Description"
         };
 
-        _categoryRepository.GetByNameAsync(command.Name).Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
+        _categoryRepository.GetByNameAsync(command.Name)
+            .Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -143,8 +140,10 @@ public class CategoryUnitTests
             Description = "Original Description"
         };
 
-        _categoryRepository.GetByIdAsync(categoryId).Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
-        _categoryRepository.UpdateAsync(Arg.Any<Domain.Entities.Category>()).Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
+        _categoryRepository.GetByIdAsync(categoryId)
+            .Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
+        _categoryRepository.UpdateAsync(Arg.Any<Domain.Entities.Category>())
+            .Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -172,7 +171,8 @@ public class CategoryUnitTests
             Description = "Test Description"
         };
 
-        _categoryRepository.GetByIdAsync(categoryId).Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
+        _categoryRepository.GetByIdAsync(categoryId)
+            .Returns(Task.FromResult((Domain.Entities.Category?)existingCategory));
         _categoryRepository.DeleteAsync(Arg.Any<Domain.Entities.Category>()).Returns(Task.FromResult(true));
 
         // Act
@@ -180,7 +180,8 @@ public class CategoryUnitTests
 
         // Assert
         Assert.True(result.IsSuccess);
-        await _categoryRepository.Received(1).DeleteAsync(Arg.Is<Domain.Entities.Category>(c => c.CategoryId == categoryId));
+        await _categoryRepository.Received(1)
+            .DeleteAsync(Arg.Is<Domain.Entities.Category>(c => c.CategoryId == categoryId));
     }
 
     [Fact]
@@ -192,8 +193,10 @@ public class CategoryUnitTests
 
         var categories = new List<Domain.Entities.Category>
         {
-            new Domain.Entities.Category { CategoryId = Guid.NewGuid(), Name = "Category 1", Description = "Description 1" },
-            new Domain.Entities.Category { CategoryId = Guid.NewGuid(), Name = "Category 2", Description = "Description 2" }
+            new Domain.Entities.Category
+                { CategoryId = Guid.NewGuid(), Name = "Category 1", Description = "Description 1" },
+            new Domain.Entities.Category
+                { CategoryId = Guid.NewGuid(), Name = "Category 2", Description = "Description 2" }
         };
 
         _categoryRepository.GetAllAsync(query.PageNumber, query.PageSize, null)

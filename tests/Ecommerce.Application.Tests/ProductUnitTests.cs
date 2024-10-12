@@ -10,12 +10,7 @@ namespace Ecommerce.Application.Tests
 {
     public class ProductUnitTests
     {
-        private readonly IProductRepository _productRepository;
-
-        public ProductUnitTests()
-        {
-            _productRepository = Substitute.For<IProductRepository>();
-        }
+        private readonly IProductRepository _productRepository = Substitute.For<IProductRepository>();
 
         [Fact]
         public async Task CreateProductHandler_ValidCommand_ReturnsSuccessResult()
