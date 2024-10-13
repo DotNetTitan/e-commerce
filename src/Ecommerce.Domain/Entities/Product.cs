@@ -56,6 +56,16 @@
         public string SKU { get; private set; }
 
         /// <summary>
+        /// Gets or sets the URL of the product's thumbnail.
+        /// </summary>
+        public string? ThumbnailUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URLs of the product's images.
+        /// </summary>
+        public List<string> ImageUrls { get; set; } = new List<string>();
+
+        /// <summary>
         /// Initializes a new instance of the Product class.
         /// </summary>
         public Product()

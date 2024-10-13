@@ -23,6 +23,7 @@ using System.Reflection;
 using Ecommerce.Infrastructure.Persistence.Repositories;
 using FluentValidation;
 using MassTransit;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,6 +116,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
     services.AddSingleton(new EmailClient(configuration["AppSettings:AzureCommunicationService"]));
 
+    services.AddSingleton(sp =>
+    {
+        var connectionString = configuration["AppSettings:AzureBlobStorageConnectionString"];
+        return new BlobServiceClient(connectionString);
+    });
+    
     services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ICurrentUserService, CurrentUserService>();
     services.AddTransient<IEmailService, EmailService>();
@@ -127,6 +134,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<ICustomerRepository, CustomerRepository>();
     services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
     services.AddScoped<IReviewRepository, ReviewRepository>();
+    services.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
 }
 
 static void ConfigureRateLimiter(IServiceCollection services, IConfiguration configuration)

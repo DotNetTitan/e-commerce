@@ -9,5 +9,7 @@
         public required int StockQuantity { get; init; }
         public required Guid CategoryId { get; init; }
         public required int LowStockThreshold { get; init; }
+        public IFormFile? Thumbnail { get; init; }
+        public List<IFormFile>? Images { get; init; }
     }
 }

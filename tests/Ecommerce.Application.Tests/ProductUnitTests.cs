@@ -11,12 +11,13 @@ namespace Ecommerce.Application.Tests
     public class ProductUnitTests
     {
         private readonly IProductRepository _productRepository = Substitute.For<IProductRepository>();
+        private readonly IAzureBlobStorageService _blobStorageService = Substitute.For<IAzureBlobStorageService>();
 
         [Fact]
         public async Task CreateProductHandler_ValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var handler = new CreateProductCommandHandler(_productRepository);
+            var handler = new CreateProductCommandHandler(_productRepository, _blobStorageService);
             var command = new CreateProductCommand
             {
                 Name = "Test Product",
@@ -56,7 +57,7 @@ namespace Ecommerce.Application.Tests
         public async Task UpdateProductHandler_ValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var handler = new UpdateProductCommandHandler(_productRepository);
+            var handler = new UpdateProductCommandHandler(_productRepository,_blobStorageService);
             var productId = Guid.NewGuid();
             var command = new UpdateProductCommand
             {

@@ -26,7 +26,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto dto)
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)
         {
             var command = new CreateProductCommand
             {
@@ -35,8 +35,11 @@ namespace Ecommerce.Api.Controllers
                 Price = dto.Price,
                 StockQuantity = dto.StockQuantity,
                 CategoryId = dto.CategoryId,
-                LowStockThreshold = dto.LowStockThreshold
+                LowStockThreshold = dto.LowStockThreshold,
+                Thumbnail = dto.Thumbnail,
+                Images = dto.Images
             };
+
 
             var result = await _mediator.Send(command);
 
@@ -71,7 +74,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateProduct(Guid productId, [FromBody] UpdateProductDto dto)
+        public async Task<IActionResult> UpdateProduct(Guid productId, [FromForm] UpdateProductDto dto)
         {
             if (productId != dto.ProductId)
             {
@@ -86,7 +89,9 @@ namespace Ecommerce.Api.Controllers
                 Price = dto.Price,
                 StockQuantity = dto.StockQuantity,
                 CategoryId = dto.CategoryId,
-                LowStockThreshold = dto.LowStockThreshold
+                LowStockThreshold = dto.LowStockThreshold,
+                Thumbnail = dto.Thumbnail,
+                Images = dto.Images
             };
 
             var result = await _mediator.Send(command);

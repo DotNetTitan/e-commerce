@@ -1,16 +1,19 @@
 ﻿using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
 {
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<UpdateProductResponse>>
     {
         private readonly IProductRepository _productRepository;
+        private readonly IAzureBlobStorageService _blobStorageService;
 
-        public UpdateProductCommandHandler(IProductRepository productRepository)
+        public UpdateProductCommandHandler(IProductRepository productRepository, IAzureBlobStorageService blobStorageService)
         {
             _productRepository = productRepository;
+            _blobStorageService = blobStorageService;
         }
 
         public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -27,6 +30,24 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
             existingProduct.Price = request.Price;
             existingProduct.CategoryId = request.CategoryId;
             existingProduct.LowStockThreshold = request.LowStockThreshold;
+
+            if (request.Thumbnail != null)
+            {
+                if (!string.IsNullOrEmpty(existingProduct.ThumbnailUrl))
+                {
+                    await _blobStorageService.DeleteFileAsync(existingProduct.ThumbnailUrl);
+                }
+                existingProduct.ThumbnailUrl = await _blobStorageService.UploadFileAsync(request.Thumbnail);
+            }
+
+            if (request.Images != null && request.Images.Any())
+            {
+                foreach (var imageUrl in existingProduct.ImageUrls)
+                {
+                    await _blobStorageService.DeleteFileAsync(imageUrl);
+                }
+                existingProduct.ImageUrls = await _blobStorageService.UploadFilesAsync(request.Images);
+            }
 
             try
             {
@@ -53,7 +74,9 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                     Description = updatedProduct.Description,
                     Price = updatedProduct.Price,
                     StockQuantity = updatedProduct.StockQuantity,
-                    CategoryId = updatedProduct.CategoryId
+                    CategoryId = updatedProduct.CategoryId,
+                    ThumbnailUrl = updatedProduct.ThumbnailUrl,
+                    ImageUrls = updatedProduct.ImageUrls
                 });
             }
 
@@ -70,6 +93,8 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public required int StockQuantity { get; init; }
         public required Guid CategoryId { get; init; }
         public required int LowStockThreshold { get; init; }
+        public IFormFile? Thumbnail { get; init; }
+        public List<IFormFile>? Images { get; init; }
     }
 
     public class UpdateProductResponse
@@ -81,5 +106,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public required decimal Price { get; set; }
         public required int StockQuantity { get; set; }
         public required Guid CategoryId { get; set; }
+        public string? ThumbnailUrl { get; init; }
+        public List<string> ImageUrls { get; init; } = new List<string>();
     }
 }
