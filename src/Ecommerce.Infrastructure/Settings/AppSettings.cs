@@ -21,6 +21,11 @@
         /// Gets or sets the email sender address.
         /// </summary>
         public string EmailSenderAddress { get; init; } = default!;
+        
+        /// <summary>
+        /// Gets or sets the Azure BlobStorage ContainerName.
+        /// </summary>
+        public string AzureBlobStorageContainerName { get; init; } = default!;
 
         /// <summary>
         /// Gets or sets the JWT settings.

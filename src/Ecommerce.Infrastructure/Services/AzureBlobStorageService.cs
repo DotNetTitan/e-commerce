@@ -1,8 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Ecommerce.Application.Interfaces;
+using Ecommerce.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Ecommerce.Infrastructure.Services
 {
@@ -11,10 +13,10 @@ namespace Ecommerce.Infrastructure.Services
         private readonly BlobServiceClient _blobServiceClient;
         private readonly string _containerName;
 
-        public AzureBlobStorageService(BlobServiceClient blobServiceClient, IConfiguration configuration)
+        public AzureBlobStorageService(BlobServiceClient blobServiceClient, IOptions<AppSettings> appSettings)
         {
             _blobServiceClient = blobServiceClient;
-            _containerName = configuration["AppSettings:AzureBlobStorageContainerName"];
+            _containerName = appSettings.Value.AzureBlobStorageContainerName;
         }
 
         public async Task<string> UploadFileAsync(IFormFile file)
