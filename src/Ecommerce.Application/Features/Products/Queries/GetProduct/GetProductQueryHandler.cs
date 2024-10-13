@@ -31,7 +31,9 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
                 Price = product.Price,
                 StockQuantity = product.StockQuantity,
                 CategoryId = product.CategoryId,
-                CategoryName = product.Category?.Name ?? "Unknown Category"
+                CategoryName = product.Category?.Name ?? "Unknown Category",
+                ThumbnailUrl = product.ThumbnailUrl,
+                ImageUrls = product.ImageUrls
             };
 
             return Result.Ok(response);
@@ -53,5 +55,7 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
         public required int StockQuantity { get; set; }
         public required Guid CategoryId { get; set; }
         public required string CategoryName { get; set; }
+        public string? ThumbnailUrl { get; init; }
+        public List<string> ImageUrls { get; init; } = new List<string>();
     }
 }
