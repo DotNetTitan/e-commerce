@@ -15,16 +15,10 @@ namespace Ecommerce.Infrastructure.Persistence.Repositories
 
         public async Task<Product?> GetByIdAsync(Guid id)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product != null)
-            {
-                await _context.Entry(product)
-                    .Reference(p => p.Category)
-                    .LoadAsync();
-            }
-
-            return product;
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
         public async Task<Product?> CreateAsync(Product product)
@@ -52,6 +46,7 @@ namespace Ecommerce.Infrastructure.Persistence.Repositories
         {
             var query = _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Images)
                 .AsQueryable();
 
             query = ApplyFilters(query, searchTerm, categoryId);

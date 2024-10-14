@@ -33,7 +33,7 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category?.Name ?? "Unknown Category",
                 ThumbnailUrl = product.ThumbnailUrl,
-                ImageUrls = product.ImageUrls
+                ImageUrls = product.Images.Select(i => i.ImageUrl).ToList()
             };
 
             return Result.Ok(response);

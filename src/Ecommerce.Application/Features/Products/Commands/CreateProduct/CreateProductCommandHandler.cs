@@ -10,11 +10,13 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
     {
         private readonly IProductRepository _productRepository;
         private readonly IAzureBlobStorageService _blobStorageService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CreateProductCommandHandler(IProductRepository productRepository, IAzureBlobStorageService blobStorageService)
+        public CreateProductCommandHandler(IProductRepository productRepository, IAzureBlobStorageService blobStorageService, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
             _blobStorageService = blobStorageService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -36,32 +38,59 @@ namespace Ecommerce.Application.Features.Products.Commands.CreateProduct
                 LowStockThreshold = request.LowStockThreshold
             };
 
-            if (request.Thumbnail != null)
-            {
-                product.ThumbnailUrl = await _blobStorageService.UploadFileAsync(request.Thumbnail);
-            }
+            string? thumbnailUrl = null;
+            List<string> imageUrls = new List<string>();
 
-            if (request.Images != null && request.Images.Any())
+            try
             {
-                product.ImageUrls = await _blobStorageService.UploadFilesAsync(request.Images);
-            }
-
-            var createdProduct = await _productRepository.CreateAsync(product);
-
-            if (createdProduct != null)
-            {
-                return Result.Ok(new CreateProductResponse
+                if (request.Thumbnail != null)
                 {
-                    Id = createdProduct.ProductId,
-                    Name = createdProduct.Name,
-                    SKU = createdProduct.SKU,
-                    Description = createdProduct.Description,
-                    Price = createdProduct.Price,
-                    StockQuantity = createdProduct.StockQuantity,
-                    CategoryId = createdProduct.CategoryId,
-                    ThumbnailUrl = createdProduct.ThumbnailUrl,
-                    ImageUrls = createdProduct.ImageUrls
-                });
+                    thumbnailUrl = await _blobStorageService.UploadFileAsync(request.Thumbnail);
+                    product.ThumbnailUrl = thumbnailUrl;
+                }
+
+                if (request.Images != null && request.Images.Any())
+                {
+                    imageUrls = await _blobStorageService.UploadFilesAsync(request.Images);
+                    product.Images = imageUrls.Select(url => new ProductImage { ImageUrl = url }).ToList();
+                }
+
+                await _unitOfWork.BeginTransactionAsync();
+                var createdProduct = await _productRepository.CreateAsync(product);
+                await _unitOfWork.CommitAsync();
+
+                if (createdProduct != null)
+                {
+                    return Result.Ok(new CreateProductResponse
+                    {
+                        Id = createdProduct.ProductId,
+                        Name = createdProduct.Name,
+                        SKU = createdProduct.SKU,
+                        Description = createdProduct.Description,
+                        Price = createdProduct.Price,
+                        StockQuantity = createdProduct.StockQuantity,
+                        CategoryId = createdProduct.CategoryId,
+                        ThumbnailUrl = createdProduct.ThumbnailUrl,
+                        ImageUrls = createdProduct.Images.Select(i => i.ImageUrl).ToList()
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackAsync();
+
+                // Delete uploaded images from blob storage
+                if (thumbnailUrl != null)
+                {
+                    await _blobStorageService.DeleteFileAsync(thumbnailUrl);
+                }
+
+                foreach (var imageUrl in imageUrls)
+                {
+                    await _blobStorageService.DeleteFileAsync(imageUrl);
+                }
+
+                throw;
             }
 
             return Result.Fail<CreateProductResponse>("Failed to create product");

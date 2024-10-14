@@ -12,12 +12,13 @@ namespace Ecommerce.Application.Tests
     {
         private readonly IProductRepository _productRepository = Substitute.For<IProductRepository>();
         private readonly IAzureBlobStorageService _blobStorageService = Substitute.For<IAzureBlobStorageService>();
+        private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
 
         [Fact]
         public async Task CreateProductHandler_ValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var handler = new CreateProductCommandHandler(_productRepository, _blobStorageService);
+            var handler = new CreateProductCommandHandler(_productRepository, _blobStorageService, _unitOfWork);
             var command = new CreateProductCommand
             {
                 Name = "Test Product",
@@ -57,7 +58,7 @@ namespace Ecommerce.Application.Tests
         public async Task UpdateProductHandler_ValidCommand_ReturnsSuccessResult()
         {
             // Arrange
-            var handler = new UpdateProductCommandHandler(_productRepository,_blobStorageService);
+            var handler = new UpdateProductCommandHandler(_productRepository,_blobStorageService, _unitOfWork);
             var productId = Guid.NewGuid();
             var command = new UpdateProductCommand
             {
@@ -102,7 +103,7 @@ namespace Ecommerce.Application.Tests
         public async Task DeleteProductHandler_ExistingProduct_ReturnsSuccessResult()
         {
             // Arrange
-            var handler = new DeleteProductCommandHandler(_productRepository);
+            var handler = new DeleteProductCommandHandler(_productRepository,_blobStorageService, _unitOfWork);
             var productId = Guid.NewGuid();
             var command = new DeleteProductCommand { ProductId = productId };
 

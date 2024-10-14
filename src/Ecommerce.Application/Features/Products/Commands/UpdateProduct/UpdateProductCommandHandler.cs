@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using MediatR;
 using Ecommerce.Application.Interfaces;
+using Ecommerce.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
@@ -9,11 +10,13 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
     {
         private readonly IProductRepository _productRepository;
         private readonly IAzureBlobStorageService _blobStorageService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateProductCommandHandler(IProductRepository productRepository, IAzureBlobStorageService blobStorageService)
+        public UpdateProductCommandHandler(IProductRepository productRepository, IAzureBlobStorageService blobStorageService, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
             _blobStorageService = blobStorageService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -25,59 +28,83 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                 return Result.Fail<UpdateProductResponse>($"Product with ID {request.ProductId} not found.");
             }
 
-            existingProduct.Name = request.Name;
-            existingProduct.Description = request.Description;
-            existingProduct.Price = request.Price;
-            existingProduct.CategoryId = request.CategoryId;
-            existingProduct.LowStockThreshold = request.LowStockThreshold;
-
-            if (request.Thumbnail != null)
-            {
-                if (!string.IsNullOrEmpty(existingProduct.ThumbnailUrl))
-                {
-                    await _blobStorageService.DeleteFileAsync(existingProduct.ThumbnailUrl);
-                }
-                existingProduct.ThumbnailUrl = await _blobStorageService.UploadFileAsync(request.Thumbnail);
-            }
-
-            if (request.Images != null && request.Images.Any())
-            {
-                foreach (var imageUrl in existingProduct.ImageUrls)
-                {
-                    await _blobStorageService.DeleteFileAsync(imageUrl);
-                }
-                existingProduct.ImageUrls = await _blobStorageService.UploadFilesAsync(request.Images);
-            }
+            string? newThumbnailUrl = null;
+            List<string> newImageUrls = new List<string>();
+            string? oldThumbnailUrl = existingProduct.ThumbnailUrl;
+            var oldImageUrls = existingProduct.Images.Select(i => i.ImageUrl).ToList();
 
             try
             {
-                existingProduct.UpdateStock(request.StockQuantity);
-            }
-            catch (ArgumentException ex)
-            {
-                return Result.Fail<UpdateProductResponse>(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Result.Fail<UpdateProductResponse>(ex.Message);
-            }
+                existingProduct.Name = request.Name;
+                existingProduct.Description = request.Description;
+                existingProduct.Price = request.Price;
+                existingProduct.CategoryId = request.CategoryId;
+                existingProduct.LowStockThreshold = request.LowStockThreshold;
 
-            var updatedProduct = await _productRepository.UpdateAsync(existingProduct);
-
-            if (updatedProduct != null)
-            {
-                return Result.Ok(new UpdateProductResponse
+                if (request.Thumbnail != null)
                 {
-                    Id = updatedProduct.ProductId,
-                    Name = updatedProduct.Name,
-                    SKU = updatedProduct.SKU,
-                    Description = updatedProduct.Description,
-                    Price = updatedProduct.Price,
-                    StockQuantity = updatedProduct.StockQuantity,
-                    CategoryId = updatedProduct.CategoryId,
-                    ThumbnailUrl = updatedProduct.ThumbnailUrl,
-                    ImageUrls = updatedProduct.ImageUrls
-                });
+                    newThumbnailUrl = await _blobStorageService.UploadFileAsync(request.Thumbnail);
+                    existingProduct.ThumbnailUrl = newThumbnailUrl;
+                }
+
+                if (request.Images != null && request.Images.Any())
+                {
+                    newImageUrls = await _blobStorageService.UploadFilesAsync(request.Images);
+                    existingProduct.Images = newImageUrls.Select(url => new ProductImage { ImageUrl = url }).ToList();
+                }
+
+                existingProduct.UpdateStock(request.StockQuantity);
+
+                await _unitOfWork.BeginTransactionAsync();
+                var updatedProduct = await _productRepository.UpdateAsync(existingProduct);
+                await _unitOfWork.CommitAsync();
+
+                if (updatedProduct != null)
+                {
+                    // Delete old images after successful update
+                    if (oldThumbnailUrl != null && oldThumbnailUrl != updatedProduct.ThumbnailUrl)
+                    {
+                        await _blobStorageService.DeleteFileAsync(oldThumbnailUrl);
+                    }
+
+                    foreach (var oldImageUrl in oldImageUrls)
+                    {
+                        if (!updatedProduct.Images.Any(i => i.ImageUrl == oldImageUrl))
+                        {
+                            await _blobStorageService.DeleteFileAsync(oldImageUrl);
+                        }
+                    }
+
+                    return Result.Ok(new UpdateProductResponse
+                    {
+                        Id = updatedProduct.ProductId,
+                        Name = updatedProduct.Name,
+                        SKU = updatedProduct.SKU,
+                        Description = updatedProduct.Description,
+                        Price = updatedProduct.Price,
+                        StockQuantity = updatedProduct.StockQuantity,
+                        CategoryId = updatedProduct.CategoryId,
+                        ThumbnailUrl = updatedProduct.ThumbnailUrl,
+                        ImageUrls = updatedProduct.Images.Select(i => i.ImageUrl).ToList()
+                    });
+                }
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackAsync();
+
+                // Delete newly uploaded images from blob storage
+                if (newThumbnailUrl != null)
+                {
+                    await _blobStorageService.DeleteFileAsync(newThumbnailUrl);
+                }
+
+                foreach (var imageUrl in newImageUrls)
+                {
+                    await _blobStorageService.DeleteFileAsync(imageUrl);
+                }
+
+                throw;
             }
 
             return Result.Fail<UpdateProductResponse>("Failed to update product");

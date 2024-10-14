@@ -31,6 +31,7 @@ namespace Ecommerce.Infrastructure.Persistence
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -49,6 +50,7 @@ namespace Ecommerce.Infrastructure.Persistence
             builder.ApplyConfiguration(new ReviewConfiguration());
             builder.ApplyConfiguration(new ShoppingCartConfiguration());
             builder.ApplyConfiguration(new ShoppingCartItemConfiguration());
+            builder.ApplyConfiguration(new ProductImageConfiguration());
         }
 
         public override int SaveChanges()

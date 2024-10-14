@@ -30,6 +30,11 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
 
             builder.HasIndex(p => p.Name);
             builder.HasIndex(p => p.CategoryId);
+
+            builder.HasMany(p => p.Images)
+                .WithOne(i => i.Product)
+                .HasForeignKey(i => i.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

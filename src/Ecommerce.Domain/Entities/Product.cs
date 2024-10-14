@@ -61,9 +61,9 @@
         public string? ThumbnailUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the URLs of the product's images.
+        /// Gets or sets the collection of image URLs for the product.
         /// </summary>
-        public List<string> ImageUrls { get; set; } = new List<string>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 
         /// <summary>
         /// Initializes a new instance of the Product class.
