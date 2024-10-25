@@ -3,7 +3,6 @@ using Ecommerce.Infrastructure.Persistence.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Ecommerce.Application.Common.Models;
 
 namespace Ecommerce.Infrastructure.Persistence
 {
@@ -21,8 +20,7 @@ namespace Ecommerce.Infrastructure.Persistence
         {
             _currentUserService = currentUserService;
         }
-
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }

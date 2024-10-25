@@ -13,11 +13,6 @@ namespace Ecommerce.Domain.Entities
         public Guid CustomerId { get; set; }
 
         /// <summary>
-        /// Gets or sets the identity identifier for the customer.
-        /// </summary>
-        public required string IdentityId { get; set; }
-
-        /// <summary>
         /// Gets or sets the first name of the customer.
         /// </summary>
         public string? FirstName { get; set; }

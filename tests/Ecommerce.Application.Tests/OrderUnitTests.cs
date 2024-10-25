@@ -55,7 +55,6 @@ namespace Ecommerce.Application.Tests
             var customer = new Customer
             {
                 CustomerId = customerId,
-                IdentityId = Guid.NewGuid().ToString(),
                 Email = "test@example.com",
                 CustomerAddress = new Address("123 Main St", "Apt 4", "City", "State", "12345", "Country")
             };
@@ -114,7 +113,6 @@ namespace Ecommerce.Application.Tests
             var customer = new Customer
             {
                 CustomerId = customerId,
-                IdentityId = Guid.NewGuid().ToString(),
                 Email = "test@example.com",
                 CustomerAddress = new Address("123 Main St", "Apt 4", "City", "State", "12345", "Country")
             };
