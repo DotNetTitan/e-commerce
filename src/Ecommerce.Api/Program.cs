@@ -118,8 +118,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         return new BlobServiceClient(connectionString);
     });
     
+    services.AddScoped<IAuthenticationService, AuthenticationService>();
     services.AddScoped<ICurrentUserService, CurrentUserService>();
     services.AddTransient<IEmailService, EmailService>();
+    services.AddScoped<ITokenService, TokenService>();
+    services.AddScoped<RefreshTokenService>();
     services.AddScoped<IUnitOfWork, UnitOfWork>();
     services.AddScoped<IOrderRepository, OrderRepository>();
     services.AddScoped<IProductRepository, ProductRepository>();

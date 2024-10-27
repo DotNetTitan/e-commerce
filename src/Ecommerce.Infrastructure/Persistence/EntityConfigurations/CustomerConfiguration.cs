@@ -18,6 +18,15 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
             builder.HasIndex("ClusterId")
                 .IsClustered();
 
+            builder.Property(c => c.IdentityId)
+                .IsRequired()
+                .HasColumnName("IdentityId");
+
+            builder.HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Customer>(c => c.IdentityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(c => c.ShoppingCart)
                 .WithOne(sc => sc.Customer)
                 .HasForeignKey<ShoppingCart>(sc => sc.CustomerId)
@@ -42,6 +51,8 @@ namespace Ecommerce.Infrastructure.Persistence.EntityConfigurations
                 address.Property(a => a.State).HasColumnName("CustomerAddressState");
                 address.Property(a => a.Country).HasColumnName("CustomerAddressCountry");
             });
+
+            builder.HasIndex(c => c.IdentityId);
         }
     }
 }
