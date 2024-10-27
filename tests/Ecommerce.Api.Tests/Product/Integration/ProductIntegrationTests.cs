@@ -65,7 +65,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
                 Price = createProductDto.Price,
                 StockQuantity = createProductDto.StockQuantity,
                 CategoryId = createProductDto.CategoryId,
-                SKU = "SKU-1234"
+                Sku = "Sku-1234"
             };
             _mediator.Send(Arg.Any<CreateProductCommand>()).Returns(Result.Ok(createProductResponse));
 
@@ -81,7 +81,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
             Assert.Equal(createProductResponse.Price, returnValue.Price);
             Assert.Equal(createProductResponse.StockQuantity, returnValue.StockQuantity);
             Assert.Equal(createProductResponse.CategoryId, returnValue.CategoryId);
-            Assert.Equal(createProductResponse.SKU, returnValue.SKU);
+            Assert.Equal(createProductResponse.Sku, returnValue.Sku);
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
                 StockQuantity = 100,
                 CategoryId = Guid.NewGuid(),
                 CategoryName = "Test Category",
-                SKU = "SKU-1234"
+                Sku = "Sku-1234"
             };
             _mediator.Send(Arg.Any<GetProductQuery>()).Returns(Result.Ok(getProductResponse));
 
@@ -116,7 +116,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
             Assert.Equal(getProductResponse.StockQuantity, returnValue.StockQuantity);
             Assert.Equal(getProductResponse.CategoryId, returnValue.CategoryId);
             Assert.Equal(getProductResponse.CategoryName, returnValue.CategoryName);
-            Assert.Equal(getProductResponse.SKU, returnValue.SKU);
+            Assert.Equal(getProductResponse.Sku, returnValue.Sku);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
                 Price = updateProductDto.Price,
                 StockQuantity = updateProductDto.StockQuantity,
                 CategoryId = updateProductDto.CategoryId,
-                SKU = "SKU-5678"
+                Sku = "Sku-5678"
             };
             _mediator.Send(Arg.Any<UpdateProductCommand>()).Returns(Result.Ok(updateProductResponse));
 
@@ -168,7 +168,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
             Assert.Equal(updateProductResponse.Price, returnValue.Price);
             Assert.Equal(updateProductResponse.StockQuantity, returnValue.StockQuantity);
             Assert.Equal(updateProductResponse.CategoryId, returnValue.CategoryId);
-            Assert.Equal(updateProductResponse.SKU, returnValue.SKU);
+            Assert.Equal(updateProductResponse.Sku, returnValue.Sku);
         }
 
         [Fact]
@@ -215,7 +215,7 @@ namespace Ecommerce.Api.Tests.Product.Integration
                         StockQuantity = 100,
                         CategoryId = Guid.NewGuid(),
                         CategoryName = "Test Category",
-                        SKU = "SKU-1234"
+                        Sku = "Sku-1234"
                     }
                 },
                 TotalCount = 1,

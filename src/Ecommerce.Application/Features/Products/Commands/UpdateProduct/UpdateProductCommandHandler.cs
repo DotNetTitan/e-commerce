@@ -79,7 +79,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
                     {
                         Id = updatedProduct.ProductId,
                         Name = updatedProduct.Name,
-                        SKU = updatedProduct.SKU,
+                        Sku = updatedProduct.Sku,
                         Description = updatedProduct.Description,
                         Price = updatedProduct.Price,
                         StockQuantity = updatedProduct.StockQuantity,
@@ -101,9 +101,9 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
 
                 foreach (var imageUrl in newImageUrls)
                 {
-                    await _blobStorageService.DeleteFileAsync(imageUrl);
+                    _blobStorageService.DeleteFileAsync(imageUrl);
                 }
-
+                
                 throw;
             }
 
@@ -129,7 +129,7 @@ namespace Ecommerce.Application.Features.Products.Commands.UpdateProduct
         public required Guid Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
-        public required string SKU { get; init; }
+        public required string Sku { get; init; }
         public required decimal Price { get; set; }
         public required int StockQuantity { get; set; }
         public required Guid CategoryId { get; set; }

@@ -26,7 +26,7 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
             {
                 Id = product.ProductId,
                 Name = product.Name,
-                SKU = product.SKU,
+                Sku = product.Sku,
                 Description = product.Description,
                 Price = product.Price,
                 StockQuantity = product.StockQuantity,
@@ -49,7 +49,7 @@ namespace Ecommerce.Application.Features.Products.Queries.GetProduct
     {
         public required Guid Id { get; set; }
         public required string Name { get; set; }
-        public required string SKU { get; init; }
+        public required string Sku { get; init; }
         public required string Description { get; set; }
         public required decimal Price { get; set; }
         public required int StockQuantity { get; set; }

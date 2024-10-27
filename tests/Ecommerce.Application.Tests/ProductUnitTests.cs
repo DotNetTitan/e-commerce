@@ -51,7 +51,7 @@ namespace Ecommerce.Application.Tests
             Assert.NotNull(result.Value);
             Assert.Equal(createdProduct.ProductId, result.Value.Id);
             Assert.Equal(createdProduct.Name, result.Value.Name);
-            Assert.Equal(createdProduct.SKU, result.Value.SKU);
+            Assert.Equal(createdProduct.Sku, result.Value.Sku);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace Ecommerce.Application.Tests
             Assert.NotNull(result.Value);
             Assert.Equal(product.ProductId, result.Value.Id);
             Assert.Equal(product.Name, result.Value.Name);
-            Assert.Equal(product.SKU, result.Value.SKU);
+            Assert.Equal(product.Sku, result.Value.Sku);
             Assert.Equal(product.Description, result.Value.Description);
             Assert.Equal(product.Price, result.Value.Price);
             Assert.Equal(product.StockQuantity, result.Value.StockQuantity);
@@ -199,7 +199,7 @@ namespace Ecommerce.Application.Tests
             {
                 Assert.Equal(products[index].ProductId, productDetails.Id);
                 Assert.Equal(products[index].Name, productDetails.Name);
-                Assert.Equal(products[index].SKU, productDetails.SKU);
+                Assert.Equal(products[index].Sku, productDetails.Sku);
                 Assert.Equal(products[index].Description, productDetails.Description);
                 Assert.Equal(products[index].Price, productDetails.Price);
                 Assert.Equal(products[index].StockQuantity, productDetails.StockQuantity);

@@ -111,7 +111,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
             Assert.Equal(createProductDto.Price, result.Price);
             Assert.Equal(createProductDto.StockQuantity, result.StockQuantity);
             Assert.Equal(createProductDto.CategoryId, result.CategoryId);
-            Assert.NotNull(result.SKU);
+            Assert.NotNull(result.Sku);
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
                 Assert.Equal(createdProduct.Price, result.Price);
                 Assert.Equal(createdProduct.StockQuantity, result.StockQuantity);
                 Assert.Equal(createdProduct.CategoryId, result.CategoryId);
-                Assert.Equal(createdProduct.SKU, result.SKU);
+                Assert.Equal(createdProduct.Sku, result.Sku);
             }
         }
 
@@ -193,7 +193,7 @@ namespace Ecommerce.Api.Tests.Product.E2E
                 Assert.Equal(updateProductDto.Price, result.Price);
                 Assert.Equal(updateProductDto.StockQuantity, result.StockQuantity);
                 Assert.Equal(updateProductDto.CategoryId, result.CategoryId);
-                Assert.Equal(createdProduct.SKU, result.SKU);
+                Assert.Equal(createdProduct.Sku, result.Sku);
             }
         }
 
