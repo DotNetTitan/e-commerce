@@ -4,7 +4,7 @@
 ![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
-Welcome to the **E-commerce API**, a robust and scalable solution built using **ASP.NET Core**. This API provides comprehensive functionalities for managing products, categories, orders, reviews, shopping carts, customers, and inventory, making it an ideal backbone for any online retail platform.
+Welcome to the **E-commerce API**, a robust and scalable solution built using **ASP.NET Core**. This API provides comprehensive functionalities for managing products, categories, user authentication, orders, reviews, shopping carts, customers, and inventory, making it an ideal backbone for any online retail platform.
 
 ## 🚀 Table of Contents
 
@@ -18,6 +18,7 @@ Welcome to the **E-commerce API**, a robust and scalable solution built using **
   - [Run the Application](#run-the-application)
 - [Configuration](#configuration)
 - [API Versioning](#api-versioning)
+- [Authentication](#authentication)
 - [API Documentation](#api-documentation)
 - [Contributing](#contributing)
 - [License](#license)
@@ -32,6 +33,7 @@ Welcome to the **E-commerce API**, a robust and scalable solution built using **
 - **Shopping Cart Management**: Add, update, and remove items from the shopping cart.
 - **Customer Management**: Edit and view customer details.
 - **Inventory Management**: Retrieve and update inventory information.
+- **User Authentication**: Register, login, change password, reset password, confirm email, and resend email confirmation with JWT authentication.
 - **Rate Limiting**: Protect your API with configurable rate limiting.
 - **Exception Handling**: Centralized exception handling for consistent error responses.
 - **Swagger Integration**: Comprehensive API documentation with Swagger UI.
@@ -113,6 +115,10 @@ Ensure to update these files with your specific settings, such as database conne
 ## 📚 API Versioning
 
 The API supports versioning to manage changes efficiently. The default API version is `1.0`. You can specify the version in the URL or use the default version.
+
+## 🔒 Authentication
+
+The API uses **JWT Bearer Tokens** for authentication. Secure endpoints require a valid JWT token. Follow the authentication endpoints to register and obtain tokens.
 
 ## 📄 API Documentation
 
