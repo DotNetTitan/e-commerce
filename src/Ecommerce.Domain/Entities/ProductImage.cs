@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Domain.Entities
 {
-    public class ProductImage : BaseEntity
+    public class ProductImage
     {
         /// <summary>
         /// Gets or sets the unique identifier for the product image.
