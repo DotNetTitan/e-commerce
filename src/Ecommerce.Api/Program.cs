@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Ecommerce.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Asp.Versioning;
 using Ecommerce.Application.Interfaces;
 using Ecommerce.Infrastructure.Services;
@@ -105,7 +108,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     });
 
     services.AddValidatorsFromAssembly(typeof(IRegisterAssembly).Assembly);
-    
+
+    ConfigureAuthentication(services, configuration);
     ConfigureIdentityOptions(services);
 
     services.AddHttpContextAccessor();
@@ -207,6 +211,27 @@ void ConfigureSwagger(SwaggerGenOptions options)
             Array.Empty<string>()
         }
     });
+}
+
+void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+{
+    var key = configuration["AppSettings:Jwt:Key"] ??
+              throw new ArgumentNullException(nameof(configuration), "AppSettings:Jwt:Key is not configured");
+
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["AppSettings:Jwt:Issuer"],
+                ValidAudience = configuration["AppSettings:Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+            };
+        });
 }
 
 void ConfigureIdentityOptions(IServiceCollection services)
